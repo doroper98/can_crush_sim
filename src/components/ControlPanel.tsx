@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
 export type RigidBodyShape = 'cylinder' | 'box' | 'sphere' | 'cone'
+export type DisplayMode = 'none' | 'stress' | 'displacement' | 'plastic'
+export type ColormapName = 'jet' | 'rainbow' | 'thermal'
 
 interface ControlPanelProps {
   canDiameter: number
@@ -31,6 +33,10 @@ interface ControlPanelProps {
   onRigidRotXChange: (v: number) => void
   onRigidRotYChange: (v: number) => void
   onRigidRotZChange: (v: number) => void
+  displayMode: DisplayMode
+  colormapType: ColormapName
+  onDisplayModeChange: (v: DisplayMode) => void
+  onColormapTypeChange: (v: ColormapName) => void
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -147,6 +153,10 @@ export default function ControlPanel({
   onRigidRotXChange,
   onRigidRotYChange,
   onRigidRotZChange,
+  displayMode,
+  colormapType,
+  onDisplayModeChange,
+  onColormapTypeChange,
 }: ControlPanelProps) {
   return (
     <div
@@ -316,6 +326,54 @@ export default function ControlPanel({
           unit="°"
           onChange={onRigidRotZChange}
         />
+      </Section>
+
+      <Section title="Visualization">
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>Display</div>
+          <select
+            value={displayMode}
+            onChange={e => onDisplayModeChange(e.target.value as DisplayMode)}
+            style={{
+              width: '100%',
+              padding: '4px 8px',
+              border: 'none',
+              borderRadius: 8,
+              background: '#e8ecf1',
+              fontSize: 12,
+              cursor: 'pointer',
+              boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
+            }}
+          >
+            <option value="none">None (Solid Color)</option>
+            <option value="stress">Von Mises Stress</option>
+            <option value="displacement">Displacement</option>
+            <option value="plastic">Plastic Strain</option>
+          </select>
+        </div>
+        {displayMode !== 'none' && (
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>Colormap</div>
+            <select
+              value={colormapType}
+              onChange={e => onColormapTypeChange(e.target.value as ColormapName)}
+              style={{
+                width: '100%',
+                padding: '4px 8px',
+                border: 'none',
+                borderRadius: 8,
+                background: '#e8ecf1',
+                fontSize: 12,
+                cursor: 'pointer',
+                boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
+              }}
+            >
+              <option value="jet">Jet</option>
+              <option value="rainbow">Rainbow</option>
+              <option value="thermal">Thermal</option>
+            </select>
+          </div>
+        )}
       </Section>
 
       <Section title="Material (Aluminum)" defaultOpen={false}>

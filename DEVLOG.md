@@ -44,9 +44,9 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | S2.6 | 3D Transform Gizmo | FR-08 | - | ✅ 완료 | 26/03/11 01:35 |
 | S2.7 | 하중 방향 화살표 시각화 | FR-09 | - | ✅ 완료 | 26/03/11 01:42 |
 | S3.1 | Von Mises 응력 계산 | FR-11 | - | ✅ 완료 | 26/03/11 01:50 |
-| S3.2 | 응력 컬러맵 | FR-11 | - | ⬜ 미착수 | - |
+| S3.2 | 응력 컬러맵 | FR-11 | - | ✅ 완료 | 26/03/11 01:58 |
 | S3.3 | 컬러바 표시 | FR-11 | - | ⬜ 미착수 | - |
-| S3.4 | 변형량/소성변형률 컬러맵 | FR-11 | - | ⬜ 미착수 | - |
+| S3.4 | 변형량/소성변형률 컬러맵 | FR-11 | - | ✅ 완료 | 26/03/11 01:58 |
 | S3.5 | 하중-변위 실시간 차트 | FR-12 | - | ⬜ 미착수 | - |
 | S3.6 | 애니메이션 속도 제어 | FR-13 | - | ⬜ 미착수 | - |
 | S3.7 | 프레임 스텝 기능 | FR-13 | - | ⬜ 미착수 | - |
@@ -152,6 +152,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 > 에이전트는 여기 아래에 로그를 추가한다.
 > 가장 최근 항목이 맨 위.
+
+---
+
+### [EXP-018] 응력/변형 컬러맵 + 시각화 모드 선택
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 01:58:00 |
+| **Step** | S3.2, S3.4 |
+| **관련 FR** | FR-11 |
+| **관련 NF** | - |
+| **변경 내용** | colormap.ts 유틸리티 모듈 생성: Jet/Rainbow/Thermal 3종 컬러맵. applyVertexColors() 함수로 per-vertex color 적용. App.tsx에 displayMode state (None/Stress/Displacement/PlasticStrain). colormapType state (Jet/Rainbow/Thermal). animate 루프에서 매 프레임 colormap 업데이트. vertexColors 활성/비활성 토글. ControlPanel에 Visualization 섹션 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 6/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | S3.2와 S3.4를 통합 구현 (동일한 colormap 인프라). 다음: S3.3 컬러바 표시. |
 
 ---
 

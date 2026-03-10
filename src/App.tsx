@@ -8,6 +8,7 @@ import { MassSpringSystem } from './engine/MassSpringSystem'
 import FileDropZone from './components/FileDropZone'
 import { loadSTL } from './cad/stlLoader'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
+import { applyVertexColors, type ColormapType } from './viewer/colormap'
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -43,6 +44,11 @@ export default function App() {
   const [rigidRotZ, setRigidRotZ] = useState(0)
   const [gizmoMode, setGizmoMode] = useState<'translate' | 'rotate'>('translate')
   const [showLoadArrow, setShowLoadArrow] = useState(true)
+  const [displayMode, setDisplayMode] = useState<'none' | 'stress' | 'displacement' | 'plastic'>('none')
+  const [colormapType, setColormapType] = useState<ColormapType>('jet')
+  const originalPositionsRef = useRef<Float32Array | null>(null)
+  const displayModeRef = useRef(displayMode)
+  const colormapTypeRef = useRef(colormapType)
 
   useEffect(() => {
     const container = containerRef.current
@@ -91,6 +97,7 @@ export default function App() {
       metalness: 0.7,
       roughness: 0.3,
       side: THREE.DoubleSide,
+      vertexColors: false,
     })
     const canMesh = new THREE.Mesh(canGeometry, canMaterial)
     scene.add(canMesh)
@@ -99,6 +106,9 @@ export default function App() {
     // Physics engine
     const physics = new MassSpringSystem(canGeometry)
     physicsRef.current = physics
+
+    // Store original positions for displacement calculation
+    originalPositionsRef.current = new Float32Array(physics.positions)
 
     // Rigid body (press cylinder) — sits above the can
     const rigidRadius = 40
@@ -199,6 +209,33 @@ export default function App() {
           // Sync physics → geometry
           physics.syncToGeometry(canGeometry)
 
+          // Apply colormap if display mode is active
+          const dm = displayModeRef.current
+          if (dm !== 'none') {
+            let values: Float32Array
+            let maxRange: number
+
+            if (dm === 'stress') {
+              values = physics.getStressPerNode()
+              maxRange = 310 // UTS as max reference
+            } else if (dm === 'displacement' && originalPositionsRef.current) {
+              values = physics.getDisplacementPerNode(originalPositionsRef.current)
+              maxRange = 80 // max displacement reference
+            } else {
+              values = physics.getPlasticStrainPerNode()
+              maxRange = 0.3 // 30% max plastic strain
+            }
+
+            // Auto-range: use actual min/max if available
+            let minV = 0
+            let maxV = maxRange
+            for (let vi = 0; vi < values.length; vi++) {
+              if (values[vi] > maxV) maxV = values[vi]
+            }
+
+            applyVertexColors(canGeometry, values, minV, maxV, colormapTypeRef.current)
+          }
+
           // Check stability
           if (!physics.isStable()) {
             simRunningRef.current = false
@@ -294,6 +331,30 @@ export default function App() {
   useEffect(() => {
     if (gridRef.current) gridRef.current.visible = showGrid
   }, [showGrid])
+
+  // Keep displayMode/colormapType refs in sync
+  useEffect(() => { displayModeRef.current = displayMode }, [displayMode])
+  useEffect(() => { colormapTypeRef.current = colormapType }, [colormapType])
+
+  // Sync display mode → material vertexColors
+  useEffect(() => {
+    const mesh = canMeshRef.current
+    if (!mesh) return
+    const mat = mesh.material as THREE.MeshStandardMaterial
+    if (displayMode !== 'none') {
+      mat.vertexColors = true
+      mat.color.set(0xffffff) // neutral base for vertex colors
+    } else {
+      mat.vertexColors = false
+      mat.color.set(0xc0c0c0)
+      // Remove color attribute
+      const geom = canGeometryRef.current
+      if (geom && geom.getAttribute('color')) {
+        geom.deleteAttribute('color')
+      }
+    }
+    mat.needsUpdate = true
+  }, [displayMode])
 
   // Sync load arrow visibility
   useEffect(() => {
@@ -514,6 +575,10 @@ export default function App() {
         onRigidRotXChange={setRigidRotX}
         onRigidRotYChange={setRigidRotY}
         onRigidRotZChange={setRigidRotZ}
+        displayMode={displayMode}
+        colormapType={colormapType}
+        onDisplayModeChange={setDisplayMode}
+        onColormapTypeChange={setColormapType}
       />
     </div>
   )
