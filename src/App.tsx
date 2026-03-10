@@ -777,6 +777,21 @@ export default function App() {
             })
           }
           break
+        case 'e': case 'E':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            const cd = chartDataRef.current
+            if (cd.length === 0) { showToastRef.current('No data to export'); break }
+            const mat = MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]
+            const header = `# Can Crush Simulator — ${mat.name}\n# ⌀${(canRadiusRef.current * 2).toFixed(0)}×${canHeightRef.current.toFixed(0)}mm t=${wallThicknessRef.current}mm\ndisplacement_mm,load_N\n`
+            const rows = cd.map(p => `${p.displacement.toFixed(4)},${p.load.toFixed(4)}`).join('\n')
+            const blob = new Blob([header + rows], { type: 'text/csv' })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url; a.download = `cancrush_${mat.name.replace(/\s+/g, '_')}_${Date.now()}.csv`
+            a.click(); URL.revokeObjectURL(url)
+            showToastRef.current(`CSV exported (${cd.length} points)`)
+          }
+          break
       }
       if (e.key === 'Tab') {
         e.preventDefault()
