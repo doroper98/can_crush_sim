@@ -1,10 +1,15 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import * as THREE from 'three'
 import { CatiaControls } from './viewer/CatiaControls'
 import { AxisHelper } from './viewer/AxisHelper'
+import ViewportToolbar from './components/ViewportToolbar'
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const controlsRef = useRef<CatiaControls | null>(null)
+  const canMeshRef = useRef<THREE.Mesh | null>(null)
+  const [isPerspective, setIsPerspective] = useState(true)
+  const [isWireframe, setIsWireframe] = useState(false)
 
   useEffect(() => {
     const container = containerRef.current
@@ -27,25 +32,22 @@ export default function App() {
     renderer.setPixelRatio(window.devicePixelRatio)
     container.appendChild(renderer.domElement)
 
-    // Ambient + directional light
+    // Lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
     scene.add(ambientLight)
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.8)
     dirLight.position.set(100, 200, 150)
     scene.add(dirLight)
 
-    // Grid helper
+    // Grid
     const grid = new THREE.GridHelper(500, 50, 0xcccccc, 0xe0e0e0)
     scene.add(grid)
 
     // Parametric can mesh
-    const canRadius = 33  // mm (D=66mm)
-    const canHeight = 120 // mm
-    const radialSegments = 32
-    const heightSegments = 20
+    const canRadius = 33
+    const canHeight = 120
     const canGeometry = new THREE.CylinderGeometry(
-      canRadius, canRadius, canHeight,
-      radialSegments, heightSegments, false
+      canRadius, canRadius, canHeight, 32, 20, false
     )
     const canMaterial = new THREE.MeshStandardMaterial({
       color: 0xc0c0c0,
@@ -54,14 +56,16 @@ export default function App() {
       side: THREE.DoubleSide,
     })
     const canMesh = new THREE.Mesh(canGeometry, canMaterial)
-    canMesh.position.y = canHeight / 2 // sit on grid
+    canMesh.position.y = canHeight / 2
     scene.add(canMesh)
+    canMeshRef.current = canMesh
 
-    // CATIA V5 compatible controls
+    // Controls
     const controls = new CatiaControls(camera, renderer.domElement)
     controls.setTarget(0, canHeight / 2, 0)
+    controlsRef.current = controls
 
-    // Axis indicator (bottom-left 80px)
+    // Axis helper
     const axisHelper = new AxisHelper(container)
 
     // Animation loop
@@ -73,7 +77,7 @@ export default function App() {
     }
     animate()
 
-    // Resize handler
+    // Resize
     const onResize = () => {
       const w = container.clientWidth
       const h = container.clientHeight
@@ -83,9 +87,31 @@ export default function App() {
     }
     window.addEventListener('resize', onResize)
 
+    // Keyboard shortcuts
+    const onKeyDown = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case 'p': case 'P':
+          setIsPerspective(prev => !prev)
+          break
+        case 'f': case 'F':
+          controls.setTarget(0, canHeight / 2, 0)
+          break
+        case 'w': case 'W':
+          setIsWireframe(prev => !prev)
+          break
+      }
+      // Numpad views
+      if (e.code === 'Numpad7') controls.setView('top')
+      if (e.code === 'Numpad3') controls.setView('right')
+      if (e.code === 'Numpad1') controls.setView('front')
+      if (e.code === 'Numpad0') controls.setView('iso')
+    }
+    window.addEventListener('keydown', onKeyDown)
+
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', onResize)
+      window.removeEventListener('keydown', onKeyDown)
       controls.dispose()
       axisHelper.dispose()
       renderer.dispose()
@@ -93,10 +119,45 @@ export default function App() {
     }
   }, [])
 
+  // Sync wireframe state
+  useEffect(() => {
+    const mesh = canMeshRef.current
+    if (mesh) {
+      ;(mesh.material as THREE.MeshStandardMaterial).wireframe = isWireframe
+    }
+  }, [isWireframe])
+
+  const handleViewChange = useCallback(
+    (view: 'top' | 'front' | 'right' | 'iso') => {
+      controlsRef.current?.setView(view)
+    },
+    []
+  )
+
+  const handleTogglePerspective = useCallback(() => {
+    setIsPerspective(prev => !prev)
+  }, [])
+
+  const handleFitAll = useCallback(() => {
+    controlsRef.current?.setTarget(0, 60, 0)
+  }, [])
+
+  const handleToggleWireframe = useCallback(() => {
+    setIsWireframe(prev => !prev)
+  }, [])
+
   return (
     <div
       ref={containerRef}
       style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative' }}
-    />
+    >
+      <ViewportToolbar
+        onViewChange={handleViewChange}
+        onTogglePerspective={handleTogglePerspective}
+        onFitAll={handleFitAll}
+        onToggleWireframe={handleToggleWireframe}
+        isPerspective={isPerspective}
+      />
+    </div>
   )
 }
