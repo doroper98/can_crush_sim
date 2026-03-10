@@ -26,6 +26,7 @@ const shortcuts = [
   { key: 'I', desc: '재료 비교 테이블' },
   { key: '[ / ]', desc: '재료 이전/다음 순환' },
   { key: 'H', desc: 'HUD 오버레이 토글' },
+  { key: 'A', desc: 'About 모달 토글' },
   { key: 'Tab', desc: '컨트롤 패널 접힘/펼침' },
   { key: 'Space', desc: '시뮬레이션 Play/Pause 토글' },
   { key: 'Esc', desc: '모달/메뉴 닫기, 측정 취소' },

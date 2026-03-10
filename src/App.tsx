@@ -835,6 +835,11 @@ export default function App() {
             handleExportJSON()
           }
           break
+        case 'a': case 'A':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            setShowAbout(prev => !prev)
+          }
+          break
       }
       if (e.key === 'Tab') {
         e.preventDefault()
