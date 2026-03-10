@@ -346,6 +346,11 @@ export default function App() {
     // Axis helper
     const axisHelper = new AxisHelper(container)
 
+    // Mini-map camera (top-down orthographic)
+    const mmCamera = new THREE.OrthographicCamera(-100, 100, 100, -100, 1, 1000)
+    mmCamera.position.set(0, 300, 0)
+    mmCamera.lookAt(0, 0, 0)
+
     // Animation loop
     let animId: number
     const animate = () => {
@@ -587,6 +592,19 @@ export default function App() {
       }
 
       renderer.render(scene, camera)
+
+      // Mini-map: top-down view in bottom-right corner
+      const mmSize = 120
+      const mmMargin = 8
+      const cw = container.clientWidth
+      const ch = container.clientHeight
+      renderer.setViewport(cw - mmSize - mmMargin, mmMargin, mmSize, mmSize)
+      renderer.setScissor(cw - mmSize - mmMargin, mmMargin, mmSize, mmSize)
+      renderer.setScissorTest(true)
+      renderer.render(scene, mmCamera)
+      renderer.setScissorTest(false)
+      renderer.setViewport(0, 0, cw, ch)
+
       axisHelper.update(camera)
     }
     animate()
