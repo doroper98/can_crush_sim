@@ -1488,7 +1488,9 @@ export default function App() {
               fontWeight: 600,
               fontSize: 13,
               cursor: 'pointer',
-              boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+              boxShadow: darkMode
+                ? '3px 3px 6px rgba(0,0,0,0.4), -3px -3px 6px rgba(51,65,85,0.4)'
+                : '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
               transition: 'box-shadow 0.15s, transform 0.15s',
             }}
           >
@@ -1506,7 +1508,9 @@ export default function App() {
               fontWeight: 600,
               fontSize: 13,
               cursor: simState === 'running' ? 'not-allowed' : 'pointer',
-              boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+              boxShadow: darkMode
+                ? '3px 3px 6px rgba(0,0,0,0.4), -3px -3px 6px rgba(51,65,85,0.4)'
+                : '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
               transition: 'box-shadow 0.15s, transform 0.15s',
             }}
           >
@@ -1523,7 +1527,9 @@ export default function App() {
               fontWeight: 600,
               fontSize: 13,
               cursor: 'pointer',
-              boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+              boxShadow: darkMode
+                ? '3px 3px 6px rgba(0,0,0,0.4), -3px -3px 6px rgba(51,65,85,0.4)'
+                : '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
               transition: 'box-shadow 0.15s, transform 0.15s',
             }}
           >
@@ -1540,7 +1546,9 @@ export default function App() {
               fontWeight: 600,
               fontSize: 13,
               cursor: 'pointer',
-              boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+              boxShadow: darkMode
+                ? '3px 3px 6px rgba(0,0,0,0.4), -3px -3px 6px rgba(51,65,85,0.4)'
+                : '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
               transition: 'box-shadow 0.15s, transform 0.15s',
             }}
           >
