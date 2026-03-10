@@ -13,6 +13,7 @@ const shortcuts = [
   { key: 'L', desc: '하중 화살표 토글' },
   { key: 'B', desc: '경계조건 마커 토글' },
   { key: 'S', desc: '스크린샷 (PNG)' },
+  { key: 'D', desc: '다크 모드 토글' },
   { key: '?', desc: '단축키 도움말 토글' },
   { key: 'Num 7', desc: 'Top View (XY)' },
   { key: 'Num 3', desc: 'Right View (YZ)' },

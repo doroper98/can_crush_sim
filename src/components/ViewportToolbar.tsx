@@ -5,6 +5,8 @@ interface ViewportToolbarProps {
   onToggleWireframe: () => void
   onScreenshot?: () => void
   onHelp?: () => void
+  onToggleDarkMode?: () => void
+  darkMode?: boolean
   isPerspective: boolean
   gizmoMode?: 'translate' | 'rotate'
   onGizmoModeChange?: (mode: 'translate' | 'rotate') => void
@@ -17,6 +19,8 @@ export default function ViewportToolbar({
   onToggleWireframe,
   onScreenshot,
   onHelp,
+  onToggleDarkMode,
+  darkMode = false,
   isPerspective,
   gizmoMode = 'translate',
   onGizmoModeChange,
@@ -108,6 +112,15 @@ export default function ViewportToolbar({
             Rot
           </button>
         </>
+      )}
+      {onToggleDarkMode && (
+        <button
+          style={darkMode ? activeBtnStyle : btnStyle}
+          onClick={onToggleDarkMode}
+          title="Toggle Dark Mode (D)"
+        >
+          {darkMode ? 'Light' : 'Dark'}
+        </button>
       )}
       {onHelp && (
         <>

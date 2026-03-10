@@ -54,6 +54,7 @@ export default function App() {
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
   const [showGrid, setShowGrid] = useState(true)
+  const [darkMode, setDarkMode] = useState(false)
   const [simState, setSimState] = useState<'idle' | 'running' | 'paused'>('idle')
   const [canDiameter, setCanDiameter] = useState(66)
   const [canHeightParam, setCanHeightParam] = useState(120)
@@ -543,6 +544,11 @@ export default function App() {
         case '?':
           setShowHelp(prev => !prev)
           break
+        case 'd': case 'D':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            setDarkMode(prev => !prev)
+          }
+          break
       }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
@@ -646,6 +652,18 @@ export default function App() {
       container.removeChild(renderer.domElement)
     }
   }, [])
+
+  // Sync dark mode
+  useEffect(() => {
+    const scene = sceneRef.current
+    if (scene) {
+      scene.background = new THREE.Color(darkMode ? 0x1e293b : 0xf0f4f8)
+    }
+    const grid = gridRef.current
+    if (grid) {
+      ;(grid.material as THREE.LineBasicMaterial).color.set(darkMode ? 0x334155 : 0xcccccc)
+    }
+  }, [darkMode])
 
   // Sync wireframe state
   useEffect(() => {
@@ -986,6 +1004,8 @@ export default function App() {
           onToggleWireframe={handleToggleWireframe}
           onScreenshot={handleScreenshot}
           onHelp={() => setShowHelp(prev => !prev)}
+          onToggleDarkMode={() => setDarkMode(prev => !prev)}
+          darkMode={darkMode}
           isPerspective={isPerspective}
           gizmoMode={gizmoMode}
           onGizmoModeChange={setGizmoMode}
