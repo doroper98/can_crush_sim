@@ -1371,13 +1371,14 @@ export default function App() {
       canDiameter, canHeight: canHeightParam, wallThickness, maxForce, compressionSpeed: compressionSpeedParam,
       controlMode, rigidShape, rigidRadius, rigidHeight, materialKey,
       matYoungsModulus, matYieldStress, matUTS, matHardeningN, maxCompression,
+      autoStopStress, autoStopMultiplier,
     }
     const presets = JSON.parse(localStorage.getItem('cancrush_presets') || '{}')
     presets[name] = preset
     localStorage.setItem('cancrush_presets', JSON.stringify(presets))
     setPresetName(name)
     showToast(`Preset "${name}" saved`)
-  }, [canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, controlMode, rigidShape, rigidRadius, rigidHeight, materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN, maxCompression, showToast])
+  }, [canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, controlMode, rigidShape, rigidRadius, rigidHeight, materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN, maxCompression, autoStopStress, autoStopMultiplier, showToast])
 
   const handleLoadPreset = useCallback((name: string) => {
     const presets = JSON.parse(localStorage.getItem('cancrush_presets') || '{}')
@@ -1398,6 +1399,8 @@ export default function App() {
     setMatHardeningN(p.matHardeningN)
     if (p.controlMode != null) setControlMode(p.controlMode)
     if (p.maxCompression != null) setMaxCompression(p.maxCompression)
+    if (p.autoStopStress != null) setAutoStopStress(p.autoStopStress)
+    if (p.autoStopMultiplier != null) setAutoStopMultiplier(p.autoStopMultiplier)
     setPresetName(name)
     showToast(`Preset "${name}" loaded`)
   }, [showToast])
@@ -1425,7 +1428,7 @@ export default function App() {
         rigidPosition: { x: rigidPosX, y: rigidPosY, z: rigidPosZ },
         rigidRotation: { x: rigidRotX, y: rigidRotY, z: rigidRotZ },
         materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN,
-        maxCompression,
+        maxCompression, autoStopStress, autoStopMultiplier,
       },
       display: { displayMode, colormapType, deformScale, clipEnabled, clipY, darkMode },
       results: resultSummary,
@@ -1442,7 +1445,8 @@ export default function App() {
   }, [showToast, canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, controlMode,
       rigidShape, rigidRadius, rigidHeight, rigidPosX, rigidPosY, rigidPosZ,
       rigidRotX, rigidRotY, rigidRotZ, materialKey, matYoungsModulus, matYieldStress,
-      matUTS, matHardeningN, maxCompression, displayMode, colormapType, deformScale, clipEnabled, clipY,
+      matUTS, matHardeningN, maxCompression, autoStopStress, autoStopMultiplier,
+      displayMode, colormapType, deformScale, clipEnabled, clipY,
       darkMode, resultSummary, chartData])
 
   const handleExportSTL = useCallback(() => {
@@ -1554,6 +1558,8 @@ export default function App() {
             if (p.matUTS != null) setMatUTS(p.matUTS)
             if (p.matHardeningN != null) setMatHardeningN(p.matHardeningN)
             if (p.maxCompression != null) setMaxCompression(p.maxCompression)
+            if (p.autoStopStress != null) setAutoStopStress(p.autoStopStress)
+            if (p.autoStopMultiplier != null) setAutoStopMultiplier(p.autoStopMultiplier)
           }
           const d = snap.display
           if (d) {
