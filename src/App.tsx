@@ -1537,8 +1537,10 @@ export default function App() {
             <div style={{
               height: 6,
               borderRadius: 3,
-              background: 'rgba(163,177,198,0.3)',
-              boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.4), inset -2px -2px 4px rgba(255,255,255,0.9)',
+              background: darkMode ? 'rgba(51,65,85,0.5)' : 'rgba(163,177,198,0.3)',
+              boxShadow: darkMode
+                ? 'inset 2px 2px 4px rgba(0,0,0,0.4), inset -2px -2px 4px rgba(51,65,85,0.6)'
+                : 'inset 2px 2px 4px rgba(163,177,198,0.4), inset -2px -2px 4px rgba(255,255,255,0.9)',
               overflow: 'hidden',
             }}>
               <div style={{
@@ -1553,7 +1555,7 @@ export default function App() {
               display: 'flex',
               justifyContent: 'space-between',
               fontSize: 9,
-              color: '#64748b',
+              color: darkMode ? '#94a3b8' : '#64748b',
               marginTop: 2,
               fontFamily: 'monospace',
             }}>
