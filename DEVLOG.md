@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-074] 다크 모드 StatusBar 전파
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 09:35:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) StatusBar.tsx: darkMode prop 추가. (2) 배경색: 다크 #0f172a / 라이트 #e8ecf1. (3) 테두리: 다크 #334155 / 라이트 #d0d5dd. (4) 텍스트: 다크 #94a3b8 / 라이트 #475569. (5) inset shadow: 다크 rgba(0,0,0,0.3). (6) App.tsx: StatusBar에 darkMode={darkMode} 전달. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | EXP-073과 함께 D키 다크 모드 시 3D 씬 + Control Panel + Status Bar 모두 어둡게 전환. |
+
+---
+
 ### [EXP-073] 다크 모드 ControlPanel 전파
 
 | 항목 | 값 |

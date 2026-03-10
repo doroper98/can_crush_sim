@@ -1687,6 +1687,7 @@ export default function App() {
         min: colorBarMin,
         max: colorBarMax,
       } : null}
+      darkMode={darkMode}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} />
     {/* Toast notifications */}
