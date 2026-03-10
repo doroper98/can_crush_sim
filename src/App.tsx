@@ -36,6 +36,12 @@ export default function App() {
   const loadArrowRef = useRef<THREE.ArrowHelper | null>(null)
   const lodLevelRef = useRef<{ radial: number; height: number }>({ radial: 32, height: 20 })
   const screenshotRef = useRef<() => void>(() => {})
+  // Refs for animation loop to access current parameter values
+  const canRadiusRef = useRef(33)
+  const canHeightRef = useRef(120)
+  const compressionSpeedRef = useRef(10)
+  const rigidRadiusRef = useRef(40)
+  const rigidHeightRef = useRef(20)
 
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
@@ -216,10 +222,6 @@ export default function App() {
     // Axis helper
     const axisHelper = new AxisHelper(container)
 
-    // Simulation parameters
-    const compressionSpeed = 10 // mm/s
-    const maxDisplacement = 80  // mm total travel
-
     // Animation loop
     let animId: number
     const animate = () => {
@@ -228,11 +230,21 @@ export default function App() {
       const doStep = simRunningRef.current || stepOnceRef.current
       if (stepOnceRef.current) stepOnceRef.current = false
 
+      // Read current params from refs (not closured constants)
+      const curCanHeight = canHeightRef.current
+      const curCanRadius = canRadiusRef.current
+      const curSpeed = compressionSpeedRef.current
+      const curRigidRadius = rigidRadiusRef.current
+      const curRigidHeight = rigidHeightRef.current
+      const maxDisplacement = curCanHeight * 0.67 // compress up to ~67% of can height
+      const physics = physicsRef.current!
+      const geom = canGeometryRef.current!
+
       if (doStep) {
         // Move rigid body down
-        const displacement = simTimeRef.current * compressionSpeed
+        const displacement = simTimeRef.current * curSpeed
         if (displacement < maxDisplacement) {
-          const rigidY = canHeight + rigidHeight / 2 + 5 - displacement
+          const rigidY = curCanHeight + curRigidHeight / 2 + 5 - displacement
           rigidMesh.position.y = rigidY
 
           // Physics step
@@ -241,22 +253,22 @@ export default function App() {
           // Apply rigid body contact
           physics.applyRigidCylinderContact(
             0, rigidY, 0,  // rigid body center
-            rigidRadius,
-            rigidHeight / 2
+            curRigidRadius,
+            curRigidHeight / 2
           )
 
           // Apply self-contact (prevent wall overlap)
           physics.applySelfContact(2.0)
 
           // Sync physics → geometry
-          physics.syncToGeometry(canGeometry)
+          physics.syncToGeometry(geom)
 
           // Record load-displacement data (every 10 frames — reduced from 5)
           if (colorBarUpdateCounter.current % 10 === 0) {
             const stresses = physics.getStressPerNode()
             let avgTopStress = 0
             let topCount = 0
-            const threshold = canHeight - displacement - 5
+            const threshold = curCanHeight - displacement - 5
             for (let ni = 0; ni < physics.nodeCount; ni++) {
               if (physics.positions[ni * 3 + 1] > threshold) {
                 avgTopStress += stresses[ni]
@@ -264,7 +276,7 @@ export default function App() {
               }
             }
             if (topCount > 0) avgTopStress /= topCount
-            const crossArea = Math.PI * canRadius * 0.3
+            const crossArea = Math.PI * curCanRadius * 0.3
             const estimatedForce = avgTopStress * crossArea * 0.001
             // Push instead of spread (avoid O(n) copy each time)
             chartDataRef.current.push({ displacement, load: estimatedForce })
@@ -282,7 +294,7 @@ export default function App() {
               maxRange = 310 // UTS as max reference
             } else if (dm === 'displacement' && originalPositionsRef.current) {
               values = physics.getDisplacementPerNode(originalPositionsRef.current)
-              maxRange = 80 // max displacement reference
+              maxRange = maxDisplacement
             } else {
               values = physics.getPlasticStrainPerNode()
               maxRange = 0.3 // 30% max plastic strain
@@ -295,7 +307,7 @@ export default function App() {
               if (values[vi] > maxV) maxV = values[vi]
             }
 
-            applyVertexColors(canGeometry, values, minV, maxV, colormapTypeRef.current)
+            applyVertexColors(geom, values, minV, maxV, colormapTypeRef.current)
 
             // Update colorbar labels (throttled)
             if (colorBarUpdateCounter.current % 10 === 0) {
@@ -322,7 +334,7 @@ export default function App() {
       if (loadArrow.visible) {
         loadArrow.position.set(
           rigidMesh.position.x,
-          rigidMesh.position.y + rigidHeight / 2 + 5,
+          rigidMesh.position.y + curRigidHeight / 2 + 5,
           rigidMesh.position.z
         )
       }
@@ -335,10 +347,12 @@ export default function App() {
         if (newLOD.radial !== curLOD.radial || newLOD.height !== curLOD.height) {
           lodLevelRef.current = newLOD
           // Rebuild can geometry with new segment counts
+          const r = canRadiusRef.current
+          const h = canHeightRef.current
           const newGeom = new THREE.CylinderGeometry(
-            canRadius, canRadius, canHeight, newLOD.radial, newLOD.height, false
+            r, r, h, newLOD.radial, newLOD.height, false
           )
-          newGeom.translate(0, canHeight / 2, 0)
+          newGeom.translate(0, h / 2, 0)
           canMesh.geometry.dispose()
           canMesh.geometry = newGeom
           canGeometryRef.current = newGeom
@@ -450,6 +464,11 @@ export default function App() {
   useEffect(() => { displayModeRef.current = displayMode }, [displayMode])
   useEffect(() => { colormapTypeRef.current = colormapType }, [colormapType])
   useEffect(() => { timeScaleRef.current = timeScale }, [timeScale])
+  useEffect(() => { canRadiusRef.current = canDiameter / 2 }, [canDiameter])
+  useEffect(() => { canHeightRef.current = canHeightParam }, [canHeightParam])
+  useEffect(() => { compressionSpeedRef.current = compressionSpeedParam }, [compressionSpeedParam])
+  useEffect(() => { rigidRadiusRef.current = rigidRadius }, [rigidRadius])
+  useEffect(() => { rigidHeightRef.current = rigidHeight }, [rigidHeight])
 
   // Rebuild can when parameters change (idle only, debounced 200ms)
   const rebuildTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)

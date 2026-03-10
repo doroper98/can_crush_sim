@@ -178,6 +178,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-038] 애니메이션 루프 파라미터 ref화
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 04:45:00 |
+| **Step** | - (버그 수정) |
+| **관련 FR** | FR-05, FR-09 |
+| **관련 NF** | - |
+| **변경 내용** | 애니메이션 루프 내 closured constants (canRadius=33, canHeight=120, compressionSpeed=10, rigidRadius=40, rigidHeight=20, maxDisplacement=80) 제거. canRadiusRef, canHeightRef, compressionSpeedRef, rigidRadiusRef, rigidHeightRef 5개 ref 추가. useEffect로 state→ref 동기화. maxDisplacement를 canHeight*0.67로 동적 계산. LOD 재생성도 현재 반지름/높이 사용. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 9/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 이전에는 캔 파라미터를 변경해도 시뮬레이션은 초기값(D=66, H=120)으로 돌아가는 버그가 있었음. 이제 파라미터 변경이 시뮬레이션에 실시간 반영됨. |
+
+---
+
 ### [EXP-037] 강체 형상 변경 시 메시 재생성
 
 | 항목 | 값 |
