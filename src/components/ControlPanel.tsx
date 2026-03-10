@@ -442,6 +442,36 @@ export default function ControlPanel({
 
       <Section title="Load-Displacement Chart">
         <LoadDisplacementChart data={chartData} width={256} height={160} />
+        {chartData.length > 0 && (
+          <button
+            onClick={() => {
+              const header = 'displacement_mm,load_N\n'
+              const rows = chartData.map(d => `${d.displacement.toFixed(4)},${d.load.toFixed(4)}`).join('\n')
+              const blob = new Blob([header + rows], { type: 'text/csv' })
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.href = url
+              a.download = `cancrush_load_disp_${Date.now()}.csv`
+              a.click()
+              URL.revokeObjectURL(url)
+            }}
+            style={{
+              width: '100%',
+              marginTop: 6,
+              padding: '6px 0',
+              border: 'none',
+              borderRadius: 10,
+              background: '#f0f4f8',
+              color: '#3b82f6',
+              fontWeight: 600,
+              fontSize: 11,
+              cursor: 'pointer',
+              boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+            }}
+          >
+            Export CSV
+          </button>
+        )}
       </Section>
 
       <Section title="Material" defaultOpen={false}>

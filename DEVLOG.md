@@ -178,6 +178,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-044] CSV 데이터 내보내기
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 05:42:00 |
+| **Step** | - (유틸리티) |
+| **관련 FR** | FR-12 |
+| **관련 NF** | - |
+| **변경 내용** | ControlPanel의 Load-Displacement Chart 섹션에 Export CSV 버튼 추가. chartData가 존재할 때만 표시. Blob 생성 → URL.createObjectURL → 자동 다운로드. CSV 형식: displacement_mm, load_N 헤더 + 소수점 4자리. 뉴로모피즘 스타일 버튼. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 시뮬레이션 결과를 엑셀/매트랩 등으로 후처리 가능. CSV 파일명에 타임스탬프 포함하여 덮어쓰기 방지. |
+
+---
+
 ### [EXP-043] 좌클릭 객체 선택 하이라이트
 
 | 항목 | 값 |
