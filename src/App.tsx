@@ -162,6 +162,17 @@ export default function App() {
     container.appendChild(renderer.domElement)
     rendererRef.current = renderer
 
+    // Simple procedural environment map for metallic reflections
+    const pmremGen = new THREE.PMREMGenerator(renderer)
+    const envScene = new THREE.Scene()
+    envScene.background = new THREE.Color(0xccddee)
+    // Add gradient hemisphere
+    const envLight1 = new THREE.HemisphereLight(0xb1e1ff, 0xb97a20, 2)
+    envScene.add(envLight1)
+    const envRT = pmremGen.fromScene(envScene)
+    scene.environment = envRT.texture
+    pmremGen.dispose()
+
     // Lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
     scene.add(ambientLight)
@@ -193,8 +204,9 @@ export default function App() {
     canGeometryRef.current = canGeometry
     const canMaterial = new THREE.MeshStandardMaterial({
       color: 0xc0c0c0,
-      metalness: 0.7,
-      roughness: 0.3,
+      metalness: 0.8,
+      roughness: 0.25,
+      envMapIntensity: 0.6,
       side: THREE.DoubleSide,
       vertexColors: false,
       clippingPlanes: [clipPlaneRef.current],
