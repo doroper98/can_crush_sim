@@ -102,6 +102,7 @@ export default function App() {
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
   const [cursorWorld, setCursorWorld] = useState<{ x: number; y: number; z: number } | null>(null)
   const [showHelp, setShowHelp] = useState(false)
+  const [showAbout, setShowAbout] = useState(() => !localStorage.getItem('cancrush_visited'))
   const [deformScale, setDeformScale] = useState(1.0)
   const deformScaleRef = useRef(1.0)
   const [simTime, setSimTime] = useState(0)
@@ -1361,6 +1362,46 @@ export default function App() {
       } : null}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} />
+    {showAbout && (
+      <div
+        onClick={() => { setShowAbout(false); localStorage.setItem('cancrush_visited', '1') }}
+        style={{
+          position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.7)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000,
+        }}
+      >
+        <div
+          onClick={e => e.stopPropagation()}
+          style={{
+            background: '#f0f4f8', borderRadius: 20, padding: '28px 36px', maxWidth: 480,
+            boxShadow: '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)',
+          }}
+        >
+          <h2 style={{ margin: '0 0 12px', fontSize: 18, color: '#0f172a' }}>Can Crush Simulator</h2>
+          <p style={{ fontSize: 12, color: '#475569', lineHeight: 1.6, margin: '0 0 12px' }}>
+            Real-time elasto-plastic aluminum can crushing simulation with Mass-Spring FEM,
+            Ludwik-Hollomon hardening, and Von Mises stress analysis.
+          </p>
+          <div style={{ fontSize: 11, color: '#64748b', lineHeight: 1.8 }}>
+            <div><strong>Play/Pause/Reset</strong> — Start or stop the simulation</div>
+            <div><strong>W</strong> — Wireframe toggle</div>
+            <div><strong>M</strong> — Measurement tool</div>
+            <div><strong>D</strong> — Dark mode</div>
+            <div><strong>?</strong> — All keyboard shortcuts</div>
+          </div>
+          <button
+            onClick={() => { setShowAbout(false); localStorage.setItem('cancrush_visited', '1') }}
+            style={{
+              marginTop: 16, width: '100%', padding: '10px 0', border: 'none', borderRadius: 12,
+              background: '#3b82f6', color: '#fff', fontWeight: 600, fontSize: 14, cursor: 'pointer',
+              boxShadow: '4px 4px 8px rgba(163,177,198,0.5), -4px -4px 8px rgba(255,255,255,0.8)',
+            }}
+          >
+            Get Started
+          </button>
+        </div>
+      </div>
+    )}
     </div>
   )
 }
