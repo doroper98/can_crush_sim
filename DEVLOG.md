@@ -916,6 +916,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **판정** | ✅ COMMIT (아래) |
 | **비고** | K값으로 재료별 경화 정도 직관적 비교 가능. SS304 K≈920, Cu C110 K≈480 등. |
 
+### [EXP-160] HUD flow stress 실시간 표시
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 17:10:00 |
+| **Step** | - (HUD 확장) |
+| **관련 FR** | FR-09 |
+| **관련 NF** | NF-03 |
+| **변경 내용** | (1) HUD에 σ_f (flow stress at max plastic strain) 실시간 표시. (2) material.flowStress(maxPlastic) 호출. (3) 9px 회색 서브텍스트. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 842.10 kB (gzip 230.07 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | σ_f는 Ludwik-Hollomon σ_f = σy + K·ε_p^n. 변형 진행에 따른 경화 정도 실시간 확인. |
+
 ---
 
 ### [EXP-115] About 모달 재료 수 동적 표시

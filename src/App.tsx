@@ -1894,6 +1894,7 @@ export default function App() {
               )
             })()}
             <div>ε_p: {(resultSummary.maxPlastic * 100).toFixed(1)} %</div>
+            <div style={{ fontSize: 9, color: '#64748b' }}>σ_f: {(MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]).flowStress(resultSummary.maxPlastic).toFixed(0)} MPa</div>
             <div>E: {resultSummary.energyAbsorbed.toFixed(2)} J</div>
             <div style={{ borderTop: '1px solid rgba(148,163,184,0.3)', marginTop: 3, paddingTop: 3 }}>
               <div>F_pk: {resultSummary.peakForce.toFixed(0)} N  F̄: {resultSummary.meanForce.toFixed(0)} N</div>
