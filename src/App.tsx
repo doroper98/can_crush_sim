@@ -113,6 +113,12 @@ export default function App() {
   const [clipY, setClipY] = useState(60) // clipping plane Y position (mm)
   const clipPlaneRef = useRef(new THREE.Plane(new THREE.Vector3(0, -1, 0), 60))
   const maxStressMarkerRef = useRef<THREE.Sprite | null>(null)
+  const [measureMode, setMeasureMode] = useState(false)
+  const measureModeRef = useRef(false)
+  const measurePt1Ref = useRef<THREE.Vector3 | null>(null)
+  const measureLineRef = useRef<THREE.Line | null>(null)
+  const measureLabelRef = useRef<THREE.Sprite | null>(null)
+  const [measureDist, setMeasureDist] = useState<number | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
@@ -550,6 +556,12 @@ export default function App() {
             setDarkMode(prev => !prev)
           }
           break
+        case 'm': case 'M':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            setMeasureMode(prev => !prev)
+            measurePt1Ref.current = null
+          }
+          break
       }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
@@ -611,7 +623,7 @@ export default function App() {
     }
     container.addEventListener('mousemove', onMouseMove)
 
-    // Left-click object selection
+    // Left-click: object selection or measurement
     const selectables = [canMesh, rigidMesh]
     const onClickSelect = (e: MouseEvent) => {
       if (e.button !== 0) return
@@ -619,6 +631,66 @@ export default function App() {
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
       raycaster.setFromCamera(mouse, camera)
+
+      // Measure mode: click two points on any mesh
+      if (measureModeRef.current) {
+        const meshHits = raycaster.intersectObjects([canMesh, rigidMesh], false)
+        let pt: THREE.Vector3 | null = null
+        if (meshHits.length > 0) {
+          pt = meshHits[0].point.clone()
+        } else if (raycaster.ray.intersectPlane(groundPlane, intersectPt)) {
+          pt = intersectPt.clone()
+        }
+        if (pt) {
+          if (!measurePt1Ref.current) {
+            // First point
+            measurePt1Ref.current = pt
+            setMeasureDist(null)
+            // Remove previous measurement visuals
+            if (measureLineRef.current) { scene.remove(measureLineRef.current); measureLineRef.current.geometry.dispose(); measureLineRef.current = null }
+            if (measureLabelRef.current) { scene.remove(measureLabelRef.current); measureLabelRef.current = null }
+          } else {
+            // Second point: draw line + label
+            const p1 = measurePt1Ref.current
+            const p2 = pt
+            const dist = p1.distanceTo(p2)
+            setMeasureDist(dist)
+
+            // Remove old
+            if (measureLineRef.current) { scene.remove(measureLineRef.current); measureLineRef.current.geometry.dispose() }
+            if (measureLabelRef.current) { scene.remove(measureLabelRef.current) }
+
+            // Line
+            const lineGeom = new THREE.BufferGeometry().setFromPoints([p1, p2])
+            const line = new THREE.Line(lineGeom, new THREE.LineBasicMaterial({ color: 0x22c55e, linewidth: 2 }))
+            scene.add(line)
+            measureLineRef.current = line
+
+            // Label at midpoint
+            const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5)
+            const labelCanvas = document.createElement('canvas')
+            labelCanvas.width = 128; labelCanvas.height = 32
+            const ctx = labelCanvas.getContext('2d')!
+            ctx.fillStyle = 'rgba(34,197,94,0.9)'
+            ctx.roundRect(0, 0, 128, 32, 6)
+            ctx.fill()
+            ctx.fillStyle = '#fff'
+            ctx.font = 'bold 16px sans-serif'
+            ctx.textAlign = 'center'
+            ctx.fillText(`${dist.toFixed(1)} mm`, 64, 22)
+            const labelTex = new THREE.CanvasTexture(labelCanvas)
+            const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: labelTex, transparent: true, depthTest: false }))
+            label.position.copy(mid).add(new THREE.Vector3(0, 5, 0))
+            label.scale.set(30, 7.5, 1)
+            scene.add(label)
+            measureLabelRef.current = label
+
+            measurePt1Ref.current = null // ready for next measurement
+          }
+        }
+        return
+      }
+
       const hits = raycaster.intersectObjects(selectables, false)
       // Clear previous selection highlight
       for (const obj of selectables) {
@@ -705,6 +777,8 @@ export default function App() {
   useEffect(() => { matYieldStressRef.current = matYieldStress }, [matYieldStress])
   useEffect(() => { matHardeningNRef.current = matHardeningN }, [matHardeningN])
   useEffect(() => { deformScaleRef.current = deformScale }, [deformScale])
+
+  useEffect(() => { measureModeRef.current = measureMode }, [measureMode])
 
   // Sync clipping plane
   useEffect(() => {
@@ -1051,6 +1125,8 @@ export default function App() {
           onHelp={() => setShowHelp(prev => !prev)}
           onToggleDarkMode={() => setDarkMode(prev => !prev)}
           darkMode={darkMode}
+          measureMode={measureMode}
+          onToggleMeasure={() => { setMeasureMode(prev => !prev); measurePt1Ref.current = null }}
           isPerspective={isPerspective}
           gizmoMode={gizmoMode}
           onGizmoModeChange={setGizmoMode}
@@ -1152,7 +1228,8 @@ export default function App() {
             color: '#64748b',
             fontSize: 12,
           }}>
-            {isRecording ? 'Recording...' : simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating...' : 'Paused'}
+            {measureMode ? (measurePt1Ref.current ? 'Click 2nd point' : 'Click 1st point') : isRecording ? 'Recording...' : simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating...' : 'Paused'}
+            {measureDist !== null && !measureMode && ` | d=${measureDist.toFixed(1)}mm`}
           </span>
         </div>
         {/* Node info tooltip */}

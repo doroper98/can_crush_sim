@@ -7,6 +7,8 @@ interface ViewportToolbarProps {
   onHelp?: () => void
   onToggleDarkMode?: () => void
   darkMode?: boolean
+  measureMode?: boolean
+  onToggleMeasure?: () => void
   isPerspective: boolean
   gizmoMode?: 'translate' | 'rotate'
   onGizmoModeChange?: (mode: 'translate' | 'rotate') => void
@@ -21,6 +23,8 @@ export default function ViewportToolbar({
   onHelp,
   onToggleDarkMode,
   darkMode = false,
+  measureMode = false,
+  onToggleMeasure,
   isPerspective,
   gizmoMode = 'translate',
   onGizmoModeChange,
@@ -112,6 +116,15 @@ export default function ViewportToolbar({
             Rot
           </button>
         </>
+      )}
+      {onToggleMeasure && (
+        <button
+          style={measureMode ? activeBtnStyle : btnStyle}
+          onClick={onToggleMeasure}
+          title="Measure Tool (M)"
+        >
+          Meas
+        </button>
       )}
       {onToggleDarkMode && (
         <button
