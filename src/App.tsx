@@ -14,6 +14,7 @@ import { MATERIALS, DEFAULT_MATERIAL } from './engine/MaterialModel'
 import { CanvasRecorder } from './viewer/recorder'
 import StatusBar from './components/StatusBar'
 import KeyboardHelp from './components/KeyboardHelp'
+import MaterialTable from './components/MaterialTable'
 
 /** LOD: compute radial/height segments based on camera distance */
 function getLODSegments(cameraDistance: number): { radial: number; height: number } {
@@ -116,6 +117,7 @@ export default function App() {
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
   const [cursorWorld, setCursorWorld] = useState<{ x: number; y: number; z: number } | null>(null)
   const [showHelp, setShowHelp] = useState(false)
+  const [showMaterialTable, setShowMaterialTable] = useState(false)
   const [showAbout, setShowAbout] = useState(() => !localStorage.getItem('cancrush_visited'))
   const [deformScale, setDeformScale] = useState(1.0)
   const deformScaleRef = useRef(1.0)
@@ -790,6 +792,11 @@ export default function App() {
             a.href = url; a.download = `cancrush_${mat.name.replace(/\s+/g, '_')}_${Date.now()}.csv`
             a.click(); URL.revokeObjectURL(url)
             showToastRef.current(`CSV exported (${cd.length} points)`)
+          }
+          break
+        case 'i': case 'I':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            setShowMaterialTable(prev => !prev)
           }
           break
       }
@@ -1990,6 +1997,7 @@ export default function App() {
       darkMode={darkMode}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} darkMode={darkMode} />
+    <MaterialTable visible={showMaterialTable} onClose={() => setShowMaterialTable(false)} darkMode={darkMode} currentMaterial={materialKeyRef.current} />
     {/* Toast notifications */}
     <div style={{ position: 'fixed', bottom: 40, left: '50%', transform: 'translateX(-50%)', zIndex: 3000, display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
       {toasts.map(t => (
