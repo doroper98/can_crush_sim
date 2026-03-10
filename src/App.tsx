@@ -5,9 +5,12 @@ import { AxisHelper } from './viewer/AxisHelper'
 import ViewportToolbar from './components/ViewportToolbar'
 import ControlPanel from './components/ControlPanel'
 import { MassSpringSystem } from './engine/MassSpringSystem'
+import FileDropZone from './components/FileDropZone'
+import { loadSTL } from './cad/stlLoader'
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const sceneRef = useRef<THREE.Scene | null>(null)
   const controlsRef = useRef<CatiaControls | null>(null)
   const canMeshRef = useRef<THREE.Mesh | null>(null)
   const gridRef = useRef<THREE.GridHelper | null>(null)
@@ -33,6 +36,7 @@ export default function App() {
 
     const scene = new THREE.Scene()
     scene.background = new THREE.Color(0xf0f4f8)
+    sceneRef.current = scene
 
     const camera = new THREE.PerspectiveCamera(
       50,
@@ -278,9 +282,46 @@ export default function App() {
     }
   }, [])
 
+  const handleFileLoaded = useCallback(async (buffer: ArrayBuffer, fileName: string, ext: string) => {
+    const scene = sceneRef.current
+    if (!scene) return
+
+    try {
+      let geometries: THREE.BufferGeometry[] = []
+
+      if (ext === 'stl') {
+        geometries = [loadSTL(buffer)]
+      } else if (ext === 'stp' || ext === 'step') {
+        console.warn('STEP file support requires OCCT.js WASM initialization (coming soon)')
+        return
+      } else {
+        console.warn(`Unsupported file format: .${ext}`)
+        return
+      }
+
+      const material = new THREE.MeshStandardMaterial({
+        color: 0x88aacc,
+        metalness: 0.4,
+        roughness: 0.5,
+        side: THREE.DoubleSide,
+      })
+
+      for (const geom of geometries) {
+        const mesh = new THREE.Mesh(geom, material)
+        mesh.name = `imported_${fileName}`
+        scene.add(mesh)
+      }
+
+      console.log(`Loaded ${fileName}: ${geometries.length} geometries`)
+    } catch (e) {
+      console.error(`Failed to load ${fileName}:`, e)
+    }
+  }, [])
+
   return (
     <div style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden' }}>
       {/* 3D Viewport (70%) */}
+      <FileDropZone onFileLoaded={handleFileLoaded}>
       <div
         ref={containerRef}
         style={{ flex: '1 1 70%', position: 'relative', minWidth: 0 }}
@@ -344,6 +385,7 @@ export default function App() {
           </span>
         </div>
       </div>
+      </FileDropZone>
       {/* Control Panel (30%) */}
       <ControlPanel
         canDiameter={canDiameter}
