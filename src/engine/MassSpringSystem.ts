@@ -4,6 +4,8 @@ interface Spring {
   i: number  // index of particle A
   j: number  // index of particle B
   restLength: number
+  plasticStrain: number  // accumulated plastic strain
+  currentRestLength: number  // rest length after plastic deformation
 }
 
 /**
@@ -23,6 +25,10 @@ export class MassSpringSystem {
   // Material parameters
   stiffness: number  // spring constant (N/m)
   damping: number    // velocity damping factor
+  yieldStress: number = 276    // MPa
+  uts: number = 310            // MPa
+  hardeningExponent: number = 0.2  // Ludwik-Hollomon n
+  hardeningK: number = 0      // computed from uts, yieldStress, n
 
   // Simulation
   dt: number = 0.001       // time step (s)
@@ -99,6 +105,12 @@ export class MassSpringSystem {
     this.stiffness = E * crossSection / avgLen * 0.01  // scale factor for stability
     this.damping = 0.995
 
+    // Elasto-plastic parameters
+    // Ludwik-Hollomon: σ = σ_y + K·ε_p^n
+    // At UTS: σ_u = σ_y + K·ε_max^n → K = (σ_u - σ_y) / ε_max^n
+    // Assume ε_max ≈ 0.3 (30% uniform elongation for aluminum)
+    this.hardeningK = (this.uts - this.yieldStress) / Math.pow(0.3, this.hardeningExponent)
+
     // Fix bottom nodes (y close to 0)
     this.fixBottomNodes(2.0) // tolerance in mm
   }
@@ -113,7 +125,7 @@ export class MassSpringSystem {
     const dz = this.positions[a * 3 + 2] - this.positions[b * 3 + 2]
     const len = Math.sqrt(dx * dx + dy * dy + dz * dz)
 
-    this.springs.push({ i: a, j: b, restLength: len })
+    this.springs.push({ i: a, j: b, restLength: len, plasticStrain: 0, currentRestLength: len })
   }
 
   private fixBottomNodes(tolerance: number) {
@@ -151,9 +163,9 @@ export class MassSpringSystem {
         }
       }
 
-      // Spring constraints
+      // Spring constraints with elasto-plastic model
       for (const spring of this.springs) {
-        const { i: a, j: b, restLength } = spring
+        const { i: a, j: b } = spring
         const ai = a * 3, bi = b * 3
 
         let dx = this.positions[bi] - this.positions[ai]
@@ -163,11 +175,34 @@ export class MassSpringSystem {
 
         if (dist < 1e-10) continue
 
-        const diff = (dist - restLength) / dist
-        const stiffFactor = this.stiffness * subDt * subDt / this.mass * 0.5
+        // Compute strain relative to current rest length (accounts for plastic deformation)
+        const strain = (dist - spring.currentRestLength) / spring.restLength
+        const absStrain = Math.abs(strain)
 
-        // Clamp correction for stability
-        const correction = Math.min(Math.max(diff * stiffFactor, -0.1), 0.1)
+        // Compute yield strain: ε_y = σ_y / E (for spring-based approximation)
+        const yieldStrain = this.yieldStress / 69000  // ~0.004
+
+        // Elasto-plastic: if strain exceeds yield, accumulate plastic strain
+        if (absStrain > yieldStrain) {
+          const plasticIncrement = (absStrain - yieldStrain) * 0.1  // partial plasticity per step
+          spring.plasticStrain += plasticIncrement
+
+          // Update rest length: permanent deformation
+          // Ludwik-Hollomon: current yield = σ_y + K·ε_p^n
+          const currentYieldStrain = yieldStrain +
+            (this.hardeningK / 69000) * Math.pow(spring.plasticStrain, this.hardeningExponent)
+
+          // Only update rest length if strain exceeds hardened yield
+          if (absStrain > currentYieldStrain) {
+            const excessStrain = absStrain - currentYieldStrain
+            spring.currentRestLength += Math.sign(strain) * excessStrain * spring.restLength * 0.05
+          }
+        }
+
+        // Elastic correction (toward current rest length)
+        const elasticDiff = (dist - spring.currentRestLength) / dist
+        const stiffFactor = this.stiffness * subDt * subDt / this.mass * 0.5
+        const correction = Math.min(Math.max(elasticDiff * stiffFactor, -0.1), 0.1)
 
         dx *= correction
         dy *= correction
@@ -300,5 +335,10 @@ export class MassSpringSystem {
       this.prevPositions[i * 3 + 2] = z
     }
     this.velocities.fill(0)
+    // Reset plastic deformation
+    for (const spring of this.springs) {
+      spring.plasticStrain = 0
+      spring.currentRestLength = spring.restLength
+    }
   }
 }
