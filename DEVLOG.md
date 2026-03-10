@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-089] About 모달 버전 및 기능 정보 업데이트
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 11:00:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) 버전 텍스트 "v1.0 — React + Three.js + Mass-Spring FEM" 추가. (2) Space 단축키 안내 교체. (3) 우클릭 Export(JSON/CSV/STL) 안내 추가. (4) Get Started 버튼 boxShadow 다크 모드 대응. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 820.53 kB (gzip 224.00 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | About 모달이 현재 기능을 정확히 반영하도록 업데이트. |
+
+---
+
 ### [EXP-088] Reset 시 Fit All + DisplayMode 초기화
 
 | 항목 | 값 |

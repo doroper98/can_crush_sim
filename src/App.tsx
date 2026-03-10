@@ -2009,24 +2009,28 @@ export default function App() {
               : '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)',
           }}
         >
-          <h2 style={{ margin: '0 0 12px', fontSize: 18, color: darkMode ? '#e2e8f0' : '#0f172a' }}>Can Crush Simulator</h2>
+          <h2 style={{ margin: '0 0 4px', fontSize: 18, color: darkMode ? '#e2e8f0' : '#0f172a' }}>Can Crush Simulator</h2>
+          <div style={{ fontSize: 10, color: darkMode ? '#64748b' : '#94a3b8', marginBottom: 12 }}>v1.0 — React + Three.js + Mass-Spring FEM</div>
           <p style={{ fontSize: 12, color: darkMode ? '#94a3b8' : '#475569', lineHeight: 1.6, margin: '0 0 12px' }}>
             Real-time elasto-plastic aluminum can crushing simulation with Mass-Spring FEM,
             Ludwik-Hollomon hardening, and Von Mises stress analysis.
           </p>
           <div style={{ fontSize: 11, color: darkMode ? '#94a3b8' : '#64748b', lineHeight: 1.8 }}>
-            <div><strong>Play/Pause/Reset</strong> — Start or stop the simulation</div>
+            <div><strong>Space</strong> — Play/Pause toggle</div>
             <div><strong>W</strong> — Wireframe toggle</div>
             <div><strong>M</strong> — Measurement tool</div>
             <div><strong>D</strong> — Dark mode</div>
             <div><strong>?</strong> — All keyboard shortcuts</div>
+            <div><strong>Right-click</strong> — Context menu (Export JSON/CSV/STL)</div>
           </div>
           <button
             onClick={() => { setShowAbout(false); localStorage.setItem('cancrush_visited', '1') }}
             style={{
               marginTop: 16, width: '100%', padding: '10px 0', border: 'none', borderRadius: 12,
               background: '#3b82f6', color: '#fff', fontWeight: 600, fontSize: 14, cursor: 'pointer',
-              boxShadow: '4px 4px 8px rgba(163,177,198,0.5), -4px -4px 8px rgba(255,255,255,0.8)',
+              boxShadow: darkMode
+                ? '4px 4px 8px rgba(0,0,0,0.4), -4px -4px 8px rgba(51,65,85,0.4)'
+                : '4px 4px 8px rgba(163,177,198,0.5), -4px -4px 8px rgba(255,255,255,0.8)',
             }}
           >
             Get Started
