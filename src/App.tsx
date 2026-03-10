@@ -55,6 +55,8 @@ export default function App() {
   const colorBarUpdateCounter = useRef(0)
   const [chartData, setChartData] = useState<{ displacement: number; load: number }[]>([])
   const chartDataRef = useRef<{ displacement: number; load: number }[]>([])
+  const [timeScale, setTimeScale] = useState(1.0)
+  const timeScaleRef = useRef(1.0)
 
   useEffect(() => {
     const container = containerRef.current
@@ -276,7 +278,7 @@ export default function App() {
             console.warn('Physics instability detected, pausing simulation')
           }
 
-          simTimeRef.current += 1 / 60 // assume 60fps
+          simTimeRef.current += (1 / 60) * timeScaleRef.current // assume 60fps × timeScale
         } else {
           simRunningRef.current = false
           setSimState('idle')
@@ -365,9 +367,10 @@ export default function App() {
     if (gridRef.current) gridRef.current.visible = showGrid
   }, [showGrid])
 
-  // Keep displayMode/colormapType refs in sync
+  // Keep refs in sync
   useEffect(() => { displayModeRef.current = displayMode }, [displayMode])
   useEffect(() => { colormapTypeRef.current = colormapType }, [colormapType])
+  useEffect(() => { timeScaleRef.current = timeScale }, [timeScale])
 
   // Sync display mode → material vertexColors
   useEffect(() => {
@@ -624,6 +627,8 @@ export default function App() {
         onDisplayModeChange={setDisplayMode}
         onColormapTypeChange={setColormapType}
         chartData={chartData}
+        timeScale={timeScale}
+        onTimeScaleChange={setTimeScale}
       />
     </div>
   )

@@ -39,6 +39,8 @@ interface ControlPanelProps {
   onDisplayModeChange: (v: DisplayMode) => void
   onColormapTypeChange: (v: ColormapName) => void
   chartData: { displacement: number; load: number }[]
+  timeScale: number
+  onTimeScaleChange: (v: number) => void
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -160,6 +162,8 @@ export default function ControlPanel({
   onDisplayModeChange,
   onColormapTypeChange,
   chartData,
+  timeScale,
+  onTimeScaleChange,
 }: ControlPanelProps) {
   return (
     <div
@@ -223,6 +227,15 @@ export default function ControlPanel({
           step={1}
           unit="mm/s"
           onChange={onSpeedChange}
+        />
+        <Slider
+          label="Time Scale"
+          value={timeScale}
+          min={0.1}
+          max={5.0}
+          step={0.1}
+          unit="×"
+          onChange={onTimeScaleChange}
         />
       </Section>
 
