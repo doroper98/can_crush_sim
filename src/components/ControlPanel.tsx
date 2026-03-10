@@ -61,6 +61,11 @@ interface ControlPanelProps {
   clipY: number
   onClipEnabledChange: (v: boolean) => void
   onClipYChange: (v: number) => void
+  presetName: string
+  presetNames: string[]
+  onSavePreset: (name: string) => void
+  onLoadPreset: (name: string) => void
+  onDeletePreset: (name: string) => void
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -204,6 +209,11 @@ export default function ControlPanel({
   clipY,
   onClipEnabledChange,
   onClipYChange,
+  presetName,
+  presetNames,
+  onSavePreset,
+  onLoadPreset,
+  onDeletePreset,
 }: ControlPanelProps) {
   return (
     <div
@@ -218,6 +228,86 @@ export default function ControlPanel({
       }}
     >
       <h3 style={{ margin: '0 0 12px', fontSize: 14, color: '#0f172a' }}>Control Panel</h3>
+
+      <Section title="Presets" defaultOpen={false}>
+        <div style={{ display: 'flex', gap: 4, marginBottom: 6 }}>
+          <input
+            type="text"
+            placeholder="Preset name..."
+            defaultValue={presetName}
+            onBlur={e => e.target.dataset.val = e.target.value}
+            style={{
+              flex: 1,
+              padding: '4px 8px',
+              border: 'none',
+              borderRadius: 6,
+              fontSize: 12,
+              background: '#f0f4f8',
+              boxShadow: 'inset 1px 1px 3px rgba(163,177,198,0.3), inset -1px -1px 3px rgba(255,255,255,0.7)',
+            }}
+            id="presetNameInput"
+          />
+          <button
+            onClick={() => {
+              const input = document.getElementById('presetNameInput') as HTMLInputElement
+              const name = input?.value?.trim()
+              if (name) onSavePreset(name)
+            }}
+            style={{
+              padding: '4px 10px',
+              border: 'none',
+              borderRadius: 8,
+              background: '#10b981',
+              color: '#fff',
+              fontSize: 11,
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            Save
+          </button>
+        </div>
+        {presetNames.length > 0 && (
+          <div style={{ fontSize: 11 }}>
+            {presetNames.map(name => (
+              <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 3 }}>
+                <button
+                  onClick={() => onLoadPreset(name)}
+                  style={{
+                    flex: 1,
+                    padding: '3px 8px',
+                    border: 'none',
+                    borderRadius: 6,
+                    background: name === presetName ? '#dbeafe' : '#e8ecf1',
+                    color: '#0f172a',
+                    fontSize: 11,
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    fontWeight: name === presetName ? 600 : 400,
+                  }}
+                >
+                  {name}
+                </button>
+                <button
+                  onClick={() => onDeletePreset(name)}
+                  style={{
+                    padding: '3px 6px',
+                    border: 'none',
+                    borderRadius: 6,
+                    background: '#fecaca',
+                    color: '#dc2626',
+                    fontSize: 10,
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                  }}
+                >
+                  X
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </Section>
 
       <Section title="Can Parameters">
         <Slider

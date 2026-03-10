@@ -67,23 +67,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-055 기준, 26/03/11 07:05)
+### 누적 통계 (EXP-056 기준, 26/03/11 07:15)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | 55 |
-| 성공 커밋 | 55 |
+| 총 실험 수 | 56 |
+| 성공 커밋 | 56 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 19건, EXP-028~055) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 20건, EXP-028~056) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 795 kB (gzip 217 kB) |
+| 빌드 크기 | 798 kB (gzip 218 kB) |
 
 ---
 
@@ -192,6 +192,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
 | **판정** | ✅ COMMIT (아래) |
 | **비고** | 구조 해석 소프트웨어의 핵심 기능: 단면도(Section View). Y축 기준 클리핑으로 캔 내부 구조와 변형을 관찰 가능. |
+
+---
+
+### [EXP-056] 시뮬레이션 프리셋 저장/로드
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 07:15:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | FR-05, FR-06 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) App.tsx: presetName 상태 + handleSavePreset/handleLoadPreset/handleDeletePreset/getPresetNames 콜백 추가. localStorage에 'cancrush_presets' 키로 JSON 저장. 13개 파라미터 저장 (canDiameter, canHeight, wallThickness, maxForce, speed, rigidShape/Radius/Height, materialKey, E/σy/σu/n). (2) ControlPanel: Presets 섹션 추가 (기본 닫힘). 이름 입력 + Save 버튼 + 저장된 프리셋 리스트 (Load/Delete). 현재 로드된 프리셋 하이라이트. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 엔지니어링 도구의 핵심 워크플로우: 반복 실험 시 파라미터 세트를 빠르게 전환. 브라우저 새로고침 후에도 프리셋 유지. |
 
 ---
 

@@ -55,6 +55,7 @@ export default function App() {
   const [isWireframe, setIsWireframe] = useState(false)
   const [showGrid, setShowGrid] = useState(true)
   const [darkMode, setDarkMode] = useState(false)
+  const [presetName, setPresetName] = useState('')
   const [simState, setSimState] = useState<'idle' | 'running' | 'paused'>('idle')
   const [canDiameter, setCanDiameter] = useState(66)
   const [canHeightParam, setCanHeightParam] = useState(120)
@@ -988,6 +989,50 @@ export default function App() {
     }
   }, [])
 
+  const handleSavePreset = useCallback((name: string) => {
+    const preset = {
+      canDiameter, canHeight: canHeightParam, wallThickness, maxForce, compressionSpeed: compressionSpeedParam,
+      rigidShape, rigidRadius, rigidHeight, materialKey,
+      matYoungsModulus, matYieldStress, matUTS, matHardeningN,
+    }
+    const presets = JSON.parse(localStorage.getItem('cancrush_presets') || '{}')
+    presets[name] = preset
+    localStorage.setItem('cancrush_presets', JSON.stringify(presets))
+    setPresetName(name)
+  }, [canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, rigidShape, rigidRadius, rigidHeight, materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN])
+
+  const handleLoadPreset = useCallback((name: string) => {
+    const presets = JSON.parse(localStorage.getItem('cancrush_presets') || '{}')
+    const p = presets[name]
+    if (!p) return
+    setCanDiameter(p.canDiameter)
+    setCanHeightParam(p.canHeight)
+    setWallThickness(p.wallThickness)
+    setMaxForce(p.maxForce)
+    setCompressionSpeedParam(p.compressionSpeed)
+    setRigidShape(p.rigidShape)
+    setRigidRadius(p.rigidRadius)
+    setRigidHeight(p.rigidHeight)
+    setMaterialKey(p.materialKey)
+    setMatYoungsModulus(p.matYoungsModulus)
+    setMatYieldStress(p.matYieldStress)
+    setMatUTS(p.matUTS)
+    setMatHardeningN(p.matHardeningN)
+    setPresetName(name)
+  }, [])
+
+  const handleDeletePreset = useCallback((name: string) => {
+    const presets = JSON.parse(localStorage.getItem('cancrush_presets') || '{}')
+    delete presets[name]
+    localStorage.setItem('cancrush_presets', JSON.stringify(presets))
+    if (presetName === name) setPresetName('')
+  }, [presetName])
+
+  const getPresetNames = useCallback((): string[] => {
+    const presets = JSON.parse(localStorage.getItem('cancrush_presets') || '{}')
+    return Object.keys(presets)
+  }, [])
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh', overflow: 'hidden' }}>
     <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
@@ -1190,6 +1235,11 @@ export default function App() {
         clipY={clipY}
         onClipEnabledChange={setClipEnabled}
         onClipYChange={setClipY}
+        presetName={presetName}
+        presetNames={getPresetNames()}
+        onSavePreset={handleSavePreset}
+        onLoadPreset={handleLoadPreset}
+        onDeletePreset={handleDeletePreset}
       />
     </div>
     <StatusBar
