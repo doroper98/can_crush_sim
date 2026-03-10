@@ -208,6 +208,22 @@ export default function LoadDisplacementChart({
       ctx.beginPath()
       ctx.arc(lx, ly, 3, 0, Math.PI * 2)
       ctx.fill()
+
+      // Legend (top-right)
+      const lgX = pad.left + plotW - 62, lgY = pad.top + 4
+      ctx.font = '7px sans-serif'
+      ctx.textAlign = 'left'
+      // Peak marker
+      ctx.fillStyle = '#f59e0b'
+      ctx.fillRect(lgX, lgY, 6, 6)
+      ctx.fillStyle = labelColor
+      ctx.fillText('Peak', lgX + 8, lgY + 5)
+      // Mean line
+      ctx.strokeStyle = '#10b981'
+      ctx.setLineDash([3, 2])
+      ctx.beginPath(); ctx.moveTo(lgX, lgY + 12); ctx.lineTo(lgX + 6, lgY + 12); ctx.stroke()
+      ctx.setLineDash([])
+      ctx.fillText('Mean', lgX + 8, lgY + 15)
     }
   }, [data, prevData, width, height, darkMode])
 
