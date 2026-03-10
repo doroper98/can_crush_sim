@@ -155,6 +155,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.16,
     wallThickness: 0.3,
   }),
+  inconel_718: createMaterial({
+    name: 'Inconel 718',
+    youngsModulus: 205000,
+    poissonRatio: 0.29,
+    yieldStress: 1035,
+    uts: 1240,
+    density: 8190,
+    hardeningExponent: 0.08,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
