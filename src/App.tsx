@@ -157,6 +157,26 @@ export default function App() {
     // Store original positions for displacement calculation
     originalPositionsRef.current = new Float32Array(physics.positions)
 
+    // Boundary condition markers: show fixed bottom nodes as small triangles
+    const bcPositions: number[] = []
+    for (let i = 0; i < physics.nodeCount; i++) {
+      if (physics.fixed[i]) {
+        bcPositions.push(
+          physics.positions[i * 3],
+          physics.positions[i * 3 + 1],
+          physics.positions[i * 3 + 2]
+        )
+      }
+    }
+    const bcGeom = new THREE.BufferGeometry()
+    bcGeom.setAttribute('position', new THREE.Float32BufferAttribute(bcPositions, 3))
+    const bcPoints = new THREE.Points(
+      bcGeom,
+      new THREE.PointsMaterial({ color: 0xef4444, size: 4, sizeAttenuation: false })
+    )
+    bcPoints.name = 'bcMarkers'
+    scene.add(bcPoints)
+
     // Rigid body (press cylinder) — sits above the can
     const rigidRadius = 40
     const rigidHeight = 20
@@ -430,6 +450,9 @@ export default function App() {
           if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
             screenshotRef.current()
           }
+          break
+        case 'b': case 'B':
+          bcPoints.visible = !bcPoints.visible
           break
       }
       if (e.code === 'Numpad7') controls.setView('top')
