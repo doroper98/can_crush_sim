@@ -818,6 +818,7 @@ export default function App() {
           onFitAll={handleFitAll}
           onToggleWireframe={handleToggleWireframe}
           onScreenshot={handleScreenshot}
+          onHelp={() => setShowHelp(prev => !prev)}
           isPerspective={isPerspective}
           gizmoMode={gizmoMode}
           onGizmoModeChange={setGizmoMode}

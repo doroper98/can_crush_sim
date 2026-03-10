@@ -4,6 +4,7 @@ interface ViewportToolbarProps {
   onFitAll: () => void
   onToggleWireframe: () => void
   onScreenshot?: () => void
+  onHelp?: () => void
   isPerspective: boolean
   gizmoMode?: 'translate' | 'rotate'
   onGizmoModeChange?: (mode: 'translate' | 'rotate') => void
@@ -15,6 +16,7 @@ export default function ViewportToolbar({
   onFitAll,
   onToggleWireframe,
   onScreenshot,
+  onHelp,
   isPerspective,
   gizmoMode = 'translate',
   onGizmoModeChange,
@@ -104,6 +106,14 @@ export default function ViewportToolbar({
             title="Rotate Gizmo (R)"
           >
             Rot
+          </button>
+        </>
+      )}
+      {onHelp && (
+        <>
+          <span style={{ width: 1, background: '#ccc', margin: '0 4px' }} />
+          <button style={btnStyle} onClick={onHelp} title="Keyboard Shortcuts (?)">
+            ?
           </button>
         </>
       )}
