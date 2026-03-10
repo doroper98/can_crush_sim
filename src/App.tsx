@@ -3,12 +3,14 @@ import * as THREE from 'three'
 import { CatiaControls } from './viewer/CatiaControls'
 import { AxisHelper } from './viewer/AxisHelper'
 import ViewportToolbar from './components/ViewportToolbar'
+import { MassSpringSystem } from './engine/MassSpringSystem'
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
   const controlsRef = useRef<CatiaControls | null>(null)
   const canMeshRef = useRef<THREE.Mesh | null>(null)
   const gridRef = useRef<THREE.GridHelper | null>(null)
+  const physicsRef = useRef<MassSpringSystem | null>(null)
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
   const [showGrid, setShowGrid] = useState(true)
@@ -52,6 +54,8 @@ export default function App() {
     const canGeometry = new THREE.CylinderGeometry(
       canRadius, canRadius, canHeight, 32, 20, false
     )
+    // Translate geometry so bottom sits at Y=0 (world coords for physics)
+    canGeometry.translate(0, canHeight / 2, 0)
     const canMaterial = new THREE.MeshStandardMaterial({
       color: 0xc0c0c0,
       metalness: 0.7,
@@ -59,9 +63,12 @@ export default function App() {
       side: THREE.DoubleSide,
     })
     const canMesh = new THREE.Mesh(canGeometry, canMaterial)
-    canMesh.position.y = canHeight / 2
     scene.add(canMesh)
     canMeshRef.current = canMesh
+
+    // Physics engine
+    const physics = new MassSpringSystem(canGeometry)
+    physicsRef.current = physics
 
     // Controls
     const controls = new CatiaControls(camera, renderer.domElement)
