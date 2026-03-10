@@ -51,6 +51,14 @@ export default function App() {
   const matYieldStressRef = useRef(276)
   const matHardeningNRef = useRef(0.2)
 
+  const [toasts, setToasts] = useState<{ id: number; msg: string }[]>([])
+  const toastId = useRef(0)
+  const showToast = useCallback((msg: string) => {
+    const id = ++toastId.current
+    setToasts(prev => [...prev, { id, msg }])
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 2500)
+  }, [])
+
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
   const [showGrid, setShowGrid] = useState(true)
@@ -1063,7 +1071,8 @@ export default function App() {
     link.download = `cancrush_${Date.now()}.png`
     link.href = dataURL
     link.click()
-  }, [])
+    showToast('Screenshot saved')
+  }, [showToast])
   screenshotRef.current = handleScreenshot
 
   const handleReset = useCallback(() => {
@@ -1146,7 +1155,8 @@ export default function App() {
     presets[name] = preset
     localStorage.setItem('cancrush_presets', JSON.stringify(presets))
     setPresetName(name)
-  }, [canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, rigidShape, rigidRadius, rigidHeight, materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN])
+    showToast(`Preset "${name}" saved`)
+  }, [canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, rigidShape, rigidRadius, rigidHeight, materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN, showToast])
 
   const handleLoadPreset = useCallback((name: string) => {
     const presets = JSON.parse(localStorage.getItem('cancrush_presets') || '{}')
@@ -1166,7 +1176,8 @@ export default function App() {
     setMatUTS(p.matUTS)
     setMatHardeningN(p.matHardeningN)
     setPresetName(name)
-  }, [])
+    showToast(`Preset "${name}" loaded`)
+  }, [showToast])
 
   const handleDeletePreset = useCallback((name: string) => {
     const presets = JSON.parse(localStorage.getItem('cancrush_presets') || '{}')
@@ -1203,7 +1214,8 @@ export default function App() {
     link.href = url
     link.click()
     URL.revokeObjectURL(url)
-  }, [canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, controlMode,
+    showToast('JSON exported')
+  }, [showToast, canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, controlMode,
       rigidShape, rigidRadius, rigidHeight, rigidPosX, rigidPosY, rigidPosZ,
       rigidRotX, rigidRotY, rigidRotZ, materialKey, matYoungsModulus, matYieldStress,
       matUTS, matHardeningN, displayMode, colormapType, deformScale, clipEnabled, clipY,
@@ -1252,8 +1264,10 @@ export default function App() {
             if (d.clipY != null) setClipY(d.clipY)
             if (d.darkMode != null) setDarkMode(d.darkMode)
           }
+          showToast('JSON imported')
         } catch (e) {
           console.error('Failed to parse JSON:', e)
+          showToast('Import failed')
         }
       }
       reader.readAsText(file)
@@ -1533,6 +1547,22 @@ export default function App() {
       } : null}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} />
+    {/* Toast notifications */}
+    <div style={{ position: 'fixed', bottom: 40, left: '50%', transform: 'translateX(-50%)', zIndex: 3000, display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
+      {toasts.map(t => (
+        <div key={t.id} style={{
+          padding: '8px 20px',
+          borderRadius: 12,
+          background: 'rgba(15,23,42,0.88)',
+          color: '#e2e8f0',
+          fontSize: 12,
+          fontWeight: 500,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+          animation: 'fadeInUp 0.25s ease-out',
+          pointerEvents: 'none',
+        }}>{t.msg}</div>
+      ))}
+    </div>
     {/* Right-click context menu */}
     {contextMenu && (
       <div
