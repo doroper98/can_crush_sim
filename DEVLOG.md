@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-076] ViewportToolbar 다크 모드
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 09:48:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) ViewportToolbar.tsx: btnStyle 배경/텍스트/boxShadow를 darkMode 조건부 렌더링. (2) activeBtnStyle의 inset shadow도 다크 대응. (3) divider 색상: 다크 #475569 / 라이트 #ccc. (4) 컨테이너 배경: 다크 rgba(30,41,59,0.95) / 라이트 rgba(240,244,248,0.95). (5) 컨테이너 boxShadow 다크 대응. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 이로써 모든 UI 컴포넌트의 다크 모드 대응 완료: ViewportToolbar, ControlPanel, StatusBar, KeyboardHelp, ContextMenu, About, HUD, ColorBar, Toast. D키 하나로 완전한 다크 테마 전환. |
+
+---
+
 ### [EXP-075] 다크 모드 전체 UI 완성
 
 | 항목 | 값 |

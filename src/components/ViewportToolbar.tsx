@@ -34,22 +34,26 @@ export default function ViewportToolbar({
     margin: '0 2px',
     border: 'none',
     borderRadius: 12,
-    background: '#f0f4f8',
-    color: '#0f172a',
+    background: darkMode ? '#1e293b' : '#f0f4f8',
+    color: darkMode ? '#e2e8f0' : '#0f172a',
     cursor: 'pointer',
     fontSize: '12px',
     fontWeight: 600,
-    boxShadow:
-      '4px 4px 8px rgba(163,177,198,0.5), -4px -4px 8px rgba(255,255,255,0.8)',
+    boxShadow: darkMode
+      ? '4px 4px 8px rgba(0,0,0,0.4), -4px -4px 8px rgba(51,65,85,0.5)'
+      : '4px 4px 8px rgba(163,177,198,0.5), -4px -4px 8px rgba(255,255,255,0.8)',
     transition: 'box-shadow 0.15s, transform 0.15s',
   }
 
   const activeBtnStyle: React.CSSProperties = {
     ...btnStyle,
-    boxShadow:
-      'inset 2px 2px 5px rgba(163,177,198,0.5), inset -2px -2px 5px rgba(255,255,255,0.8)',
+    boxShadow: darkMode
+      ? 'inset 2px 2px 5px rgba(0,0,0,0.4), inset -2px -2px 5px rgba(51,65,85,0.5)'
+      : 'inset 2px 2px 5px rgba(163,177,198,0.5), inset -2px -2px 5px rgba(255,255,255,0.8)',
     transform: 'scale(0.98)',
   }
+
+  const divider = { width: 1, background: darkMode ? '#475569' : '#ccc', margin: '0 4px' }
 
   return (
     <div
@@ -60,11 +64,12 @@ export default function ViewportToolbar({
         display: 'flex',
         gap: 2,
         zIndex: 10,
-        background: 'rgba(240,244,248,0.95)',
+        background: darkMode ? 'rgba(30,41,59,0.95)' : 'rgba(240,244,248,0.95)',
         padding: '4px 8px',
         borderRadius: 16,
-        boxShadow:
-          '8px 8px 16px rgba(163,177,198,0.6), -8px -8px 16px rgba(255,255,255,0.8)',
+        boxShadow: darkMode
+          ? '8px 8px 16px rgba(0,0,0,0.5), -8px -8px 16px rgba(51,65,85,0.4)'
+          : '8px 8px 16px rgba(163,177,198,0.6), -8px -8px 16px rgba(255,255,255,0.8)',
       }}
     >
       <button style={btnStyle} onClick={() => onViewChange('top')} title="Top View (Num 7)">
@@ -79,7 +84,7 @@ export default function ViewportToolbar({
       <button style={btnStyle} onClick={() => onViewChange('iso')} title="Isometric (Num 0)">
         ISO
       </button>
-      <span style={{ width: 1, background: '#ccc', margin: '0 4px' }} />
+      <span style={divider} />
       <button
         style={isPerspective ? btnStyle : activeBtnStyle}
         onClick={onTogglePerspective}
@@ -100,7 +105,7 @@ export default function ViewportToolbar({
       )}
       {onGizmoModeChange && (
         <>
-          <span style={{ width: 1, background: '#ccc', margin: '0 4px' }} />
+          <span style={divider} />
           <button
             style={gizmoMode === 'translate' ? activeBtnStyle : btnStyle}
             onClick={() => onGizmoModeChange('translate')}
@@ -137,7 +142,7 @@ export default function ViewportToolbar({
       )}
       {onHelp && (
         <>
-          <span style={{ width: 1, background: '#ccc', margin: '0 4px' }} />
+          <span style={divider} />
           <button style={btnStyle} onClick={onHelp} title="Keyboard Shortcuts (?)">
             ?
           </button>
