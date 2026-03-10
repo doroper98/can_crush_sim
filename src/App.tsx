@@ -97,6 +97,7 @@ export default function App() {
   const colorBarUpdateCounter = useRef(0)
   const [chartData, setChartData] = useState<{ displacement: number; load: number }[]>([])
   const chartDataRef = useRef<{ displacement: number; load: number }[]>([])
+  const [prevChartData, setPrevChartData] = useState<{ displacement: number; load: number }[] | undefined>(undefined)
   const [timeScale, setTimeScale] = useState(1.0)
   const timeScaleRef = useRef(1.0)
   const stepOnceRef = useRef(false)
@@ -1291,6 +1292,7 @@ export default function App() {
     simWallStartRef.current = 0
     setSimSteps(0)
     setSimState('idle')
+    if (chartDataRef.current.length > 0) setPrevChartData(chartDataRef.current.slice())
     chartDataRef.current = []
     setChartData([])
     setResultSummary(null)
@@ -1904,6 +1906,7 @@ export default function App() {
         onDisplayModeChange={setDisplayMode}
         onColormapTypeChange={setColormapType}
         chartData={chartData}
+        prevChartData={prevChartData}
         timeScale={timeScale}
         onTimeScaleChange={setTimeScale}
         materialKey={materialKey}

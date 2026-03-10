@@ -44,6 +44,7 @@ interface ControlPanelProps {
   onDisplayModeChange: (v: DisplayMode) => void
   onColormapTypeChange: (v: ColormapName) => void
   chartData: { displacement: number; load: number }[]
+  prevChartData?: { displacement: number; load: number }[]
   timeScale: number
   onTimeScaleChange: (v: number) => void
   materialKey?: string
@@ -225,6 +226,7 @@ export default function ControlPanel({
   onDisplayModeChange,
   onColormapTypeChange,
   chartData,
+  prevChartData,
   timeScale,
   onTimeScaleChange,
   materialKey = 'aluminum_6061',
@@ -512,7 +514,7 @@ export default function ControlPanel({
       </Section>
 
       <Section title="Load-Displacement Chart" theme={theme}>
-        <LoadDisplacementChart data={chartData} width={256} height={160} darkMode={darkMode} />
+        <LoadDisplacementChart data={chartData} prevData={prevChartData} width={256} height={160} darkMode={darkMode} />
         {chartData.length > 0 && (
           <button
             onClick={() => {

@@ -7,6 +7,7 @@ interface DataPoint {
 
 interface LoadDisplacementChartProps {
   data: DataPoint[]
+  prevData?: DataPoint[]
   width?: number
   height?: number
   darkMode?: boolean
@@ -14,6 +15,7 @@ interface LoadDisplacementChartProps {
 
 export default function LoadDisplacementChart({
   data,
+  prevData,
   width = 260,
   height = 160,
   darkMode = false,
@@ -55,11 +57,17 @@ export default function LoadDisplacementChart({
     ctx.lineWidth = 1
     ctx.strokeRect(0.5, 0.5, width - 1, height - 1)
 
-    // Compute ranges
+    // Compute ranges (include prevData for consistent axes)
     let maxDisp = 1, maxLoad = 1
     for (const p of data) {
       if (p.displacement > maxDisp) maxDisp = p.displacement
       if (p.load > maxLoad) maxLoad = p.load
+    }
+    if (prevData) {
+      for (const p of prevData) {
+        if (p.displacement > maxDisp) maxDisp = p.displacement
+        if (p.load > maxLoad) maxLoad = p.load
+      }
     }
     // Round up for nice axes
     maxDisp = Math.ceil(maxDisp / 10) * 10 || 10
@@ -117,6 +125,22 @@ export default function LoadDisplacementChart({
       const y = pad.top + plotH - (plotH / 4) * i
       const val = (maxLoad / 4) * i
       ctx.fillText(val.toFixed(0), pad.left - 4, y + 3)
+    }
+
+    // Previous data ghost curve
+    if (prevData && prevData.length > 1) {
+      ctx.strokeStyle = darkMode ? 'rgba(148,163,184,0.4)' : 'rgba(100,116,139,0.3)'
+      ctx.lineWidth = 1
+      ctx.setLineDash([3, 3])
+      ctx.beginPath()
+      for (let i = 0; i < prevData.length; i++) {
+        const x = pad.left + (prevData[i].displacement / maxDisp) * plotW
+        const y = pad.top + plotH - (prevData[i].load / maxLoad) * plotH
+        if (i === 0) ctx.moveTo(x, y)
+        else ctx.lineTo(x, y)
+      }
+      ctx.stroke()
+      ctx.setLineDash([])
     }
 
     // Plot data
@@ -185,7 +209,7 @@ export default function LoadDisplacementChart({
       ctx.arc(lx, ly, 3, 0, Math.PI * 2)
       ctx.fill()
     }
-  }, [data, width, height, darkMode])
+  }, [data, prevData, width, height, darkMode])
 
   return (
     <canvas
