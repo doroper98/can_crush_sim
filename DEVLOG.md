@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-073] 다크 모드 ControlPanel 전파
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 09:30:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) ControlPanel.tsx: Theme 인터페이스 + getTheme(dark) 함수 도입. Light/Dark 양쪽 색상 세트(bg, surface, text, textSec, border, inset, raised, pressed, inputBg, inputShadow, selectBg, selectShadow). (2) Section 컴포넌트에 theme prop 추가: 배경/텍스트/boxShadow를 theme 기반으로 렌더링. (3) Slider 컴포넌트에 theme prop 추가: 라벨/입력 필드 색상 테마 대응. (4) 모든 11개 Section, 모든 Slider 호출에 theme={theme} 전달. (5) select 요소 5개(controlMode, rigidShape, displayMode, colormapType, material) 모두 theme.selectBg/selectShadow/text 적용. (6) Preset 버튼, 삭제 버튼, CSV Export 버튼 다크 대응. (7) Results 섹션 텍스트 다크 대응 (theme.text + theme.textSec). (8) App.tsx: ControlPanel에 darkMode={darkMode} prop 전달. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | D키로 다크 모드 전환 시 3D 씬 + Control Panel이 동시에 어둡게 전환. 일관된 다크 테마 경험 제공. |
+
+---
+
 ### [EXP-072] 완료 알림 기능 강화
 
 | 항목 | 값 |

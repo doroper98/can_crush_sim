@@ -1672,6 +1672,7 @@ export default function App() {
         onDeletePreset={handleDeletePreset}
         autoStopStress={autoStopStress}
         onAutoStopStressChange={setAutoStopStress}
+        darkMode={darkMode}
       />}
     </div>
     <StatusBar

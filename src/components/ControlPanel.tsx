@@ -69,12 +69,38 @@ interface ControlPanelProps {
   onDeletePreset: (name: string) => void
   autoStopStress?: boolean
   onAutoStopStressChange?: (v: boolean) => void
+  darkMode?: boolean
 }
 
-function Section({ title, children, defaultOpen = true }: {
+interface Theme {
+  bg: string; surface: string; text: string; textSec: string; border: string
+  inset: string; raised: string; pressed: string; inputBg: string; inputShadow: string
+  selectBg: string; selectShadow: string
+}
+
+function getTheme(dark: boolean): Theme {
+  return dark
+    ? { bg: '#1e293b', surface: '#334155', text: '#e2e8f0', textSec: '#94a3b8', border: '#475569',
+        inset: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -4px -4px 8px rgba(51,65,85,0.6)',
+        raised: '4px 4px 8px rgba(0,0,0,0.4), -4px -4px 8px rgba(51,65,85,0.5)',
+        pressed: 'inset 2px 2px 5px rgba(0,0,0,0.4), inset -2px -2px 5px rgba(51,65,85,0.5)',
+        inputBg: '#1e293b', inputShadow: 'inset 1px 1px 3px rgba(0,0,0,0.3), inset -1px -1px 3px rgba(51,65,85,0.5)',
+        selectBg: '#334155', selectShadow: 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(51,65,85,0.5)',
+      }
+    : { bg: '#f0f4f8', surface: '#ffffff', text: '#0f172a', textSec: '#64748b', border: '#d0d5dd',
+        inset: 'inset 4px 4px 8px rgba(163,177,198,0.4), inset -4px -4px 8px rgba(255,255,255,0.9)',
+        raised: '4px 4px 8px rgba(163,177,198,0.5), -4px -4px 8px rgba(255,255,255,0.8)',
+        pressed: 'inset 2px 2px 5px rgba(163,177,198,0.5), inset -2px -2px 5px rgba(255,255,255,0.8)',
+        inputBg: '#f0f4f8', inputShadow: 'inset 1px 1px 3px rgba(163,177,198,0.3), inset -1px -1px 3px rgba(255,255,255,0.7)',
+        selectBg: '#e8ecf1', selectShadow: 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
+      }
+}
+
+function Section({ title, children, defaultOpen = true, theme }: {
   title: string
   children: React.ReactNode
   defaultOpen?: boolean
+  theme: Theme
 }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
@@ -86,16 +112,14 @@ function Section({ title, children, defaultOpen = true }: {
           padding: '8px 14px',
           border: 'none',
           borderRadius: 12,
-          background: '#f0f4f8',
-          color: '#0f172a',
+          background: theme.bg,
+          color: theme.text,
           fontWeight: 600,
           fontSize: 13,
           cursor: 'pointer',
           textAlign: 'left',
           transition: 'box-shadow 0.15s, transform 0.15s',
-          boxShadow: open
-            ? 'inset 2px 2px 5px rgba(163,177,198,0.5), inset -2px -2px 5px rgba(255,255,255,0.8)'
-            : '4px 4px 8px rgba(163,177,198,0.5), -4px -4px 8px rgba(255,255,255,0.8)',
+          boxShadow: open ? theme.pressed : theme.raised,
           transform: open ? 'scale(0.98)' : 'scale(1)',
         }}
       >
@@ -110,7 +134,7 @@ function Section({ title, children, defaultOpen = true }: {
   )
 }
 
-function Slider({ label, value, min, max, step, unit, onChange }: {
+function Slider({ label, value, min, max, step, unit, onChange, theme }: {
   label: string
   value: number
   min: number
@@ -118,10 +142,11 @@ function Slider({ label, value, min, max, step, unit, onChange }: {
   step: number
   unit: string
   onChange: (v: number) => void
+  theme: Theme
 }) {
   return (
     <div style={{ marginBottom: 8 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#64748b', marginBottom: 2 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: theme.textSec, marginBottom: 2 }}>
         <span>{label}</span>
         <span>
           <input
@@ -138,8 +163,9 @@ function Slider({ label, value, min, max, step, unit, onChange }: {
               padding: '2px 4px',
               textAlign: 'right',
               fontSize: 12,
-              background: '#f0f4f8',
-              boxShadow: 'inset 1px 1px 3px rgba(163,177,198,0.3), inset -1px -1px 3px rgba(255,255,255,0.7)',
+              color: theme.text,
+              background: theme.inputBg,
+              boxShadow: theme.inputShadow,
             }}
           />
           <span style={{ marginLeft: 2 }}>{unit}</span>
@@ -220,22 +246,24 @@ export default function ControlPanel({
   onDeletePreset,
   autoStopStress,
   onAutoStopStressChange,
+  darkMode = false,
 }: ControlPanelProps) {
+  const theme = getTheme(darkMode)
   return (
     <div
       style={{
         width: 280,
         height: '100%',
-        background: '#f0f4f8',
+        background: theme.bg,
         borderLeft: 'none',
         padding: '12px',
         overflowY: 'auto',
-        boxShadow: 'inset 4px 4px 8px rgba(163,177,198,0.4), inset -4px -4px 8px rgba(255,255,255,0.9)',
+        boxShadow: theme.inset,
       }}
     >
-      <h3 style={{ margin: '0 0 12px', fontSize: 14, color: '#0f172a' }}>Control Panel</h3>
+      <h3 style={{ margin: '0 0 12px', fontSize: 14, color: theme.text }}>Control Panel</h3>
 
-      <Section title="Presets" defaultOpen={false}>
+      <Section title="Presets" defaultOpen={false} theme={theme}>
         <div style={{ display: 'flex', gap: 4, marginBottom: 6 }}>
           <input
             type="text"
@@ -248,8 +276,9 @@ export default function ControlPanel({
               border: 'none',
               borderRadius: 6,
               fontSize: 12,
-              background: '#f0f4f8',
-              boxShadow: 'inset 1px 1px 3px rgba(163,177,198,0.3), inset -1px -1px 3px rgba(255,255,255,0.7)',
+              color: theme.text,
+              background: theme.inputBg,
+              boxShadow: theme.inputShadow,
             }}
             id="presetNameInput"
           />
@@ -284,8 +313,10 @@ export default function ControlPanel({
                     padding: '3px 8px',
                     border: 'none',
                     borderRadius: 6,
-                    background: name === presetName ? '#dbeafe' : '#e8ecf1',
-                    color: '#0f172a',
+                    background: name === presetName
+                      ? (darkMode ? '#1e3a5f' : '#dbeafe')
+                      : (darkMode ? '#475569' : '#e8ecf1'),
+                    color: theme.text,
                     fontSize: 11,
                     cursor: 'pointer',
                     textAlign: 'left',
@@ -300,7 +331,7 @@ export default function ControlPanel({
                     padding: '3px 6px',
                     border: 'none',
                     borderRadius: 6,
-                    background: '#fecaca',
+                    background: darkMode ? '#7f1d1d' : '#fecaca',
                     color: '#dc2626',
                     fontSize: 10,
                     cursor: 'pointer',
@@ -315,39 +346,15 @@ export default function ControlPanel({
         )}
       </Section>
 
-      <Section title="Can Parameters">
-        <Slider
-          label="Diameter (D)"
-          value={canDiameter}
-          min={20}
-          max={100}
-          step={1}
-          unit="mm"
-          onChange={onCanDiameterChange}
-        />
-        <Slider
-          label="Height (H)"
-          value={canHeight}
-          min={50}
-          max={200}
-          step={1}
-          unit="mm"
-          onChange={onCanHeightChange}
-        />
-        <Slider
-          label="Wall Thickness (t)"
-          value={wallThickness}
-          min={0.1}
-          max={2.0}
-          step={0.05}
-          unit="mm"
-          onChange={onWallThicknessChange}
-        />
+      <Section title="Can Parameters" theme={theme}>
+        <Slider label="Diameter (D)" value={canDiameter} min={20} max={100} step={1} unit="mm" onChange={onCanDiameterChange} theme={theme} />
+        <Slider label="Height (H)" value={canHeight} min={50} max={200} step={1} unit="mm" onChange={onCanHeightChange} theme={theme} />
+        <Slider label="Wall Thickness (t)" value={wallThickness} min={0.1} max={2.0} step={0.05} unit="mm" onChange={onWallThicknessChange} theme={theme} />
       </Section>
 
-      <Section title="Load Conditions">
+      <Section title="Load Conditions" theme={theme}>
         <div style={{ marginBottom: 8 }}>
-          <div style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>Control Mode</div>
+          <div style={{ fontSize: 12, color: theme.textSec, marginBottom: 4 }}>Control Mode</div>
           <select
             value={controlMode}
             onChange={e => onControlModeChange(e.target.value as ControlMode)}
@@ -356,45 +363,22 @@ export default function ControlPanel({
               padding: '4px 8px',
               border: 'none',
               borderRadius: 8,
-              background: '#e8ecf1',
+              background: theme.selectBg,
+              color: theme.text,
               fontSize: 12,
               cursor: 'pointer',
-              boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
+              boxShadow: theme.selectShadow,
             }}
           >
             <option value="displacement">Displacement Control</option>
             <option value="force">Force Control</option>
           </select>
         </div>
-        <Slider
-          label="Max Force"
-          value={force}
-          min={0}
-          max={10000}
-          step={50}
-          unit="N"
-          onChange={onForceChange}
-        />
-        <Slider
-          label="Compression Speed"
-          value={speed}
-          min={1}
-          max={100}
-          step={1}
-          unit="mm/s"
-          onChange={onSpeedChange}
-        />
-        <Slider
-          label="Time Scale"
-          value={timeScale}
-          min={0.1}
-          max={5.0}
-          step={0.1}
-          unit="×"
-          onChange={onTimeScaleChange}
-        />
+        <Slider label="Max Force" value={force} min={0} max={10000} step={50} unit="N" onChange={onForceChange} theme={theme} />
+        <Slider label="Compression Speed" value={speed} min={1} max={100} step={1} unit="mm/s" onChange={onSpeedChange} theme={theme} />
+        <Slider label="Time Scale" value={timeScale} min={0.1} max={5.0} step={0.1} unit="×" onChange={onTimeScaleChange} theme={theme} />
         {onAutoStopStressChange && (
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#475569', marginTop: 4, cursor: 'pointer' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: theme.textSec, marginTop: 4, cursor: 'pointer' }}>
             <input
               type="checkbox"
               checked={autoStopStress ?? true}
@@ -406,9 +390,9 @@ export default function ControlPanel({
         )}
       </Section>
 
-      <Section title="Rigid Body">
+      <Section title="Rigid Body" theme={theme}>
         <div style={{ marginBottom: 8 }}>
-          <div style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>Shape</div>
+          <div style={{ fontSize: 12, color: theme.textSec, marginBottom: 4 }}>Shape</div>
           <select
             value={rigidShape}
             onChange={e => onRigidShapeChange(e.target.value as RigidBodyShape)}
@@ -417,10 +401,11 @@ export default function ControlPanel({
               padding: '4px 8px',
               border: 'none',
               borderRadius: 8,
-              background: '#e8ecf1',
+              background: theme.selectBg,
+              color: theme.text,
               fontSize: 12,
               cursor: 'pointer',
-              boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
+              boxShadow: theme.selectShadow,
             }}
           >
             <option value="cylinder">Cylinder</option>
@@ -429,91 +414,27 @@ export default function ControlPanel({
             <option value="cone">Cone</option>
           </select>
         </div>
-        <Slider
-          label="Radius"
-          value={rigidRadius}
-          min={10}
-          max={100}
-          step={1}
-          unit="mm"
-          onChange={onRigidRadiusChange}
-        />
+        <Slider label="Radius" value={rigidRadius} min={10} max={100} step={1} unit="mm" onChange={onRigidRadiusChange} theme={theme} />
         {rigidShape !== 'sphere' && (
-          <Slider
-            label="Height"
-            value={rigidHeight}
-            min={5}
-            max={100}
-            step={1}
-            unit="mm"
-            onChange={onRigidHeightChange}
-          />
+          <Slider label="Height" value={rigidHeight} min={5} max={100} step={1} unit="mm" onChange={onRigidHeightChange} theme={theme} />
         )}
       </Section>
 
-      <Section title="Rigid Position" defaultOpen={false}>
-        <Slider
-          label="X"
-          value={rigidPosX}
-          min={-200}
-          max={200}
-          step={1}
-          unit="mm"
-          onChange={onRigidPosXChange}
-        />
-        <Slider
-          label="Y"
-          value={rigidPosY}
-          min={0}
-          max={400}
-          step={1}
-          unit="mm"
-          onChange={onRigidPosYChange}
-        />
-        <Slider
-          label="Z"
-          value={rigidPosZ}
-          min={-200}
-          max={200}
-          step={1}
-          unit="mm"
-          onChange={onRigidPosZChange}
-        />
+      <Section title="Rigid Position" defaultOpen={false} theme={theme}>
+        <Slider label="X" value={rigidPosX} min={-200} max={200} step={1} unit="mm" onChange={onRigidPosXChange} theme={theme} />
+        <Slider label="Y" value={rigidPosY} min={0} max={400} step={1} unit="mm" onChange={onRigidPosYChange} theme={theme} />
+        <Slider label="Z" value={rigidPosZ} min={-200} max={200} step={1} unit="mm" onChange={onRigidPosZChange} theme={theme} />
       </Section>
 
-      <Section title="Rigid Rotation" defaultOpen={false}>
-        <Slider
-          label="Rx"
-          value={rigidRotX}
-          min={-180}
-          max={180}
-          step={1}
-          unit="°"
-          onChange={onRigidRotXChange}
-        />
-        <Slider
-          label="Ry"
-          value={rigidRotY}
-          min={-180}
-          max={180}
-          step={1}
-          unit="°"
-          onChange={onRigidRotYChange}
-        />
-        <Slider
-          label="Rz"
-          value={rigidRotZ}
-          min={-180}
-          max={180}
-          step={1}
-          unit="°"
-          onChange={onRigidRotZChange}
-        />
+      <Section title="Rigid Rotation" defaultOpen={false} theme={theme}>
+        <Slider label="Rx" value={rigidRotX} min={-180} max={180} step={1} unit="°" onChange={onRigidRotXChange} theme={theme} />
+        <Slider label="Ry" value={rigidRotY} min={-180} max={180} step={1} unit="°" onChange={onRigidRotYChange} theme={theme} />
+        <Slider label="Rz" value={rigidRotZ} min={-180} max={180} step={1} unit="°" onChange={onRigidRotZChange} theme={theme} />
       </Section>
 
-      <Section title="Visualization">
+      <Section title="Visualization" theme={theme}>
         <div style={{ marginBottom: 8 }}>
-          <div style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>Display</div>
+          <div style={{ fontSize: 12, color: theme.textSec, marginBottom: 4 }}>Display</div>
           <select
             value={displayMode}
             onChange={e => onDisplayModeChange(e.target.value as DisplayMode)}
@@ -522,10 +443,11 @@ export default function ControlPanel({
               padding: '4px 8px',
               border: 'none',
               borderRadius: 8,
-              background: '#e8ecf1',
+              background: theme.selectBg,
+              color: theme.text,
               fontSize: 12,
               cursor: 'pointer',
-              boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
+              boxShadow: theme.selectShadow,
             }}
           >
             <option value="none">None (Solid Color)</option>
@@ -536,7 +458,7 @@ export default function ControlPanel({
         </div>
         {displayMode !== 'none' && (
           <div style={{ marginBottom: 8 }}>
-            <div style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>Colormap</div>
+            <div style={{ fontSize: 12, color: theme.textSec, marginBottom: 4 }}>Colormap</div>
             <select
               value={colormapType}
               onChange={e => onColormapTypeChange(e.target.value as ColormapName)}
@@ -545,10 +467,11 @@ export default function ControlPanel({
                 padding: '4px 8px',
                 border: 'none',
                 borderRadius: 8,
-                background: '#e8ecf1',
+                background: theme.selectBg,
+                color: theme.text,
                 fontSize: 12,
                 cursor: 'pointer',
-                boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
+                boxShadow: theme.selectShadow,
               }}
             >
               <option value="jet">Jet</option>
@@ -557,17 +480,9 @@ export default function ControlPanel({
             </select>
           </div>
         )}
-        <Slider
-          label="Deform Scale"
-          value={deformScale}
-          min={0.1}
-          max={10.0}
-          step={0.1}
-          unit="×"
-          onChange={onDeformScaleChange}
-        />
+        <Slider label="Deform Scale" value={deformScale} min={0.1} max={10.0} step={0.1} unit="×" onChange={onDeformScaleChange} theme={theme} />
         <div style={{ marginBottom: 8 }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#64748b', cursor: 'pointer' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: theme.textSec, cursor: 'pointer' }}>
             <input
               type="checkbox"
               checked={clipEnabled}
@@ -577,19 +492,11 @@ export default function ControlPanel({
           </label>
         </div>
         {clipEnabled && (
-          <Slider
-            label="Clip Y"
-            value={clipY}
-            min={0}
-            max={200}
-            step={1}
-            unit="mm"
-            onChange={onClipYChange}
-          />
+          <Slider label="Clip Y" value={clipY} min={0} max={200} step={1} unit="mm" onChange={onClipYChange} theme={theme} />
         )}
       </Section>
 
-      <Section title="Load-Displacement Chart">
+      <Section title="Load-Displacement Chart" theme={theme}>
         <LoadDisplacementChart data={chartData} width={256} height={160} />
         {chartData.length > 0 && (
           <button
@@ -610,12 +517,12 @@ export default function ControlPanel({
               padding: '6px 0',
               border: 'none',
               borderRadius: 10,
-              background: '#f0f4f8',
+              background: theme.bg,
               color: '#3b82f6',
               fontWeight: 600,
               fontSize: 11,
               cursor: 'pointer',
-              boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+              boxShadow: theme.raised,
             }}
           >
             Export CSV
@@ -623,7 +530,7 @@ export default function ControlPanel({
         )}
       </Section>
 
-      <Section title="Material" defaultOpen={false}>
+      <Section title="Material" defaultOpen={false} theme={theme}>
         {onMaterialKeyChange && (
           <select
             value={materialKey}
@@ -633,12 +540,12 @@ export default function ControlPanel({
               padding: '6px 10px',
               borderRadius: 8,
               border: 'none',
-              background: '#e8ecf1',
-              color: '#0f172a',
+              background: theme.selectBg,
+              color: theme.text,
               fontSize: 12,
               fontWeight: 500,
               marginBottom: 8,
-              boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.4), inset -2px -2px 4px rgba(255,255,255,0.9)',
+              boxShadow: theme.selectShadow,
             }}
           >
             {MATERIAL_KEYS.map(k => (
@@ -646,14 +553,14 @@ export default function ControlPanel({
             ))}
           </select>
         )}
-        <Slider label="E (Young's)" value={matYoungsModulus} min={10000} max={300000} step={1000} unit="MPa" onChange={onMatYoungsModulusChange} />
-        <Slider label="σ_y (Yield)" value={matYieldStress} min={10} max={1500} step={1} unit="MPa" onChange={onMatYieldStressChange} />
-        <Slider label="σ_u (UTS)" value={matUTS} min={20} max={2000} step={1} unit="MPa" onChange={onMatUTSChange} />
-        <Slider label="n (Hardening)" value={matHardeningN} min={0.01} max={1.0} step={0.01} unit="" onChange={onMatHardeningNChange} />
+        <Slider label="E (Young's)" value={matYoungsModulus} min={10000} max={300000} step={1000} unit="MPa" onChange={onMatYoungsModulusChange} theme={theme} />
+        <Slider label="σ_y (Yield)" value={matYieldStress} min={10} max={1500} step={1} unit="MPa" onChange={onMatYieldStressChange} theme={theme} />
+        <Slider label="σ_u (UTS)" value={matUTS} min={20} max={2000} step={1} unit="MPa" onChange={onMatUTSChange} theme={theme} />
+        <Slider label="n (Hardening)" value={matHardeningN} min={0.01} max={1.0} step={0.01} unit="" onChange={onMatHardeningNChange} theme={theme} />
         {(() => {
           const mat = MATERIALS[materialKey] ?? MATERIALS['aluminum_6061']
           return (
-            <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 4 }}>
+            <div style={{ fontSize: 10, color: theme.textSec, marginTop: 4 }}>
               ν = {mat.poissonRatio} · ρ = {mat.density.toLocaleString()} kg/m³
             </div>
           )
@@ -661,12 +568,12 @@ export default function ControlPanel({
       </Section>
 
       {resultSummary && (
-        <Section title="Results" defaultOpen={true}>
-          <div style={{ fontSize: 11, lineHeight: 1.8, color: '#334155' }}>
-            <div><strong>Max σ:</strong> {resultSummary.maxStress.toFixed(1)} MPa</div>
-            <div><strong>Max d:</strong> {resultSummary.maxDisp.toFixed(2)} mm</div>
-            <div><strong>Max ε_p:</strong> {(resultSummary.maxPlastic * 100).toFixed(2)} %</div>
-            <div><strong>Energy:</strong> {resultSummary.energyAbsorbed.toFixed(3)} J</div>
+        <Section title="Results" defaultOpen={true} theme={theme}>
+          <div style={{ fontSize: 11, lineHeight: 1.8, color: theme.textSec }}>
+            <div><strong style={{ color: theme.text }}>Max σ:</strong> {resultSummary.maxStress.toFixed(1)} MPa</div>
+            <div><strong style={{ color: theme.text }}>Max d:</strong> {resultSummary.maxDisp.toFixed(2)} mm</div>
+            <div><strong style={{ color: theme.text }}>Max ε_p:</strong> {(resultSummary.maxPlastic * 100).toFixed(2)} %</div>
+            <div><strong style={{ color: theme.text }}>Energy:</strong> {resultSummary.energyAbsorbed.toFixed(3)} J</div>
           </div>
         </Section>
       )}
