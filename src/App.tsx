@@ -123,7 +123,7 @@ export default function App() {
   const [simDisplacement, setSimDisplacement] = useState(0)
   const [simSteps, setSimSteps] = useState(0)
   const [pickedNode, setPickedNode] = useState<{
-    x: number; y: number; stress: number; disp: number; plastic: number; nodeIdx: number
+    x: number; y: number; stress: number; disp: number; plastic: number; nodeIdx: number; flowStress: number
   } | null>(null)
   const [clipEnabled, setClipEnabled] = useState(false)
   const [clipY, setClipY] = useState(60) // clipping plane Y position (mm)
@@ -827,12 +827,15 @@ export default function App() {
             const stresses = phys.getStressPerNode()
             const disps = originalPositionsRef.current ? phys.getDisplacementPerNode(originalPositionsRef.current) : null
             const plastics = phys.getPlasticStrainPerNode()
+            const mat = MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]
+            const fs = mat.flowStress(plastics[nearestIdx])
             setPickedNode({
               x: e.clientX, y: e.clientY,
               stress: stresses[nearestIdx],
               disp: disps ? disps[nearestIdx] : 0,
               plastic: plastics[nearestIdx],
               nodeIdx: nearestIdx,
+              flowStress: fs,
             })
           }
         }
@@ -1850,6 +1853,7 @@ export default function App() {
           }}>
             <div style={{ fontWeight: 600, color: '#93c5fd', marginBottom: 2 }}>Node #{pickedNode.nodeIdx}</div>
             <div>σ: {pickedNode.stress.toFixed(1)} MPa</div>
+            <div>σ_f: {pickedNode.flowStress.toFixed(1)} MPa</div>
             <div>d: {pickedNode.disp.toFixed(3)} mm</div>
             <div>ε_p: {(pickedNode.plastic * 100).toFixed(2)} %</div>
           </div>
