@@ -185,6 +185,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.08,
     wallThickness: 0.3,
   }),
+  polycarbonate: createMaterial({
+    name: 'Polycarbonate (PC)',
+    youngsModulus: 2400,
+    poissonRatio: 0.37,
+    yieldStress: 62,
+    uts: 70,
+    density: 1200,
+    hardeningExponent: 0.3,
+    wallThickness: 1.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */
