@@ -127,6 +127,8 @@ export default function App() {
   } | null>(null)
   const [showGhost, setShowGhost] = useState(false)
   const ghostMeshRef = useRef<THREE.LineSegments | null>(null)
+  const [autoStopStress, setAutoStopStress] = useState(true)
+  const autoStopStressRef = useRef(true)
   const [measureMode, setMeasureMode] = useState(false)
   const measureModeRef = useRef(false)
   const [contextMenu, setContextMenu] = useState<{
@@ -449,6 +451,12 @@ export default function App() {
               energy += 0.5 * (cd[ci - 1].load + cd[ci].load) * (cd[ci].displacement - cd[ci - 1].displacement) * 0.001
             }
             setResultSummary({ maxStress: maxS, maxDisp: maxD, maxPlastic: maxP, energyAbsorbed: energy })
+
+            // Auto-stop: pause if max stress exceeds UTS
+            if (autoStopStressRef.current && maxS > matUTSRef.current * 1.2) {
+              simRunningRef.current = false
+              setSimState('paused')
+            }
           }
 
           // Apply colormap if display mode is active
@@ -908,6 +916,7 @@ export default function App() {
   useEffect(() => { deformScaleRef.current = deformScale }, [deformScale])
 
   useEffect(() => { measureModeRef.current = measureMode }, [measureMode])
+  useEffect(() => { autoStopStressRef.current = autoStopStress }, [autoStopStress])
 
   // Sync clipping plane
   useEffect(() => {
@@ -1580,6 +1589,8 @@ export default function App() {
         onSavePreset={handleSavePreset}
         onLoadPreset={handleLoadPreset}
         onDeletePreset={handleDeletePreset}
+        autoStopStress={autoStopStress}
+        onAutoStopStressChange={setAutoStopStress}
       />
     </div>
     <StatusBar

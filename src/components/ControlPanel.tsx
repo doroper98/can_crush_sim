@@ -67,6 +67,8 @@ interface ControlPanelProps {
   onSavePreset: (name: string) => void
   onLoadPreset: (name: string) => void
   onDeletePreset: (name: string) => void
+  autoStopStress?: boolean
+  onAutoStopStressChange?: (v: boolean) => void
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -216,6 +218,8 @@ export default function ControlPanel({
   onSavePreset,
   onLoadPreset,
   onDeletePreset,
+  autoStopStress,
+  onAutoStopStressChange,
 }: ControlPanelProps) {
   return (
     <div
@@ -389,6 +393,17 @@ export default function ControlPanel({
           unit="×"
           onChange={onTimeScaleChange}
         />
+        {onAutoStopStressChange && (
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#475569', marginTop: 4, cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={autoStopStress ?? true}
+              onChange={e => onAutoStopStressChange(e.target.checked)}
+              style={{ accentColor: '#3b82f6' }}
+            />
+            Auto-stop at 120% UTS
+          </label>
+        )}
       </Section>
 
       <Section title="Rigid Body">
