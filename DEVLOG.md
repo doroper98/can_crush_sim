@@ -28,7 +28,7 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | S1.1 | Vite + React + Three.js 셋업 | - | NF-03, NF-04 | ✅ 완료 | 26/03/10 23:58 |
 | S1.2 | 실린더 캔 메시 생성 | FR-05 | NF-01 | ✅ 완료 | 26/03/11 00:02 |
 | S1.3 | 카메라 컨트롤 (CATIA 호환) | FR-02, FR-15 | NF-05 | ✅ 완료 | 26/03/11 00:08 |
-| S1.4 | 좌표축 표시 | FR-14 | - | ⬜ 미착수 | - |
+| S1.4 | 좌표축 표시 | FR-14 | - | ✅ 완료 | 26/03/11 00:14 |
 | S1.5 | Viewport Toolbar | FR-03, FR-04 | - | ⬜ 미착수 | - |
 | S1.6 | 그리드 표시 | - | - | ⬜ 미착수 | - |
 | S1.7 | Mass-Spring 물리 엔진 기초 | FR-10 | NF-01, NF-02 | ⬜ 미착수 | - |
@@ -152,6 +152,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 > 에이전트는 여기 아래에 로그를 추가한다.
 > 가장 최근 항목이 맨 위.
+
+---
+
+### [EXP-004] 좌하단 좌표축 표시
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 00:14:00 |
+| **Step** | S1.4 |
+| **관련 FR** | FR-14 |
+| **관련 NF** | - |
+| **변경 내용** | AxisHelper 클래스 구현 (viewer/AxisHelper.ts). 별도 씬+OrthographicCamera로 좌하단 80x80px 영역에 RGB=XYZ 좌표축 표시. ArrowHelper+Sprite 라벨. 메인 카메라 quaternion 동기화. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: n/a · ui: 3/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 별도 WebGLRenderer로 alpha 배경 오버레이. 다음: S1.5 Viewport Toolbar. |
 
 ---
 

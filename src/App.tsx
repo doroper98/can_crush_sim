@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
 import { CatiaControls } from './viewer/CatiaControls'
+import { AxisHelper } from './viewer/AxisHelper'
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -60,11 +61,15 @@ export default function App() {
     const controls = new CatiaControls(camera, renderer.domElement)
     controls.setTarget(0, canHeight / 2, 0)
 
+    // Axis indicator (bottom-left 80px)
+    const axisHelper = new AxisHelper(container)
+
     // Animation loop
     let animId: number
     const animate = () => {
       animId = requestAnimationFrame(animate)
       renderer.render(scene, camera)
+      axisHelper.update(camera)
     }
     animate()
 
@@ -82,6 +87,7 @@ export default function App() {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', onResize)
       controls.dispose()
+      axisHelper.dispose()
       renderer.dispose()
       container.removeChild(renderer.domElement)
     }
@@ -90,7 +96,7 @@ export default function App() {
   return (
     <div
       ref={containerRef}
-      style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}
+      style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative' }}
     />
   )
 }
