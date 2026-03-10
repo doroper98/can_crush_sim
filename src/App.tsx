@@ -498,7 +498,8 @@ export default function App() {
               setSimState('paused')
               displayModeRef.current = 'stress'
               setDisplayMode('stress')
-              showToastRef.current(`Auto-stopped: σ_max ${maxS.toFixed(0)} MPa > ${(autoStopMultiplierRef.current * 100).toFixed(0)}% UTS (${(matUTSRef.current * autoStopMultiplierRef.current).toFixed(0)} MPa)`)
+              const aDisp = simTimeRef.current * curSpeed
+              showToastRef.current(`Auto-stopped: σ=${maxS.toFixed(0)}MPa > ${(autoStopMultiplierRef.current * 100).toFixed(0)}%UTS · d=${aDisp.toFixed(1)}mm · ${simStepCountRef.current} steps`)
             }
           }
 
