@@ -1333,13 +1333,14 @@ export default function App() {
   screenshotRef.current = handleScreenshot
 
   const handleReset = useCallback(() => {
+    const hadData = chartDataRef.current.length > 0
     simRunningRef.current = false
     simTimeRef.current = 0
     simStepCountRef.current = 0
     simWallStartRef.current = 0
     setSimSteps(0)
     setSimState('idle')
-    if (chartDataRef.current.length > 0) setPrevChartData(chartDataRef.current.slice())
+    if (hadData) setPrevChartData(chartDataRef.current.slice())
     chartDataRef.current = []
     setChartData([])
     setResultSummary(prev => { if (prev) setPrevResultSummary(prev); return null })
@@ -1376,7 +1377,7 @@ export default function App() {
     // Reset display mode to none
     displayModeRef.current = 'none'
     setDisplayMode('none')
-    showToast('Simulation reset')
+    showToast(hadData ? 'Reset — previous results saved for comparison' : 'Simulation reset')
   }, [canDiameter, canHeightParam, wallThickness, materialKey, rigidHeight, matYoungsModulus, matYieldStress, matUTS, matHardeningN, showToast])
 
   const handleFileLoaded = useCallback(async (buffer: ArrayBuffer, fileName: string, ext: string) => {
