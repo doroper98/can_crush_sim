@@ -78,6 +78,7 @@ export default function App() {
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
   const [isRecording, setIsRecording] = useState(false)
   const [fps, setFps] = useState(60)
+  const [nodeCount, setNodeCount] = useState(693)
   const fpsFrames = useRef(0)
   const fpsLastTime = useRef(performance.now())
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
@@ -456,6 +457,7 @@ export default function App() {
     const physics = new MassSpringSystem(newGeom, { materialKey: materialKey, wallThickness })
     physicsRef.current = physics
     originalPositionsRef.current = new Float32Array(physics.positions)
+    setNodeCount(physics.nodeCount)
     // Update rigid body position to sit above new can
     if (rigidBodyRef.current) {
       rigidBodyRef.current.position.y = h + rigidHeight / 2 + 5
@@ -808,7 +810,7 @@ export default function App() {
     <StatusBar
       simState={simState}
       fps={fps}
-      nodeCount={693}
+      nodeCount={nodeCount}
     />
     </div>
   )
