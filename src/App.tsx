@@ -581,7 +581,13 @@ export default function App() {
           displayModeRef.current = 'stress'
           setDisplayMode('stress')
           const wallSec = ((performance.now() - simWallStartRef.current) / 1000).toFixed(1)
-          showToastRef.current(`Done! d=${maxDisplacement.toFixed(1)}mm (${maxCompressionRef.current}%) · ${simStepCountRef.current} steps · ${wallSec}s`)
+          // Compute final summary for toast
+          let peakF = 0, meanF = 0
+          const cd = chartDataRef.current
+          for (let ci = 0; ci < cd.length; ci++) { if (cd[ci].load > peakF) peakF = cd[ci].load; meanF += cd[ci].load }
+          meanF = cd.length > 0 ? meanF / cd.length : 0
+          const cfeVal = peakF > 0 ? (meanF / peakF * 100).toFixed(0) : '—'
+          showToastRef.current(`Done! d=${maxDisplacement.toFixed(1)}mm · CFE=${cfeVal}% · ${simStepCountRef.current} steps · ${wallSec}s`)
         }
       }
 
