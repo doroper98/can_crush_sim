@@ -445,27 +445,31 @@ export default function App() {
   useEffect(() => { colormapTypeRef.current = colormapType }, [colormapType])
   useEffect(() => { timeScaleRef.current = timeScale }, [timeScale])
 
-  // Rebuild can when parameters change (idle only)
+  // Rebuild can when parameters change (idle only, debounced 200ms)
+  const rebuildTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
     if (simState !== 'idle') return
-    const mesh = canMeshRef.current
-    if (!mesh) return
-    const r = canDiameter / 2
-    const h = canHeightParam
-    const newGeom = new THREE.CylinderGeometry(r, r, h, 32, 20, false)
-    newGeom.translate(0, h / 2, 0)
-    mesh.geometry.dispose()
-    mesh.geometry = newGeom
-    canGeometryRef.current = newGeom
-    const physics = new MassSpringSystem(newGeom, { materialKey: materialKey, wallThickness })
-    physicsRef.current = physics
-    originalPositionsRef.current = new Float32Array(physics.positions)
-    setNodeCount(physics.nodeCount)
-    // Update rigid body position to sit above new can
-    if (rigidBodyRef.current) {
-      rigidBodyRef.current.position.y = h + rigidHeight / 2 + 5
-      setRigidPosY(Math.round(h + rigidHeight / 2 + 5))
-    }
+    if (rebuildTimerRef.current) clearTimeout(rebuildTimerRef.current)
+    rebuildTimerRef.current = setTimeout(() => {
+      const mesh = canMeshRef.current
+      if (!mesh) return
+      const r = canDiameter / 2
+      const h = canHeightParam
+      const newGeom = new THREE.CylinderGeometry(r, r, h, 32, 20, false)
+      newGeom.translate(0, h / 2, 0)
+      mesh.geometry.dispose()
+      mesh.geometry = newGeom
+      canGeometryRef.current = newGeom
+      const physics = new MassSpringSystem(newGeom, { materialKey: materialKey, wallThickness })
+      physicsRef.current = physics
+      originalPositionsRef.current = new Float32Array(physics.positions)
+      setNodeCount(physics.nodeCount)
+      if (rigidBodyRef.current) {
+        rigidBodyRef.current.position.y = h + rigidHeight / 2 + 5
+        setRigidPosY(Math.round(h + rigidHeight / 2 + 5))
+      }
+    }, 200)
+    return () => { if (rebuildTimerRef.current) clearTimeout(rebuildTimerRef.current) }
   }, [canDiameter, canHeightParam, wallThickness, materialKey])
 
   // Sync display mode → material vertexColors
