@@ -13,6 +13,7 @@ import { applyVertexColors, type ColormapType } from './viewer/colormap'
 import { MATERIALS, DEFAULT_MATERIAL } from './engine/MaterialModel'
 import { CanvasRecorder } from './viewer/recorder'
 import StatusBar from './components/StatusBar'
+import KeyboardHelp from './components/KeyboardHelp'
 
 /** LOD: compute radial/height segments based on camera distance */
 function getLODSegments(cameraDistance: number): { radial: number; height: number } {
@@ -94,6 +95,7 @@ export default function App() {
   const fpsLastTime = useRef(performance.now())
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
   const [cursorWorld, setCursorWorld] = useState<{ x: number; y: number; z: number } | null>(null)
+  const [showHelp, setShowHelp] = useState(false)
 
   useEffect(() => {
     const container = containerRef.current
@@ -453,6 +455,9 @@ export default function App() {
           break
         case 'b': case 'B':
           bcPoints.visible = !bcPoints.visible
+          break
+        case '?':
+          setShowHelp(prev => !prev)
           break
       }
       if (e.code === 'Numpad7') controls.setView('top')
@@ -976,6 +981,7 @@ export default function App() {
       nodeCount={nodeCount}
       cursorWorld={cursorWorld}
     />
+    <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} />
     </div>
   )
 }
