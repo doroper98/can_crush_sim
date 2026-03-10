@@ -7,11 +7,12 @@ interface StatusBarProps {
   displacement?: number
   simSteps?: number
   maxDisplacement?: number
+  wallElapsed?: number
   displayInfo?: { mode: string; min: number; max: number } | null
   darkMode?: boolean
 }
 
-export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTime = 0, displacement = 0, simSteps = 0, maxDisplacement = 0, displayInfo, darkMode = false }: StatusBarProps) {
+export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTime = 0, displacement = 0, simSteps = 0, maxDisplacement = 0, wallElapsed = 0, displayInfo, darkMode = false }: StatusBarProps) {
   const stateLabel = simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating' : 'Paused'
   const stateColor = simState === 'idle' ? '#64748b' : simState === 'running' ? '#10b981' : '#f59e0b'
 
@@ -50,7 +51,7 @@ export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTi
       {/* Sim Info */}
       {simState !== 'idle' && (
         <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>t: {simTime.toFixed(3)}s  d: {displacement.toFixed(1)}mm  steps: {simSteps}</span>
+          <span>t: {simTime.toFixed(3)}s  d: {displacement.toFixed(1)}mm  steps: {simSteps}{wallElapsed > 0 ? `  wall: ${wallElapsed.toFixed(1)}s` : ''}</span>
           {maxDisplacement > 0 && (
             <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <span style={{ width: 60, height: 6, borderRadius: 3, background: darkMode ? '#334155' : '#d0d5dd', overflow: 'hidden' }}>

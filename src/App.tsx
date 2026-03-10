@@ -124,6 +124,7 @@ export default function App() {
   const [simTime, setSimTime] = useState(0)
   const [simDisplacement, setSimDisplacement] = useState(0)
   const [simSteps, setSimSteps] = useState(0)
+  const [wallElapsed, setWallElapsed] = useState(0)
   const [pickedNode, setPickedNode] = useState<{
     x: number; y: number; stress: number; disp: number; plastic: number; nodeIdx: number; flowStress: number
   } | null>(null)
@@ -453,6 +454,7 @@ export default function App() {
             setSimTime(simTimeRef.current)
             setSimDisplacement(displacement)
             setSimSteps(simStepCountRef.current)
+            if (simWallStartRef.current > 0) setWallElapsed((performance.now() - simWallStartRef.current) / 1000)
 
             // Result summary: compute max stress, max disp, max plastic, energy
             let maxS = 0, maxD = 0, maxP = 0
@@ -1353,6 +1355,7 @@ export default function App() {
     simStepCountRef.current = 0
     simWallStartRef.current = 0
     setSimSteps(0)
+    setWallElapsed(0)
     setSimState('idle')
     if (hadData) setPrevChartData(chartDataRef.current.slice())
     chartDataRef.current = []
@@ -2020,6 +2023,7 @@ export default function App() {
         max: colorBarMax,
       } : null}
       maxDisplacement={canHeightParam * (maxCompression / 100)}
+      wallElapsed={wallElapsed}
       darkMode={darkMode}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} darkMode={darkMode} />
