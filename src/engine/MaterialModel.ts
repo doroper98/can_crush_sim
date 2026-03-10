@@ -155,6 +155,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.16,
     wallThickness: 0.3,
   }),
+  copper_beryllium_c172: createMaterial({
+    name: 'Cu-Be C17200',
+    youngsModulus: 131000,
+    poissonRatio: 0.30,
+    yieldStress: 1000,
+    uts: 1250,
+    density: 8250,
+    hardeningExponent: 0.09,
+    wallThickness: 0.3,
+  }),
   inconel_718: createMaterial({
     name: 'Inconel 718',
     youngsModulus: 205000,
