@@ -125,6 +125,8 @@ export default function App() {
   const [resultSummary, setResultSummary] = useState<{
     maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number
   } | null>(null)
+  const [showGhost, setShowGhost] = useState(false)
+  const ghostMeshRef = useRef<THREE.LineSegments | null>(null)
   const [measureMode, setMeasureMode] = useState(false)
   const measureModeRef = useRef(false)
   const [contextMenu, setContextMenu] = useState<{
@@ -637,6 +639,11 @@ export default function App() {
             measurePt1Ref.current = null
           }
           break
+        case 'o': case 'O':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            setShowGhost(prev => !prev)
+          }
+          break
       }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
@@ -829,6 +836,36 @@ export default function App() {
       ;(grid.material as THREE.LineBasicMaterial).color.set(darkMode ? 0x334155 : 0xcccccc)
     }
   }, [darkMode])
+
+  // Ghost (original shape) overlay
+  useEffect(() => {
+    const scene = sceneRef.current
+    const origPos = originalPositionsRef.current
+    const geom = canGeometryRef.current
+    if (!scene || !geom || !origPos) return
+
+    if (showGhost) {
+      // Create a wireframe mesh from original positions
+      const ghostGeom = geom.clone()
+      const arr = ghostGeom.attributes.position.array as Float32Array
+      arr.set(origPos.subarray(0, arr.length))
+      ghostGeom.attributes.position.needsUpdate = true
+      const edges = new THREE.EdgesGeometry(ghostGeom, 30)
+      const ghost = new THREE.LineSegments(
+        edges,
+        new THREE.LineBasicMaterial({ color: 0x3b82f6, opacity: 0.3, transparent: true })
+      )
+      ghost.name = 'ghostMesh'
+      scene.add(ghost)
+      ghostMeshRef.current = ghost
+    } else {
+      if (ghostMeshRef.current) {
+        ghostMeshRef.current.geometry.dispose()
+        scene.remove(ghostMeshRef.current)
+        ghostMeshRef.current = null
+      }
+    }
+  }, [showGhost])
 
   // Sync wireframe state
   useEffect(() => {
@@ -1616,6 +1653,16 @@ export default function App() {
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               {clipEnabled ? 'Disable Section Clip' : 'Enable Section Clip'}
+            </div>
+          )}
+          {contextMenu.target === 'can' && (
+            <div
+              onClick={() => { setShowGhost(!showGhost); setContextMenu(null) }}
+              style={ctxItemStyle}
+              onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >
+              {showGhost ? 'Hide Original Shape (O)' : 'Show Original Shape (O)'}
             </div>
           )}
           {contextMenu.target === 'rigid' && (
