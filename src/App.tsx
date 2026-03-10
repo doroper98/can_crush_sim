@@ -96,6 +96,8 @@ export default function App() {
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
   const [cursorWorld, setCursorWorld] = useState<{ x: number; y: number; z: number } | null>(null)
   const [showHelp, setShowHelp] = useState(false)
+  const [simTime, setSimTime] = useState(0)
+  const [simDisplacement, setSimDisplacement] = useState(0)
 
   useEffect(() => {
     const container = containerRef.current
@@ -317,6 +319,8 @@ export default function App() {
           if (colorBarUpdateCounter.current % 10 === 0) {
             chartDataRef.current.push({ displacement, load: estimatedForce })
             setChartData(chartDataRef.current.slice())
+            setSimTime(simTimeRef.current)
+            setSimDisplacement(displacement)
           }
 
           // Apply colormap if display mode is active
@@ -981,6 +985,8 @@ export default function App() {
       fps={fps}
       nodeCount={nodeCount}
       cursorWorld={cursorWorld}
+      simTime={simTime}
+      displacement={simDisplacement}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} />
     </div>

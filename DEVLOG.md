@@ -178,6 +178,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-048] 시뮬레이션 시간 + 변위 StatusBar 표시
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 06:12:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | FR-13 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | App.tsx: simTime, simDisplacement 상태 추가. 10프레임마다 simTimeRef.current와 현재 변위를 상태에 반영. StatusBar: simTime/displacement props 추가, 시뮬레이션 실행/일시정지 중에만 "t: 0.123s  d: 15.3mm" 형태로 표시. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 사용자가 시뮬레이션 진행 상황을 실시간으로 파악 가능. 시뮬 시간과 변위 모두 표시. |
+
+---
+
 ### [EXP-047] ViewportToolbar Help 버튼
 
 | 항목 | 값 |

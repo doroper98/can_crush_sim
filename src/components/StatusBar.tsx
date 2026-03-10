@@ -3,9 +3,11 @@ interface StatusBarProps {
   fps: number
   nodeCount: number
   cursorWorld?: { x: number; y: number; z: number } | null
+  simTime?: number
+  displacement?: number
 }
 
-export default function StatusBar({ simState, fps, nodeCount, cursorWorld }: StatusBarProps) {
+export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTime = 0, displacement = 0 }: StatusBarProps) {
   const stateLabel = simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating' : 'Paused'
   const stateColor = simState === 'idle' ? '#64748b' : simState === 'running' ? '#10b981' : '#f59e0b'
 
@@ -38,6 +40,11 @@ export default function StatusBar({ simState, fps, nodeCount, cursorWorld }: Sta
           ? `X: ${cursorWorld.x.toFixed(1)}  Y: ${cursorWorld.y.toFixed(1)}  Z: ${cursorWorld.z.toFixed(1)}`
           : 'X: —  Y: —  Z: —'}
       </span>
+
+      {/* Sim Info */}
+      {simState !== 'idle' && (
+        <span>t: {simTime.toFixed(3)}s  d: {displacement.toFixed(1)}mm</span>
+      )}
 
       {/* Node Count */}
       <span>Nodes: {nodeCount}</span>
