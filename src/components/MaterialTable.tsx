@@ -68,6 +68,7 @@ export default function MaterialTable({ visible, onClose, darkMode = false, curr
                   {c.label}{c.unit ? ` (${c.unit})` : ''}
                 </th>
               ))}
+              <th style={{ padding: '4px 6px', textAlign: 'right', color: textSec, borderBottom: `1px solid ${borderColor}`, fontWeight: 600 }}>UTS/σy</th>
             </tr>
           </thead>
           <tbody>
@@ -83,6 +84,9 @@ export default function MaterialTable({ visible, onClose, darkMode = false, curr
                       {c.fmt((mat as unknown as Record<string, number>)[c.key])}
                     </td>
                   ))}
+                  <td style={{ padding: '4px 6px', textAlign: 'right', color: (mat.uts / mat.yieldStress) >= 2 ? '#10b981' : textSec, borderBottom: `1px solid ${borderColor}`, fontFamily: 'monospace', fontWeight: (mat.uts / mat.yieldStress) >= 2 ? 600 : 400 }}>
+                    {(mat.uts / mat.yieldStress).toFixed(2)}
+                  </td>
                 </tr>
               )
             })}
