@@ -11,6 +11,12 @@ interface ControlPanelProps {
   rigidShape: RigidBodyShape
   rigidRadius: number
   rigidHeight: number
+  rigidPosX: number
+  rigidPosY: number
+  rigidPosZ: number
+  rigidRotX: number
+  rigidRotY: number
+  rigidRotZ: number
   onCanDiameterChange: (v: number) => void
   onCanHeightChange: (v: number) => void
   onWallThicknessChange: (v: number) => void
@@ -19,6 +25,12 @@ interface ControlPanelProps {
   onRigidShapeChange: (v: RigidBodyShape) => void
   onRigidRadiusChange: (v: number) => void
   onRigidHeightChange: (v: number) => void
+  onRigidPosXChange: (v: number) => void
+  onRigidPosYChange: (v: number) => void
+  onRigidPosZChange: (v: number) => void
+  onRigidRotXChange: (v: number) => void
+  onRigidRotYChange: (v: number) => void
+  onRigidRotZChange: (v: number) => void
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -115,6 +127,12 @@ export default function ControlPanel({
   rigidShape,
   rigidRadius,
   rigidHeight,
+  rigidPosX,
+  rigidPosY,
+  rigidPosZ,
+  rigidRotX,
+  rigidRotY,
+  rigidRotZ,
   onCanDiameterChange,
   onCanHeightChange,
   onWallThicknessChange,
@@ -123,6 +141,12 @@ export default function ControlPanel({
   onRigidShapeChange,
   onRigidRadiusChange,
   onRigidHeightChange,
+  onRigidPosXChange,
+  onRigidPosYChange,
+  onRigidPosZChange,
+  onRigidRotXChange,
+  onRigidRotYChange,
+  onRigidRotZChange,
 }: ControlPanelProps) {
   return (
     <div
@@ -232,6 +256,66 @@ export default function ControlPanel({
             onChange={onRigidHeightChange}
           />
         )}
+      </Section>
+
+      <Section title="Rigid Position" defaultOpen={false}>
+        <Slider
+          label="X"
+          value={rigidPosX}
+          min={-200}
+          max={200}
+          step={1}
+          unit="mm"
+          onChange={onRigidPosXChange}
+        />
+        <Slider
+          label="Y"
+          value={rigidPosY}
+          min={0}
+          max={400}
+          step={1}
+          unit="mm"
+          onChange={onRigidPosYChange}
+        />
+        <Slider
+          label="Z"
+          value={rigidPosZ}
+          min={-200}
+          max={200}
+          step={1}
+          unit="mm"
+          onChange={onRigidPosZChange}
+        />
+      </Section>
+
+      <Section title="Rigid Rotation" defaultOpen={false}>
+        <Slider
+          label="Rx"
+          value={rigidRotX}
+          min={-180}
+          max={180}
+          step={1}
+          unit="°"
+          onChange={onRigidRotXChange}
+        />
+        <Slider
+          label="Ry"
+          value={rigidRotY}
+          min={-180}
+          max={180}
+          step={1}
+          unit="°"
+          onChange={onRigidRotYChange}
+        />
+        <Slider
+          label="Rz"
+          value={rigidRotZ}
+          min={-180}
+          max={180}
+          step={1}
+          unit="°"
+          onChange={onRigidRotZChange}
+        />
       </Section>
 
       <Section title="Material (Aluminum)" defaultOpen={false}>

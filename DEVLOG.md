@@ -40,7 +40,7 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | S2.2 | STP 파일 드래그&드롭 임포트 | FR-01 | - | 🔄 부분완료 | 26/03/11 01:10 |
 | S2.3 | STL 직접 로드 | FR-01 | - | ✅ 완료 | 26/03/11 01:10 |
 | S2.4 | 강체 형상 변경 | FR-07 | - | ✅ 완료 | 26/03/11 01:16 |
-| S2.5 | 강체 위치/방향 수치입력 | FR-08 | - | ⬜ 미착수 | - |
+| S2.5 | 강체 위치/방향 수치입력 | FR-08 | - | ✅ 완료 | 26/03/11 01:25 |
 | S2.6 | 3D Transform Gizmo | FR-08 | - | ⬜ 미착수 | - |
 | S2.7 | 하중 방향 화살표 시각화 | FR-09 | - | ⬜ 미착수 | - |
 | S3.1 | Von Mises 응력 계산 | FR-11 | - | ⬜ 미착수 | - |
@@ -152,6 +152,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 > 에이전트는 여기 아래에 로그를 추가한다.
 > 가장 최근 항목이 맨 위.
+
+---
+
+### [EXP-014] 강체 위치/방향 수치입력
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 01:25:00 |
+| **Step** | S2.5 |
+| **관련 FR** | FR-08 |
+| **관련 NF** | - |
+| **변경 내용** | ControlPanel에 Rigid Position 섹션(X/Y/Z 슬라이더, -200~200mm, Y는 0~400mm) 및 Rigid Rotation 섹션(Rx/Ry/Rz, ±180°) 추가. App.tsx에 rigidPosX/Y/Z, rigidRotX/Y/Z state 추가. idle 상태에서 rigidBody mesh의 position/rotation을 수치값으로 동기화하는 useEffect 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 5/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | idle 상태에서만 position/rotation 동기화. 시뮬 실행 중엔 물리엔진이 위치 제어. 다음: S2.6 3D Transform Gizmo. |
 
 ---
 

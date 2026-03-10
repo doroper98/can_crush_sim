@@ -32,6 +32,12 @@ export default function App() {
   const [rigidShape, setRigidShape] = useState<RigidBodyShape>('cylinder')
   const [rigidRadius, setRigidRadius] = useState(40)
   const [rigidHeight, setRigidHeight] = useState(20)
+  const [rigidPosX, setRigidPosX] = useState(0)
+  const [rigidPosY, setRigidPosY] = useState(145) // canHeight + rigidHeight/2 + 5
+  const [rigidPosZ, setRigidPosZ] = useState(0)
+  const [rigidRotX, setRigidRotX] = useState(0)
+  const [rigidRotY, setRigidRotY] = useState(0)
+  const [rigidRotZ, setRigidRotZ] = useState(0)
 
   useEffect(() => {
     const container = containerRef.current
@@ -227,6 +233,19 @@ export default function App() {
     if (gridRef.current) gridRef.current.visible = showGrid
   }, [showGrid])
 
+  // Sync rigid body position/rotation from control panel
+  useEffect(() => {
+    const rb = rigidBodyRef.current
+    if (rb && simState === 'idle') {
+      rb.position.set(rigidPosX, rigidPosY, rigidPosZ)
+      rb.rotation.set(
+        rigidRotX * Math.PI / 180,
+        rigidRotY * Math.PI / 180,
+        rigidRotZ * Math.PI / 180
+      )
+    }
+  }, [rigidPosX, rigidPosY, rigidPosZ, rigidRotX, rigidRotY, rigidRotZ, simState])
+
   const handleViewChange = useCallback(
     (view: 'top' | 'front' | 'right' | 'iso') => {
       controlsRef.current?.setView(view)
@@ -399,6 +418,12 @@ export default function App() {
         rigidShape={rigidShape}
         rigidRadius={rigidRadius}
         rigidHeight={rigidHeight}
+        rigidPosX={rigidPosX}
+        rigidPosY={rigidPosY}
+        rigidPosZ={rigidPosZ}
+        rigidRotX={rigidRotX}
+        rigidRotY={rigidRotY}
+        rigidRotZ={rigidRotZ}
         onCanDiameterChange={setCanDiameter}
         onCanHeightChange={setCanHeightParam}
         onWallThicknessChange={setWallThickness}
@@ -407,6 +432,12 @@ export default function App() {
         onRigidShapeChange={setRigidShape}
         onRigidRadiusChange={setRigidRadius}
         onRigidHeightChange={setRigidHeight}
+        onRigidPosXChange={setRigidPosX}
+        onRigidPosYChange={setRigidPosY}
+        onRigidPosZChange={setRigidPosZ}
+        onRigidRotXChange={setRigidRotX}
+        onRigidRotYChange={setRigidRotY}
+        onRigidRotZChange={setRigidRotZ}
       />
     </div>
   )
