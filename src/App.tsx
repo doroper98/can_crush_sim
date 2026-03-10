@@ -127,6 +127,7 @@ export default function App() {
   const maxStressMarkerRef = useRef<THREE.Sprite | null>(null)
   const [resultSummary, setResultSummary] = useState<{
     maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number
+    sea: number; cfe: number; canMass: number
   } | null>(null)
   const [panelVisible, setPanelVisible] = useState(true)
   const [showGhost, setShowGhost] = useState(false)
@@ -463,7 +464,22 @@ export default function App() {
             for (let ci = 1; ci < cd.length; ci++) {
               energy += 0.5 * (cd[ci - 1].load + cd[ci].load) * (cd[ci].displacement - cd[ci - 1].displacement) * 0.001
             }
-            setResultSummary({ maxStress: maxS, maxDisp: maxD, maxPlastic: maxP, energyAbsorbed: energy })
+            // Crashworthiness metrics: SEA and CFE
+            const mat = MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]
+            const canR = canRadiusRef.current // mm
+            const canH = canHeightRef.current // mm
+            const wt = wallThicknessRef.current // mm
+            // Thin-wall cylinder mass: density * π * D * t * H (mm³→m³)
+            const canMassKg = mat.density * Math.PI * (2 * canR) * wt * canH * 1e-9
+            const sea = canMassKg > 0 ? energy / canMassKg : 0 // J/kg
+            let peakForce = 0, meanForce = 0
+            for (let ci = 0; ci < cd.length; ci++) {
+              if (cd[ci].load > peakForce) peakForce = cd[ci].load
+              meanForce += cd[ci].load
+            }
+            meanForce = cd.length > 0 ? meanForce / cd.length : 0
+            const cfe = peakForce > 0 ? meanForce / peakForce : 0
+            setResultSummary({ maxStress: maxS, maxDisp: maxD, maxPlastic: maxP, energyAbsorbed: energy, sea, cfe, canMass: canMassKg })
 
             // Auto-stop: pause if max stress exceeds 120% UTS
             if (autoStopStressRef.current && maxS > matUTSRef.current * 1.2) {
@@ -1219,6 +1235,7 @@ export default function App() {
     ]
     if (resultSummary) {
       lines.push(`σ_max=${resultSummary.maxStress.toFixed(0)}MPa  E=${resultSummary.energyAbsorbed.toFixed(2)}J`)
+      lines.push(`SEA=${resultSummary.sea.toFixed(1)}J/kg  CFE=${(resultSummary.cfe*100).toFixed(1)}%`)
     }
     const lh = Math.max(16, w * 0.016)
     lines.forEach((line, i) => {
@@ -1735,6 +1752,11 @@ export default function App() {
             <div>σ_max: <span style={{ color: resultSummary.maxStress > matUTS ? '#ef4444' : '#10b981' }}>{resultSummary.maxStress.toFixed(0)}</span> MPa</div>
             <div>ε_p: {(resultSummary.maxPlastic * 100).toFixed(1)} %</div>
             <div>E: {resultSummary.energyAbsorbed.toFixed(2)} J</div>
+            <div style={{ borderTop: '1px solid rgba(148,163,184,0.3)', marginTop: 3, paddingTop: 3 }}>
+              <div>SEA: {resultSummary.sea.toFixed(1)} J/kg</div>
+              <div>CFE: <span style={{ color: resultSummary.cfe >= 0.7 ? '#10b981' : resultSummary.cfe >= 0.4 ? '#f59e0b' : '#ef4444' }}>{(resultSummary.cfe * 100).toFixed(1)}%</span></div>
+              <div style={{ fontSize: 9, color: '#64748b' }}>m: {(resultSummary.canMass * 1000).toFixed(2)} g</div>
+            </div>
           </div>
         )}
         {/* Node info tooltip */}
