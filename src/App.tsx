@@ -94,7 +94,7 @@ export default function App() {
     camera.lookAt(0, 0, 0)
     cameraRef.current = camera
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true })
+    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true })
     renderer.setSize(container.clientWidth, container.clientHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
     container.appendChild(renderer.domElement)
@@ -519,6 +519,17 @@ export default function App() {
     }
   }, [])
 
+  const handleScreenshot = useCallback(() => {
+    const renderer = rendererRef.current
+    if (!renderer) return
+    // Force a render to ensure current frame is captured
+    const dataURL = renderer.domElement.toDataURL('image/png')
+    const link = document.createElement('a')
+    link.download = `cancrush_${Date.now()}.png`
+    link.href = dataURL
+    link.click()
+  }, [])
+
   const handleReset = useCallback(() => {
     simRunningRef.current = false
     simTimeRef.current = 0
@@ -601,6 +612,7 @@ export default function App() {
           onTogglePerspective={handleTogglePerspective}
           onFitAll={handleFitAll}
           onToggleWireframe={handleToggleWireframe}
+          onScreenshot={handleScreenshot}
           isPerspective={isPerspective}
           gizmoMode={gizmoMode}
           onGizmoModeChange={setGizmoMode}

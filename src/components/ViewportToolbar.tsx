@@ -3,6 +3,7 @@ interface ViewportToolbarProps {
   onTogglePerspective: () => void
   onFitAll: () => void
   onToggleWireframe: () => void
+  onScreenshot?: () => void
   isPerspective: boolean
   gizmoMode?: 'translate' | 'rotate'
   onGizmoModeChange?: (mode: 'translate' | 'rotate') => void
@@ -13,6 +14,7 @@ export default function ViewportToolbar({
   onTogglePerspective,
   onFitAll,
   onToggleWireframe,
+  onScreenshot,
   isPerspective,
   gizmoMode = 'translate',
   onGizmoModeChange,
@@ -81,6 +83,11 @@ export default function ViewportToolbar({
       <button style={btnStyle} onClick={onToggleWireframe} title="Wireframe (W)">
         Wire
       </button>
+      {onScreenshot && (
+        <button style={btnStyle} onClick={onScreenshot} title="Screenshot (S)">
+          Snap
+        </button>
+      )}
       {onGizmoModeChange && (
         <>
           <span style={{ width: 1, background: '#ccc', margin: '0 4px' }} />

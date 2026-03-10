@@ -60,7 +60,7 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | S4.7 | LOD 적용 | - | NF-01 | ✅ 완료 | 26/03/11 03:05 |
 | S4.8 | 성능 프로파일링 및 튜닝 | - | NF-01, NF-05 | ✅ 완료 | 26/03/11 03:15 |
 | S5.1 | StatusBar (상태+좌표+FPS) | - | NF-05 | ✅ 완료 | 26/03/11 03:25 |
-| S5.2 | Screenshot PNG 캡처 | - | - | ⬜ 미착수 | - |
+| S5.2 | Screenshot PNG 캡처 | - | - | ✅ 완료 | 26/03/11 03:32 |
 | S5.3 | 재료 모델 플러그인 구조 | FR-06 | NF-07 | ⬜ 미착수 | - |
 | S5.4 | 캔 파라미터 동적 적용 | FR-05 | - | ⬜ 미착수 | - |
 | S5.5 | 물성값 UI 편집 | FR-06 | - | ⬜ 미착수 | - |
@@ -157,6 +157,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 > 에이전트는 여기 아래에 로그를 추가한다.
 > 가장 최근 항목이 맨 위.
+
+---
+
+### [EXP-029] Screenshot PNG 캡처
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 03:32:00 |
+| **Step** | S5.2 |
+| **관련 FR** | - |
+| **관련 NF** | - |
+| **변경 내용** | (1) ViewportToolbar에 Snap 버튼 추가 (onScreenshot prop). (2) App.tsx: handleScreenshot 구현 — renderer.domElement.toDataURL('image/png') → 자동 다운로드. (3) WebGLRenderer에 preserveDrawingBuffer:true 옵션 추가 (toDataURL이 빈 캔버스를 반환하는 문제 방지). GOAL.md §5.1 Toolbar의 스크린샷 버튼 요구사항 충족. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 9/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | preserveDrawingBuffer는 약간의 GPU 메모리 오버헤드가 있으나 스크린샷 기능에 필수. |
 
 ---
 
