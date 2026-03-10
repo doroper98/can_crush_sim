@@ -2129,18 +2129,16 @@ export default function App() {
           }}
         >
           <h2 style={{ margin: '0 0 4px', fontSize: 18, color: darkMode ? '#e2e8f0' : '#0f172a' }}>Can Crush Simulator</h2>
-          <div style={{ fontSize: 10, color: darkMode ? '#64748b' : '#94a3b8', marginBottom: 12 }}>v1.0 — React + Three.js + Mass-Spring FEM</div>
+          <div style={{ fontSize: 10, color: darkMode ? '#64748b' : '#94a3b8', marginBottom: 12 }}>v1.1 — React + Three.js + Mass-Spring FEM · 8 Materials</div>
           <p style={{ fontSize: 12, color: darkMode ? '#94a3b8' : '#475569', lineHeight: 1.6, margin: '0 0 12px' }}>
-            Real-time elasto-plastic aluminum can crushing simulation with Mass-Spring FEM,
-            Ludwik-Hollomon hardening, and Von Mises stress analysis.
+            Real-time elasto-plastic can crushing with Mass-Spring FEM, Ludwik-Hollomon hardening,
+            Von Mises stress, SEA/CFE crashworthiness metrics, and 8 built-in materials.
           </p>
           <div style={{ fontSize: 11, color: darkMode ? '#94a3b8' : '#64748b', lineHeight: 1.8 }}>
-            <div><strong>Space</strong> — Play/Pause toggle</div>
-            <div><strong>W</strong> — Wireframe toggle</div>
-            <div><strong>M</strong> — Measurement tool</div>
-            <div><strong>D</strong> — Dark mode</div>
-            <div><strong>?</strong> — All keyboard shortcuts</div>
-            <div><strong>Right-click</strong> — Context menu (Export JSON/CSV/STL)</div>
+            <div><strong>Space</strong> — Play/Pause · <strong>N</strong> — Step · <strong>V</strong> — Display mode</div>
+            <div><strong>C</strong> — Copy results · <strong>S</strong> — Screenshot · <strong>M</strong> — Measure</div>
+            <div><strong>D</strong> — Dark mode · <strong>?</strong> — All shortcuts</div>
+            <div><strong>Right-click</strong> — Export JSON/CSV/STL</div>
           </div>
           <button
             onClick={() => { setShowAbout(false); localStorage.setItem('cancrush_visited', '1') }}
