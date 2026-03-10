@@ -32,6 +32,7 @@ export default function App() {
   const rigidBodyRef = useRef<THREE.Mesh | null>(null)
   const simRunningRef = useRef(false)
   const simTimeRef = useRef(0)
+  const simStepCountRef = useRef(0)
   const canGeometryRef = useRef<THREE.CylinderGeometry | null>(null)
   const transformControlsRef = useRef<TransformControls | null>(null)
   const loadArrowRef = useRef<THREE.ArrowHelper | null>(null)
@@ -118,6 +119,7 @@ export default function App() {
   const deformScaleRef = useRef(1.0)
   const [simTime, setSimTime] = useState(0)
   const [simDisplacement, setSimDisplacement] = useState(0)
+  const [simSteps, setSimSteps] = useState(0)
   const [pickedNode, setPickedNode] = useState<{
     x: number; y: number; stress: number; disp: number; plastic: number; nodeIdx: number
   } | null>(null)
@@ -386,6 +388,7 @@ export default function App() {
 
           // Physics step
           physics.step()
+          simStepCountRef.current++
 
           // Apply rigid body contact
           physics.applyRigidCylinderContact(
@@ -442,6 +445,7 @@ export default function App() {
             setChartData(chartDataRef.current.slice())
             setSimTime(simTimeRef.current)
             setSimDisplacement(displacement)
+            setSimSteps(simStepCountRef.current)
 
             // Result summary: compute max stress, max disp, max plastic, energy
             let maxS = 0, maxD = 0, maxP = 0
@@ -1253,6 +1257,8 @@ export default function App() {
   const handleReset = useCallback(() => {
     simRunningRef.current = false
     simTimeRef.current = 0
+    simStepCountRef.current = 0
+    setSimSteps(0)
     setSimState('idle')
     chartDataRef.current = []
     setChartData([])
@@ -1885,6 +1891,7 @@ export default function App() {
       cursorWorld={cursorWorld}
       simTime={simTime}
       displacement={simDisplacement}
+      simSteps={simSteps}
       displayInfo={displayMode !== 'none' ? {
         mode: displayMode === 'stress' ? 'σ (MPa)' : displayMode === 'displacement' ? 'd (mm)' : 'ε_p',
         min: colorBarMin,

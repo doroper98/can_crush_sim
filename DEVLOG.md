@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-102] 시뮬레이션 스텝 카운터 StatusBar 표시
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 12:05:00 |
+| **Step** | - (정보 표시) |
+| **관련 FR** | FR-13 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) simStepCountRef로 물리 스텝 누적 카운트. (2) simSteps state로 React 렌더. (3) StatusBar에 "steps: N" 표시. (4) Reset 시 카운터 0 초기화. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 824.24 kB (gzip 225.10 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 물리 엔진 성능 디버깅/벤치마킹에 유용. 총 스텝 수로 시뮬레이션 수렴성 판단 가능. |
+
+---
+
 ### [EXP-101] ControlPanel Results 섹션 SEA/CFE 확장
 
 | 항목 | 값 |
