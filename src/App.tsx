@@ -615,7 +615,8 @@ export default function App() {
     return () => { if (rebuildTimerRef.current) clearTimeout(rebuildTimerRef.current) }
   }, [canDiameter, canHeightParam, wallThickness, materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN])
 
-  // Sync display mode → material vertexColors
+  // Sync display mode → material vertexColors + mesh edge overlay
+  const edgeLinesRef = useRef<THREE.LineSegments | null>(null)
   useEffect(() => {
     const mesh = canMeshRef.current
     if (!mesh) return
@@ -623,6 +624,19 @@ export default function App() {
     if (displayMode !== 'none') {
       mat.vertexColors = true
       mat.color.set(0xffffff) // neutral base for vertex colors
+      // Add edge overlay
+      if (!edgeLinesRef.current) {
+        const geom = canGeometryRef.current
+        if (geom) {
+          const edges = new THREE.EdgesGeometry(geom, 30)
+          const lines = new THREE.LineSegments(
+            edges,
+            new THREE.LineBasicMaterial({ color: 0x000000, opacity: 0.15, transparent: true })
+          )
+          mesh.add(lines)
+          edgeLinesRef.current = lines
+        }
+      }
     } else {
       mat.vertexColors = false
       mat.color.set(0xc0c0c0)
@@ -630,6 +644,12 @@ export default function App() {
       const geom = canGeometryRef.current
       if (geom && geom.getAttribute('color')) {
         geom.deleteAttribute('color')
+      }
+      // Remove edge overlay
+      if (edgeLinesRef.current) {
+        edgeLinesRef.current.geometry.dispose()
+        mesh.remove(edgeLinesRef.current)
+        edgeLinesRef.current = null
       }
     }
     mat.needsUpdate = true
