@@ -67,23 +67,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-060 기준, 26/03/11 07:48)
+### 누적 통계 (EXP-061 기준, 26/03/11 07:55)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | 60 |
-| 성공 커밋 | 60 |
+| 총 실험 수 | 61 |
+| 성공 커밋 | 61 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 24건, EXP-028~060) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 25건, EXP-028~061) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 803 kB (gzip 219 kB) |
+| 빌드 크기 | 806 kB (gzip 220 kB) |
 
 ---
 
@@ -192,6 +192,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
 | **판정** | ✅ COMMIT (아래) |
 | **비고** | 구조 해석 소프트웨어의 핵심 기능: 단면도(Section View). Y축 기준 클리핑으로 캔 내부 구조와 변형을 관찰 가능. |
+
+---
+
+### [EXP-061] 우클릭 컨텍스트 메뉴
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 07:55:00 |
+| **Step** | - (GOAL.md §5.2 Context Menu 구현) |
+| **관련 FR** | FR-02 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) App.tsx: contextMenu 상태 추가 (x/y/target). contextmenu 이벤트 핸들러에서 Raycaster로 클릭 대상 감지 (can/rigid/viewport 3분기). (2) 컨텍스트 메뉴 팝업 UI: 뉴로모피즘 스타일, 대상별 분기 메뉴. Can 우클릭: Show/Hide Stress Map, Enable/Disable Section Clip. Rigid 우클릭: Show/Hide Load Arrow. 공통: Fit All(F), Wireframe(W), Grid(G), Dark Mode(D), Screenshot(S), Reset Simulation. (3) 배경 오버레이 클릭 시 메뉴 닫기. 호버 하이라이트 적용. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | GOAL.md §5.2 마우스 컨트롤의 "Context | 우클릭 | 컨텍스트 메뉴" 요구사항 충족. 대상별 맥락 메뉴로 discoverability 향상. |
 
 ---
 

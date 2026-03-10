@@ -119,6 +119,9 @@ export default function App() {
   } | null>(null)
   const [measureMode, setMeasureMode] = useState(false)
   const measureModeRef = useRef(false)
+  const [contextMenu, setContextMenu] = useState<{
+    x: number; y: number; target: 'can' | 'rigid' | 'viewport'
+  } | null>(null)
   const measurePt1Ref = useRef<THREE.Vector3 | null>(null)
   const measureLineRef = useRef<THREE.Line | null>(null)
   const measureLabelRef = useRef<THREE.Sprite | null>(null)
@@ -738,12 +741,29 @@ export default function App() {
     }
     container.addEventListener('click', onClickSelect)
 
+    // Right-click context menu
+    const onContextMenu = (e: MouseEvent) => {
+      e.preventDefault()
+      const rect = container.getBoundingClientRect()
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+      raycaster.setFromCamera(mouse, camera)
+      const hits = raycaster.intersectObjects([canMesh, rigidMesh], false)
+      let target: 'can' | 'rigid' | 'viewport' = 'viewport'
+      if (hits.length > 0) {
+        target = hits[0].object === canMesh ? 'can' : 'rigid'
+      }
+      setContextMenu({ x: e.clientX, y: e.clientY, target })
+    }
+    container.addEventListener('contextmenu', onContextMenu)
+
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', onResize)
       window.removeEventListener('keydown', onKeyDown)
       container.removeEventListener('mousemove', onMouseMove)
       container.removeEventListener('click', onClickSelect)
+      container.removeEventListener('contextmenu', onContextMenu)
       transformControls.detach()
       transformControls.dispose()
       controls.dispose()
@@ -1135,6 +1155,12 @@ export default function App() {
     return Object.keys(presets)
   }, [])
 
+  const ctxItemStyle: React.CSSProperties = {
+    padding: '6px 16px',
+    cursor: 'pointer',
+    transition: 'background 0.1s',
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh', overflow: 'hidden' }}>
     <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
@@ -1362,6 +1388,114 @@ export default function App() {
       } : null}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} />
+    {/* Right-click context menu */}
+    {contextMenu && (
+      <div
+        onClick={() => setContextMenu(null)}
+        onContextMenu={e => { e.preventDefault(); setContextMenu(null) }}
+        style={{ position: 'fixed', inset: 0, zIndex: 1500 }}
+      >
+        <div
+          onClick={e => e.stopPropagation()}
+          style={{
+            position: 'fixed',
+            left: contextMenu.x,
+            top: contextMenu.y,
+            background: '#f0f4f8',
+            borderRadius: 12,
+            padding: '6px 0',
+            minWidth: 180,
+            boxShadow: '8px 8px 16px rgba(163,177,198,0.6), -8px -8px 16px rgba(255,255,255,0.8)',
+            zIndex: 1501,
+            fontSize: 12,
+            color: '#0f172a',
+          }}
+        >
+          {contextMenu.target === 'can' && (
+            <div
+              onClick={() => { setDisplayMode(displayMode === 'stress' ? 'none' : 'stress'); setContextMenu(null) }}
+              style={ctxItemStyle}
+              onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >
+              {displayMode === 'stress' ? 'Hide Stress Map' : 'Show Stress Map'}
+            </div>
+          )}
+          {contextMenu.target === 'can' && (
+            <div
+              onClick={() => { setClipEnabled(!clipEnabled); setContextMenu(null) }}
+              style={ctxItemStyle}
+              onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >
+              {clipEnabled ? 'Disable Section Clip' : 'Enable Section Clip'}
+            </div>
+          )}
+          {contextMenu.target === 'rigid' && (
+            <div
+              onClick={() => { setShowLoadArrow(!showLoadArrow); setContextMenu(null) }}
+              style={ctxItemStyle}
+              onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >
+              {showLoadArrow ? 'Hide Load Arrow' : 'Show Load Arrow'}
+            </div>
+          )}
+          {contextMenu.target !== 'viewport' && (
+            <div style={{ height: 1, background: '#d0d5dd', margin: '4px 8px' }} />
+          )}
+          <div
+            onClick={() => { handleFitAll(); setContextMenu(null) }}
+            style={ctxItemStyle}
+            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            Fit All (F)
+          </div>
+          <div
+            onClick={() => { setIsWireframe(prev => !prev); setContextMenu(null) }}
+            style={ctxItemStyle}
+            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            {isWireframe ? 'Solid Mode (W)' : 'Wireframe (W)'}
+          </div>
+          <div
+            onClick={() => { setShowGrid(prev => !prev); setContextMenu(null) }}
+            style={ctxItemStyle}
+            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            {showGrid ? 'Hide Grid (G)' : 'Show Grid (G)'}
+          </div>
+          <div
+            onClick={() => { setDarkMode(prev => !prev); setContextMenu(null) }}
+            style={ctxItemStyle}
+            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            {darkMode ? 'Light Mode (D)' : 'Dark Mode (D)'}
+          </div>
+          <div style={{ height: 1, background: '#d0d5dd', margin: '4px 8px' }} />
+          <div
+            onClick={() => { handleScreenshot(); setContextMenu(null) }}
+            style={ctxItemStyle}
+            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            Screenshot (S)
+          </div>
+          <div
+            onClick={() => { handleReset(); setContextMenu(null) }}
+            style={ctxItemStyle}
+            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            Reset Simulation
+          </div>
+        </div>
+      </div>
+    )}
     {showAbout && (
       <div
         onClick={() => { setShowAbout(false); localStorage.setItem('cancrush_visited', '1') }}
