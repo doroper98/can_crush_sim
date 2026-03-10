@@ -44,6 +44,7 @@ export default function App() {
   const rigidHeightRef = useRef(20)
   const controlModeRef = useRef<'displacement' | 'force'>('displacement')
   const maxForceRef = useRef(500)
+  const matUTSRef = useRef(310)
 
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
@@ -304,7 +305,7 @@ export default function App() {
 
             if (dm === 'stress') {
               values = physics.getStressPerNode()
-              maxRange = 310 // UTS as max reference
+              maxRange = matUTSRef.current // UTS as max reference
             } else if (dm === 'displacement' && originalPositionsRef.current) {
               values = physics.getDisplacementPerNode(originalPositionsRef.current)
               maxRange = maxDisplacement
@@ -438,12 +439,16 @@ export default function App() {
     }
     window.addEventListener('keydown', onKeyDown)
 
-    // Mouse → world coordinate (raycast to Y=0 ground plane)
+    // Mouse → world coordinate (raycast to Y=0 ground plane, throttled 100ms)
     const raycaster = new THREE.Raycaster()
     const mouse = new THREE.Vector2()
     const groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
     const intersectPt = new THREE.Vector3()
+    let lastCursorUpdate = 0
     const onMouseMove = (e: MouseEvent) => {
+      const now = performance.now()
+      if (now - lastCursorUpdate < 100) return // throttle 100ms
+      lastCursorUpdate = now
       const rect = container.getBoundingClientRect()
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
@@ -501,6 +506,7 @@ export default function App() {
   useEffect(() => { rigidHeightRef.current = rigidHeight }, [rigidHeight])
   useEffect(() => { controlModeRef.current = controlMode }, [controlMode])
   useEffect(() => { maxForceRef.current = maxForce }, [maxForce])
+  useEffect(() => { matUTSRef.current = matUTS }, [matUTS])
 
   // Rebuild can when parameters change (idle only, debounced 200ms)
   const rebuildTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
