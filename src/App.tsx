@@ -1404,6 +1404,7 @@ export default function App() {
           label={displayMode === 'stress' ? 'Stress' : displayMode === 'displacement' ? 'Disp.' : displayMode === 'plastic' ? 'ε_p' : ''}
           unit={displayMode === 'stress' ? 'MPa' : displayMode === 'displacement' ? 'mm' : ''}
           visible={displayMode !== 'none'}
+          darkMode={darkMode}
         />
         {/* Compression progress bar */}
         {simState !== 'idle' && (
@@ -1599,12 +1600,14 @@ export default function App() {
           height: 24,
           border: 'none',
           borderRadius: 8,
-          background: '#f0f4f8',
+          background: darkMode ? '#1e293b' : '#f0f4f8',
           cursor: 'pointer',
           fontSize: 12,
           fontWeight: 700,
-          color: '#64748b',
-          boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+          color: darkMode ? '#94a3b8' : '#64748b',
+          boxShadow: darkMode
+            ? '3px 3px 6px rgba(0,0,0,0.4), -3px -3px 6px rgba(51,65,85,0.4)'
+            : '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
           transition: 'right 0.2s',
         }}
         title={panelVisible ? 'Hide Panel' : 'Show Panel'}

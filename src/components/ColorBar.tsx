@@ -8,6 +8,7 @@ interface ColorBarProps {
   label: string
   unit: string
   visible: boolean
+  darkMode?: boolean
 }
 
 export default function ColorBar({
@@ -17,6 +18,7 @@ export default function ColorBar({
   label,
   unit,
   visible,
+  darkMode = false,
 }: ColorBarProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -52,18 +54,19 @@ export default function ColorBar({
         display: 'flex',
         gap: 4,
         zIndex: 10,
-        background: 'rgba(240,244,248,0.85)',
+        background: darkMode ? 'rgba(30,41,59,0.9)' : 'rgba(240,244,248,0.85)',
         padding: '8px 10px',
         borderRadius: 10,
-        boxShadow:
-          '4px 4px 8px rgba(163,177,198,0.4), -4px -4px 8px rgba(255,255,255,0.7)',
+        boxShadow: darkMode
+          ? '4px 4px 8px rgba(0,0,0,0.4), -4px -4px 8px rgba(51,65,85,0.4)'
+          : '4px 4px 8px rgba(163,177,198,0.4), -4px -4px 8px rgba(255,255,255,0.7)',
       }}
     >
       <canvas
         ref={canvasRef}
         width={20}
         height={150}
-        style={{ borderRadius: 4, border: '1px solid #d0d5dd' }}
+        style={{ borderRadius: 4, border: `1px solid ${darkMode ? '#475569' : '#d0d5dd'}` }}
       />
       <div
         style={{
@@ -71,12 +74,12 @@ export default function ColorBar({
           flexDirection: 'column',
           justifyContent: 'space-between',
           fontSize: 10,
-          color: '#334155',
+          color: darkMode ? '#94a3b8' : '#334155',
           minWidth: 50,
         }}
       >
         <span>{maxVal.toFixed(1)} {unit}</span>
-        <span style={{ fontSize: 11, fontWeight: 600, color: '#0f172a' }}>
+        <span style={{ fontSize: 11, fontWeight: 600, color: darkMode ? '#e2e8f0' : '#0f172a' }}>
           {label}
         </span>
         <span>{minVal.toFixed(1)} {unit}</span>

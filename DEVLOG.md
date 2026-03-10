@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-077] 패널 토글 + ColorBar 다크 모드
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 09:52:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) App.tsx: 패널 토글 버튼(«/») 배경/텍스트/boxShadow를 darkMode 대응. (2) ColorBar.tsx: darkMode prop 추가. 배경/boxShadow/border/텍스트 다크 대응. (3) App.tsx: ColorBar에 darkMode={darkMode} 전달. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 다크 모드 시리즈 최종 완성 (EXP-055→073→074→075→076→077). |
+
+---
+
 ### [EXP-076] ViewportToolbar 다크 모드
 
 | 항목 | 값 |
