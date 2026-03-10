@@ -12,6 +12,13 @@ import { TransformControls } from 'three/examples/jsm/controls/TransformControls
 import { applyVertexColors, type ColormapType } from './viewer/colormap'
 import { CanvasRecorder } from './viewer/recorder'
 
+/** LOD: compute radial/height segments based on camera distance */
+function getLODSegments(cameraDistance: number): { radial: number; height: number } {
+  if (cameraDistance > 800) return { radial: 16, height: 10 }
+  if (cameraDistance > 400) return { radial: 24, height: 14 }
+  return { radial: 32, height: 20 } // full detail
+}
+
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
   const sceneRef = useRef<THREE.Scene | null>(null)
@@ -25,6 +32,7 @@ export default function App() {
   const canGeometryRef = useRef<THREE.CylinderGeometry | null>(null)
   const transformControlsRef = useRef<TransformControls | null>(null)
   const loadArrowRef = useRef<THREE.ArrowHelper | null>(null)
+  const lodLevelRef = useRef<{ radial: number; height: number }>({ radial: 32, height: 20 })
 
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
@@ -273,7 +281,6 @@ export default function App() {
             applyVertexColors(canGeometry, values, minV, maxV, colormapTypeRef.current)
 
             // Update colorbar labels (throttled)
-            colorBarUpdateCounter.current++
             if (colorBarUpdateCounter.current % 10 === 0) {
               setColorBarMin(minV)
               setColorBarMax(maxV)
@@ -302,6 +309,29 @@ export default function App() {
           rigidMesh.position.z
         )
       }
+
+      // LOD: check camera distance every 30 frames (only when not simulating)
+      if (!simRunningRef.current && colorBarUpdateCounter.current % 30 === 0) {
+        const camDist = camera.position.length()
+        const newLOD = getLODSegments(camDist)
+        const curLOD = lodLevelRef.current
+        if (newLOD.radial !== curLOD.radial || newLOD.height !== curLOD.height) {
+          lodLevelRef.current = newLOD
+          // Rebuild can geometry with new segment counts
+          const newGeom = new THREE.CylinderGeometry(
+            canRadius, canRadius, canHeight, newLOD.radial, newLOD.height, false
+          )
+          newGeom.translate(0, canHeight / 2, 0)
+          canMesh.geometry.dispose()
+          canMesh.geometry = newGeom
+          canGeometryRef.current = newGeom
+          // Rebuild physics for new geometry
+          const newPhysics = new MassSpringSystem(newGeom)
+          physicsRef.current = newPhysics
+          originalPositionsRef.current = new Float32Array(newPhysics.positions)
+        }
+      }
+      colorBarUpdateCounter.current++
 
       renderer.render(scene, camera)
       axisHelper.update(camera)

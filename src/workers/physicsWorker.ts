@@ -1,19 +1,22 @@
 /**
  * Physics Web Worker for MassSpringSystem.
  * Runs physics simulation off the main thread.
- * Communicates via postMessage with transferable ArrayBuffers.
+ * Supports both SharedArrayBuffer (zero-copy) and transferable ArrayBuffers.
  */
 
 import { MassSpringSystem } from '../engine/MassSpringSystem'
 
 let physics: MassSpringSystem | null = null
 let originalPositions: Float32Array | null = null
+let sharedPositionBuffer: SharedArrayBuffer | null = null
+let sharedPositionView: Float32Array | null = null
 
 interface InitMessage {
   type: 'init'
   positions: Float32Array
   indices: Uint32Array
   nodeCount: number
+  useSharedBuffer: boolean
 }
 
 interface StepMessage {
@@ -41,8 +44,6 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
 
   switch (msg.type) {
     case 'init': {
-      // Create a minimal BufferGeometry-like object for MassSpringSystem
-      // We need to build a fake geometry with position attribute and index
       const fakeGeom = {
         getAttribute: (name: string) => {
           if (name === 'position') {
@@ -63,7 +64,22 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
       physics = new MassSpringSystem(fakeGeom as any)
       originalPositions = new Float32Array(msg.positions)
 
-      self.postMessage({ type: 'ready', nodeCount: physics.nodeCount })
+      // Create SharedArrayBuffer if supported and requested
+      if (msg.useSharedBuffer && typeof SharedArrayBuffer !== 'undefined') {
+        sharedPositionBuffer = new SharedArrayBuffer(physics.nodeCount * 3 * 4)
+        sharedPositionView = new Float32Array(sharedPositionBuffer)
+        // Copy initial positions
+        sharedPositionView.set(physics.positions)
+        self.postMessage({
+          type: 'ready',
+          nodeCount: physics.nodeCount,
+          sharedBuffer: sharedPositionBuffer,
+        })
+      } else {
+        sharedPositionBuffer = null
+        sharedPositionView = null
+        self.postMessage({ type: 'ready', nodeCount: physics.nodeCount })
+      }
       break
     }
 
@@ -76,15 +92,20 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
         msg.rigidRadius, msg.rigidHalfHeight
       )
 
-      // Send back positions (copy, not transfer, to keep worker state)
-      const posCopy = new Float32Array(physics.positions)
-      self.postMessage({ type: 'positions', positions: posCopy }, [posCopy.buffer] as any)
+      if (sharedPositionView) {
+        // Zero-copy: write directly to shared buffer
+        sharedPositionView.set(physics.positions)
+        self.postMessage({ type: 'positions', shared: true })
+      } else {
+        // Fallback: transfer a copy
+        const posCopy = new Float32Array(physics.positions)
+        self.postMessage({ type: 'positions', positions: posCopy, shared: false }, [posCopy.buffer] as any)
+      }
       break
     }
 
     case 'reset': {
       if (!physics) return
-      // Rebuild positions from provided data
       for (let i = 0; i < physics.nodeCount * 3; i++) {
         physics.positions[i] = msg.positions[i]
         physics.prevPositions[i] = msg.positions[i]
@@ -95,6 +116,9 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
         spring.currentRestLength = spring.restLength
       }
       originalPositions = new Float32Array(msg.positions)
+      if (sharedPositionView) {
+        sharedPositionView.set(physics.positions)
+      }
       self.postMessage({ type: 'resetDone' })
       break
     }
