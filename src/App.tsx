@@ -58,6 +58,8 @@ export default function App() {
     setToasts(prev => [...prev, { id, msg }])
     setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 2500)
   }, [])
+  const showToastRef = useRef(showToast)
+  useEffect(() => { showToastRef.current = showToast }, [showToast])
 
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
@@ -426,6 +428,9 @@ export default function App() {
           if (curControlMode === 'force' && estimatedForce > curMaxForce) {
             simRunningRef.current = false
             setSimState('paused')
+            displayModeRef.current = 'stress'
+            setDisplayMode('stress')
+            showToastRef.current(`Force limit reached: ${estimatedForce.toFixed(0)} N > ${curMaxForce.toFixed(0)} N`)
           }
 
           // Record load-displacement data (every 10 frames)
@@ -458,10 +463,13 @@ export default function App() {
             }
             setResultSummary({ maxStress: maxS, maxDisp: maxD, maxPlastic: maxP, energyAbsorbed: energy })
 
-            // Auto-stop: pause if max stress exceeds UTS
+            // Auto-stop: pause if max stress exceeds 120% UTS
             if (autoStopStressRef.current && maxS > matUTSRef.current * 1.2) {
               simRunningRef.current = false
               setSimState('paused')
+              displayModeRef.current = 'stress'
+              setDisplayMode('stress')
+              showToastRef.current(`Auto-stopped: σ_max ${maxS.toFixed(0)} MPa > 120% UTS (${(matUTSRef.current * 1.2).toFixed(0)} MPa)`)
             }
           }
 
@@ -532,13 +540,18 @@ export default function App() {
           if (!physics.isStable()) {
             simRunningRef.current = false
             setSimState('paused')
+            showToastRef.current('Physics instability detected — simulation paused')
             console.warn('Physics instability detected, pausing simulation')
           }
 
           simTimeRef.current += (1 / 60) * timeScaleRef.current // assume 60fps × timeScale
         } else {
+          // Max displacement reached — auto-stop
           simRunningRef.current = false
-          setSimState('idle')
+          setSimState('paused')
+          displayModeRef.current = 'stress'
+          setDisplayMode('stress')
+          showToastRef.current(`Compression complete: ${maxDisplacement.toFixed(1)} mm (${((maxDisplacement / curCanHeight) * 100).toFixed(0)}% of height)`)
         }
       }
 

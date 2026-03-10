@@ -67,23 +67,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-071 기준, 26/03/11 09:10)
+### 누적 통계 (EXP-072 기준, 26/03/11 09:22)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | 71 |
-| 성공 커밋 | 71 |
+| 총 실험 수 | 72 |
+| 성공 커밋 | 72 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 35건, EXP-028~071) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 36건, EXP-028~072) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 814 kB (gzip 222 kB) |
+| 빌드 크기 | 815 kB (gzip 222 kB) |
 
 ---
 
@@ -192,6 +192,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
 | **판정** | ✅ COMMIT (아래) |
 | **비고** | 구조 해석 소프트웨어의 핵심 기능: 단면도(Section View). Y축 기준 클리핑으로 캔 내부 구조와 변형을 관찰 가능. |
+
+---
+
+### [EXP-072] 완료 알림 기능 강화
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 09:22:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | FR-13 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) showToastRef 추가: animation loop에서 안전하게 showToast 호출 가능. (2) Auto-stop (120% UTS) 시 토스트로 σ_max 수치와 기준값 알림 + displayMode를 stress로 자동 전환. (3) Max displacement 도달 시 setSimState('paused')로 변경(기존 'idle') + 토스트로 압축 완료 알림 + stress map 자동 활성화. (4) Force control limit 도달 시 토스트로 초과 force 알림 + stress map 자동 활성화. (5) Physics instability 감지 시 토스트 알림 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 4가지 auto-stop 조건(UTS, max displacement, force limit, instability) 모두에 토스트 피드백 추가. 사용자가 왜 시뮬이 멈췄는지 즉시 인지 가능. stress map 자동 활성화로 결과 분석 워크플로우 단축. |
 
 ---
 
