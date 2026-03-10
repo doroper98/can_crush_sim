@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
+import { CatiaControls } from './viewer/CatiaControls'
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -55,6 +56,10 @@ export default function App() {
     canMesh.position.y = canHeight / 2 // sit on grid
     scene.add(canMesh)
 
+    // CATIA V5 compatible controls
+    const controls = new CatiaControls(camera, renderer.domElement)
+    controls.setTarget(0, canHeight / 2, 0)
+
     // Animation loop
     let animId: number
     const animate = () => {
@@ -76,6 +81,7 @@ export default function App() {
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', onResize)
+      controls.dispose()
       renderer.dispose()
       container.removeChild(renderer.domElement)
     }
