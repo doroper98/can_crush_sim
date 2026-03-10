@@ -68,6 +68,7 @@ export default function App() {
   const [timeScale, setTimeScale] = useState(1.0)
   const timeScaleRef = useRef(1.0)
   const stepOnceRef = useRef(false)
+  const [materialKey, setMaterialKey] = useState('aluminum_6061')
   const recorderRef = useRef(new CanvasRecorder())
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
   const [isRecording, setIsRecording] = useState(false)
@@ -756,6 +757,8 @@ export default function App() {
         chartData={chartData}
         timeScale={timeScale}
         onTimeScaleChange={setTimeScale}
+        materialKey={materialKey}
+        onMaterialKeyChange={setMaterialKey}
       />
     </div>
     <StatusBar

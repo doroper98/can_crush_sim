@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import LoadDisplacementChart from './LoadDisplacementChart'
+import { MATERIALS, MATERIAL_KEYS } from '../engine/MaterialModel'
 
 export type RigidBodyShape = 'cylinder' | 'box' | 'sphere' | 'cone'
 export type DisplayMode = 'none' | 'stress' | 'displacement' | 'plastic'
@@ -41,6 +42,8 @@ interface ControlPanelProps {
   chartData: { displacement: number; load: number }[]
   timeScale: number
   onTimeScaleChange: (v: number) => void
+  materialKey?: string
+  onMaterialKeyChange?: (v: string) => void
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -166,6 +169,8 @@ export default function ControlPanel({
   chartData,
   timeScale,
   onTimeScaleChange,
+  materialKey = 'aluminum_6061',
+  onMaterialKeyChange,
 }: ControlPanelProps) {
   return (
     <div
@@ -398,15 +403,42 @@ export default function ControlPanel({
         <LoadDisplacementChart data={chartData} width={256} height={160} />
       </Section>
 
-      <Section title="Material (Aluminum)" defaultOpen={false}>
-        <div style={{ fontSize: 11, color: '#64748b', lineHeight: 1.6 }}>
-          E = 69,000 MPa<br />
-          ν = 0.33<br />
-          σ_y = 276 MPa<br />
-          σ_u = 310 MPa<br />
-          ρ = 2,700 kg/m³<br />
-          n = 0.2
-        </div>
+      <Section title="Material" defaultOpen={false}>
+        {onMaterialKeyChange && (
+          <select
+            value={materialKey}
+            onChange={e => onMaterialKeyChange(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '6px 10px',
+              borderRadius: 8,
+              border: 'none',
+              background: '#e8ecf1',
+              color: '#0f172a',
+              fontSize: 12,
+              fontWeight: 500,
+              marginBottom: 8,
+              boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.4), inset -2px -2px 4px rgba(255,255,255,0.9)',
+            }}
+          >
+            {MATERIAL_KEYS.map(k => (
+              <option key={k} value={k}>{MATERIALS[k].name}</option>
+            ))}
+          </select>
+        )}
+        {(() => {
+          const mat = MATERIALS[materialKey] ?? MATERIALS['aluminum_6061']
+          return (
+            <div style={{ fontSize: 11, color: '#64748b', lineHeight: 1.6 }}>
+              E = {mat.youngsModulus.toLocaleString()} MPa<br />
+              ν = {mat.poissonRatio}<br />
+              σ_y = {mat.yieldStress} MPa<br />
+              σ_u = {mat.uts} MPa<br />
+              ρ = {mat.density.toLocaleString()} kg/m³<br />
+              n = {mat.hardeningExponent}
+            </div>
+          )
+        })()}
       </Section>
     </div>
   )

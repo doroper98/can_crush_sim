@@ -1,4 +1,5 @@
 import type * as THREE from 'three'
+import { type MaterialModel, MATERIALS, DEFAULT_MATERIAL } from './MaterialModel'
 
 interface Spring {
   i: number  // index of particle A
@@ -43,10 +44,13 @@ export class MassSpringSystem {
   private _strainBuf: Float32Array | null = null
   private _strainCount: Uint16Array | null = null
 
+  materialModel: MaterialModel
+
   constructor(geometry: THREE.BufferGeometry, options?: {
     density?: number      // kg/m³
     wallThickness?: number // mm
     youngsModulus?: number // MPa
+    materialKey?: string  // key from MATERIALS registry
   }) {
     const posAttr = geometry.getAttribute('position')
     this.nodeCount = posAttr.count
@@ -84,10 +88,19 @@ export class MassSpringSystem {
       }
     }
 
-    // Compute physical parameters
-    const density = options?.density ?? 2700          // kg/m³
-    const thickness = options?.wallThickness ?? 0.3   // mm
-    const E = options?.youngsModulus ?? 69000          // MPa
+    // Resolve material model
+    const matKey = options?.materialKey ?? DEFAULT_MATERIAL
+    const mat = MATERIALS[matKey] ?? MATERIALS[DEFAULT_MATERIAL]
+    this.materialModel = mat
+
+    // Compute physical parameters from material model
+    const density = options?.density ?? mat.density
+    const thickness = options?.wallThickness ?? mat.wallThickness
+    const E = options?.youngsModulus ?? mat.youngsModulus
+
+    this.yieldStress = mat.yieldStress
+    this.uts = mat.uts
+    this.hardeningExponent = mat.hardeningExponent
 
     // Estimate average edge length to compute spring stiffness
     let totalLen = 0
@@ -96,27 +109,16 @@ export class MassSpringSystem {
     }
     const avgLen = this.springs.length > 0 ? totalLen / this.springs.length : 1
 
-    // Mass per particle: approximate surface area / nodeCount * thickness * density
-    // For a cylinder: A ≈ 2πr·h + 2πr² ≈ 2π·33·120 + 2π·33² ≈ 31665 mm²
-    // Total volume ≈ A·t = 31665·0.3 = 9500 mm³ = 9.5e-6 m³
-    // Total mass ≈ 9.5e-6·2700 ≈ 0.0257 kg
     const surfArea = 31665  // mm² (approximate for default can)
     const totalVolume = surfArea * thickness * 1e-9  // m³
     const totalMass = totalVolume * density
     this.mass = totalMass / this.nodeCount
 
-    // Spring stiffness: k = E·A/L where A = cross-section ≈ avgLen·t
-    // E in MPa = N/mm², A in mm², L in mm → k in N/mm
-    // Convert to N/mm for mm-based simulation
     const crossSection = avgLen * thickness
-    this.stiffness = E * crossSection / avgLen * 0.01  // scale factor for stability
+    this.stiffness = E * crossSection / avgLen * 0.01
     this.damping = 0.995
 
-    // Elasto-plastic parameters
-    // Ludwik-Hollomon: σ = σ_y + K·ε_p^n
-    // At UTS: σ_u = σ_y + K·ε_max^n → K = (σ_u - σ_y) / ε_max^n
-    // Assume ε_max ≈ 0.3 (30% uniform elongation for aluminum)
-    this.hardeningK = (this.uts - this.yieldStress) / Math.pow(0.3, this.hardeningExponent)
+    this.hardeningK = mat.hardeningK()
 
     // Fix bottom nodes (y close to 0)
     this.fixBottomNodes(2.0) // tolerance in mm

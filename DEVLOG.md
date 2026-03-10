@@ -61,7 +61,7 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | S4.8 | 성능 프로파일링 및 튜닝 | - | NF-01, NF-05 | ✅ 완료 | 26/03/11 03:15 |
 | S5.1 | StatusBar (상태+좌표+FPS) | - | NF-05 | ✅ 완료 | 26/03/11 03:25 |
 | S5.2 | Screenshot PNG 캡처 | - | - | ✅ 완료 | 26/03/11 03:32 |
-| S5.3 | 재료 모델 플러그인 구조 | FR-06 | NF-07 | ⬜ 미착수 | - |
+| S5.3 | 재료 모델 플러그인 구조 | FR-06 | NF-07 | ✅ 완료 | 26/03/11 03:40 |
 | S5.4 | 캔 파라미터 동적 적용 | FR-05 | - | ⬜ 미착수 | - |
 | S5.5 | 물성값 UI 편집 | FR-06 | - | ⬜ 미착수 | - |
 
@@ -157,6 +157,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 > 에이전트는 여기 아래에 로그를 추가한다.
 > 가장 최근 항목이 맨 위.
+
+---
+
+### [EXP-030] 재료 모델 플러그인 구조
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 03:40:00 |
+| **Step** | S5.3 |
+| **관련 FR** | FR-06 |
+| **관련 NF** | NF-07 |
+| **변경 내용** | (1) MaterialModel.ts 신규 생성: MaterialModel 인터페이스 + createMaterial 팩토리 + MATERIALS 레지스트리. (2) 기본 4종 재료 등록: Aluminum 6061-T6, Mild Steel AISI 1018, Copper C110, Titanium Ti-6Al-4V. (3) MassSpringSystem: materialKey 옵션으로 재료 선택, 물성값 자동 연동. (4) ControlPanel: Material 섹션에 드롭다운으로 재료 전환, 선택된 재료의 물성값 동적 표시. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 9/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | NF-07 충족: 새 재료 추가 시 MaterialModel.ts의 MATERIALS에 createMaterial() 호출 한 줄 추가만 하면 됨. 현재 재료 전환은 idle 상태에서만 권장 (시뮬 중 전환 시 물리 재초기화 필요). |
 
 ---
 
