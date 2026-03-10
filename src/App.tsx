@@ -32,9 +32,28 @@ export default function App() {
     dirLight.position.set(100, 200, 150)
     scene.add(dirLight)
 
-    // Grid helper (XY plane → rotated to XZ for floor)
+    // Grid helper
     const grid = new THREE.GridHelper(500, 50, 0xcccccc, 0xe0e0e0)
     scene.add(grid)
+
+    // Parametric can mesh
+    const canRadius = 33  // mm (D=66mm)
+    const canHeight = 120 // mm
+    const radialSegments = 32
+    const heightSegments = 20
+    const canGeometry = new THREE.CylinderGeometry(
+      canRadius, canRadius, canHeight,
+      radialSegments, heightSegments, false
+    )
+    const canMaterial = new THREE.MeshStandardMaterial({
+      color: 0xc0c0c0,
+      metalness: 0.7,
+      roughness: 0.3,
+      side: THREE.DoubleSide,
+    })
+    const canMesh = new THREE.Mesh(canGeometry, canMaterial)
+    canMesh.position.y = canHeight / 2 // sit on grid
+    scene.add(canMesh)
 
     // Animation loop
     let animId: number
