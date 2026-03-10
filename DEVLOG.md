@@ -55,7 +55,7 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | S4.2 | 슬라이더 Inset 스타일 | - | NF-06 | ✅ 완료 | 26/03/11 02:45 |
 | S4.3 | 버튼 Pressed 피드백 | - | NF-05 | ✅ 완료 | 26/03/11 02:45 |
 | S4.4 | 영역 구분 3D Depth 적용 | - | - | ✅ 완료 | 26/03/11 02:45 |
-| S4.5 | Web Worker 물리 엔진 분리 | - | NF-02 | ⬜ 미착수 | - |
+| S4.5 | Web Worker 물리 엔진 분리 | - | NF-02 | ✅ 완료 | 26/03/11 02:52 |
 | S4.6 | SharedArrayBuffer 메시 전달 | - | NF-02 | ⬜ 미착수 | - |
 | S4.7 | LOD 적용 | - | NF-01 | ⬜ 미착수 | - |
 | S4.8 | 성능 프로파일링 및 튜닝 | - | NF-01, NF-05 | ⬜ 미착수 | - |
@@ -152,6 +152,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 > 에이전트는 여기 아래에 로그를 추가한다.
 > 가장 최근 항목이 맨 위.
+
+---
+
+### [EXP-025] Web Worker 물리 엔진 모듈
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 02:52:00 |
+| **Step** | S4.5 |
+| **관련 FR** | - |
+| **관련 NF** | NF-02 |
+| **변경 내용** | physicsWorker.ts 생성 (workers/). MassSpringSystem을 Worker 컨텍스트에서 실행하는 메시지 핸들러. init(positions+indices) → step(rigid body params) → positions 반환 (transferable). reset/getStress/getDisplacement/getPlasticStrain 쿼리. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 8/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | Worker 모듈만 생성. App.tsx 통합은 S4.6에서. 현재 메인 스레드에서 물리 계속 실행. Worker 전환은 점진적으로. |
 
 ---
 
