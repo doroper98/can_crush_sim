@@ -1155,6 +1155,87 @@ export default function App() {
     return Object.keys(presets)
   }, [])
 
+  const handleExportJSON = useCallback(() => {
+    const snapshot = {
+      version: '1.0',
+      timestamp: new Date().toISOString(),
+      parameters: {
+        canDiameter, canHeight: canHeightParam, wallThickness, maxForce,
+        compressionSpeed: compressionSpeedParam, controlMode,
+        rigidShape, rigidRadius, rigidHeight,
+        rigidPosition: { x: rigidPosX, y: rigidPosY, z: rigidPosZ },
+        rigidRotation: { x: rigidRotX, y: rigidRotY, z: rigidRotZ },
+        materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN,
+      },
+      display: { displayMode, colormapType, deformScale, clipEnabled, clipY, darkMode },
+      results: resultSummary,
+      loadDisplacementCurve: chartData,
+    }
+    const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.download = `cancrush_${Date.now()}.json`
+    link.href = url
+    link.click()
+    URL.revokeObjectURL(url)
+  }, [canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, controlMode,
+      rigidShape, rigidRadius, rigidHeight, rigidPosX, rigidPosY, rigidPosZ,
+      rigidRotX, rigidRotY, rigidRotZ, materialKey, matYoungsModulus, matYieldStress,
+      matUTS, matHardeningN, displayMode, colormapType, deformScale, clipEnabled, clipY,
+      darkMode, resultSummary, chartData])
+
+  const handleImportJSON = useCallback(() => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.json'
+    input.onchange = () => {
+      const file = input.files?.[0]
+      if (!file) return
+      const reader = new FileReader()
+      reader.onload = () => {
+        try {
+          const snap = JSON.parse(reader.result as string)
+          const p = snap.parameters
+          if (p) {
+            if (p.canDiameter != null) setCanDiameter(p.canDiameter)
+            if (p.canHeight != null) setCanHeightParam(p.canHeight)
+            if (p.wallThickness != null) setWallThickness(p.wallThickness)
+            if (p.maxForce != null) setMaxForce(p.maxForce)
+            if (p.compressionSpeed != null) setCompressionSpeedParam(p.compressionSpeed)
+            if (p.controlMode != null) setControlMode(p.controlMode)
+            if (p.rigidShape != null) setRigidShape(p.rigidShape)
+            if (p.rigidRadius != null) setRigidRadius(p.rigidRadius)
+            if (p.rigidHeight != null) setRigidHeight(p.rigidHeight)
+            if (p.rigidPosition) {
+              setRigidPosX(p.rigidPosition.x); setRigidPosY(p.rigidPosition.y); setRigidPosZ(p.rigidPosition.z)
+            }
+            if (p.rigidRotation) {
+              setRigidRotX(p.rigidRotation.x); setRigidRotY(p.rigidRotation.y); setRigidRotZ(p.rigidRotation.z)
+            }
+            if (p.materialKey != null) setMaterialKey(p.materialKey)
+            if (p.matYoungsModulus != null) setMatYoungsModulus(p.matYoungsModulus)
+            if (p.matYieldStress != null) setMatYieldStress(p.matYieldStress)
+            if (p.matUTS != null) setMatUTS(p.matUTS)
+            if (p.matHardeningN != null) setMatHardeningN(p.matHardeningN)
+          }
+          const d = snap.display
+          if (d) {
+            if (d.displayMode != null) setDisplayMode(d.displayMode)
+            if (d.colormapType != null) setColormapType(d.colormapType)
+            if (d.deformScale != null) setDeformScale(d.deformScale)
+            if (d.clipEnabled != null) setClipEnabled(d.clipEnabled)
+            if (d.clipY != null) setClipY(d.clipY)
+            if (d.darkMode != null) setDarkMode(d.darkMode)
+          }
+        } catch (e) {
+          console.error('Failed to parse JSON:', e)
+        }
+      }
+      reader.readAsText(file)
+    }
+    input.click()
+  }, [])
+
   const ctxItemStyle: React.CSSProperties = {
     padding: '6px 16px',
     cursor: 'pointer',
@@ -1531,6 +1612,23 @@ export default function App() {
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             Reset Simulation
+          </div>
+          <div style={{ height: 1, background: '#d0d5dd', margin: '4px 8px' }} />
+          <div
+            onClick={() => { handleExportJSON(); setContextMenu(null) }}
+            style={ctxItemStyle}
+            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            Export JSON...
+          </div>
+          <div
+            onClick={() => { handleImportJSON(); setContextMenu(null) }}
+            style={ctxItemStyle}
+            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            Import JSON...
           </div>
         </div>
       </div>
