@@ -61,6 +61,7 @@ interface ControlPanelProps {
   clipY: number
   onClipEnabledChange: (v: boolean) => void
   onClipYChange: (v: number) => void
+  resultSummary?: { maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number } | null
   presetName: string
   presetNames: string[]
   onSavePreset: (name: string) => void
@@ -209,6 +210,7 @@ export default function ControlPanel({
   clipY,
   onClipEnabledChange,
   onClipYChange,
+  resultSummary,
   presetName,
   presetNames,
   onSavePreset,
@@ -642,6 +644,17 @@ export default function ControlPanel({
           )
         })()}
       </Section>
+
+      {resultSummary && (
+        <Section title="Results" defaultOpen={true}>
+          <div style={{ fontSize: 11, lineHeight: 1.8, color: '#334155' }}>
+            <div><strong>Max σ:</strong> {resultSummary.maxStress.toFixed(1)} MPa</div>
+            <div><strong>Max d:</strong> {resultSummary.maxDisp.toFixed(2)} mm</div>
+            <div><strong>Max ε_p:</strong> {(resultSummary.maxPlastic * 100).toFixed(2)} %</div>
+            <div><strong>Energy:</strong> {resultSummary.energyAbsorbed.toFixed(3)} J</div>
+          </div>
+        </Section>
+      )}
     </div>
   )
 }

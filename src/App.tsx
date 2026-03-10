@@ -113,6 +113,9 @@ export default function App() {
   const [clipY, setClipY] = useState(60) // clipping plane Y position (mm)
   const clipPlaneRef = useRef(new THREE.Plane(new THREE.Vector3(0, -1, 0), 60))
   const maxStressMarkerRef = useRef<THREE.Sprite | null>(null)
+  const [resultSummary, setResultSummary] = useState<{
+    maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number
+  } | null>(null)
   const [measureMode, setMeasureMode] = useState(false)
   const measureModeRef = useRef(false)
   const measurePt1Ref = useRef<THREE.Vector3 | null>(null)
@@ -372,6 +375,29 @@ export default function App() {
             setChartData(chartDataRef.current.slice())
             setSimTime(simTimeRef.current)
             setSimDisplacement(displacement)
+
+            // Result summary: compute max stress, max disp, max plastic, energy
+            let maxS = 0, maxD = 0, maxP = 0
+            for (let ni = 0; ni < stresses.length; ni++) {
+              if (stresses[ni] > maxS) maxS = stresses[ni]
+            }
+            if (originalPositionsRef.current) {
+              const disps = physics.getDisplacementPerNode(originalPositionsRef.current)
+              for (let ni = 0; ni < disps.length; ni++) {
+                if (disps[ni] > maxD) maxD = disps[ni]
+              }
+            }
+            const plastics = physics.getPlasticStrainPerNode()
+            for (let ni = 0; ni < plastics.length; ni++) {
+              if (plastics[ni] > maxP) maxP = plastics[ni]
+            }
+            // Energy absorbed: trapezoidal integration of load-displacement curve
+            let energy = 0
+            const cd = chartDataRef.current
+            for (let ci = 1; ci < cd.length; ci++) {
+              energy += 0.5 * (cd[ci - 1].load + cd[ci].load) * (cd[ci].displacement - cd[ci - 1].displacement) * 0.001
+            }
+            setResultSummary({ maxStress: maxS, maxDisp: maxD, maxPlastic: maxP, energyAbsorbed: energy })
           }
 
           // Apply colormap if display mode is active
@@ -1000,6 +1026,7 @@ export default function App() {
     setSimState('idle')
     chartDataRef.current = []
     setChartData([])
+    setResultSummary(null)
     // Rebuild geometry with current parameters
     const mesh = canMeshRef.current
     if (mesh) {
@@ -1312,6 +1339,7 @@ export default function App() {
         clipY={clipY}
         onClipEnabledChange={setClipEnabled}
         onClipYChange={setClipY}
+        resultSummary={resultSummary}
         presetName={presetName}
         presetNames={getPresetNames()}
         onSavePreset={handleSavePreset}
