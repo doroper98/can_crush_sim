@@ -35,6 +35,7 @@ export default function App() {
   const transformControlsRef = useRef<TransformControls | null>(null)
   const loadArrowRef = useRef<THREE.ArrowHelper | null>(null)
   const lodLevelRef = useRef<{ radial: number; height: number }>({ radial: 32, height: 20 })
+  const screenshotRef = useRef<() => void>(() => {})
 
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
@@ -397,6 +398,11 @@ export default function App() {
         case 'l': case 'L':
           setShowLoadArrow(prev => !prev)
           break
+        case 's': case 'S':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            screenshotRef.current()
+          }
+          break
       }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
@@ -575,38 +581,36 @@ export default function App() {
     link.href = dataURL
     link.click()
   }, [])
+  screenshotRef.current = handleScreenshot
 
   const handleReset = useCallback(() => {
     simRunningRef.current = false
     simTimeRef.current = 0
     setSimState('idle')
-    // Clear chart data
     chartDataRef.current = []
     setChartData([])
+    // Rebuild geometry with current parameters
+    const mesh = canMeshRef.current
+    if (mesh) {
+      const r = canDiameter / 2
+      const h = canHeightParam
+      const newGeom = new THREE.CylinderGeometry(r, r, h, 32, 20, false)
+      newGeom.translate(0, h / 2, 0)
+      mesh.geometry.dispose()
+      mesh.geometry = newGeom
+      canGeometryRef.current = newGeom
+      const physics = new MassSpringSystem(newGeom, { materialKey, wallThickness })
+      physicsRef.current = physics
+      originalPositionsRef.current = new Float32Array(physics.positions)
+      setNodeCount(physics.nodeCount)
+    }
     // Reset rigid body position
     if (rigidBodyRef.current) {
-      rigidBodyRef.current.position.set(0, 120 + 10 + 5, 0)
+      const h = canHeightParam
+      rigidBodyRef.current.position.set(0, h + rigidHeight / 2 + 5, 0)
+      setRigidPosY(Math.round(h + rigidHeight / 2 + 5))
     }
-    // Reset can geometry
-    const geom = canGeometryRef.current
-    const physics = physicsRef.current
-    if (geom && physics) {
-      // Recreate geometry and reset physics
-      const posAttr = geom.getAttribute('position')
-      // We need to store original positions — for now regenerate
-      const newGeom = new THREE.CylinderGeometry(33, 33, 120, 32, 20, false)
-      newGeom.translate(0, 60, 0)
-      const newPosAttr = newGeom.getAttribute('position')
-      for (let i = 0; i < posAttr.count; i++) {
-        posAttr.setXYZ(i, newPosAttr.getX(i), newPosAttr.getY(i), newPosAttr.getZ(i))
-      }
-      posAttr.needsUpdate = true
-      geom.computeVertexNormals()
-      geom.computeBoundingSphere()
-      physics.reset(geom)
-      newGeom.dispose()
-    }
-  }, [])
+  }, [canDiameter, canHeightParam, wallThickness, materialKey, rigidHeight])
 
   const handleFileLoaded = useCallback(async (buffer: ArrayBuffer, fileName: string, ext: string) => {
     const scene = sceneRef.current

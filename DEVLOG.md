@@ -178,6 +178,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-036] Reset 개선 + S 단축키
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 04:23:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | FR-13 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) handleReset이 하드코딩된 radius=33, height=120 대신 현재 상태값(canDiameter, canHeightParam, wallThickness, materialKey) 사용하여 Reset. (2) screenshotRef 추가로 키보드 핸들러에서 handleScreenshot 접근. (3) 'S' 키로 스크린샷 촬영 (input/select 요소에서는 무시). |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 9/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 파라미터 변경 후 Reset 시 변경된 파라미터가 유지됨. S 단축키로 빠른 스크린샷 캡처 가능. |
+
+---
+
 ### [EXP-033] 동적 노드수 표시
 
 | 항목 | 값 |
