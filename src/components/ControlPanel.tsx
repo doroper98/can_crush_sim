@@ -3,6 +3,7 @@ import LoadDisplacementChart from './LoadDisplacementChart'
 import { MATERIALS, MATERIAL_KEYS } from '../engine/MaterialModel'
 
 export type RigidBodyShape = 'cylinder' | 'box' | 'sphere' | 'cone'
+export type ControlMode = 'displacement' | 'force'
 export type DisplayMode = 'none' | 'stress' | 'displacement' | 'plastic'
 export type ColormapName = 'jet' | 'rainbow' | 'thermal'
 
@@ -11,6 +12,7 @@ interface ControlPanelProps {
   canHeight: number
   wallThickness: number
   force: number
+  controlMode: ControlMode
   speed: number
   rigidShape: RigidBodyShape
   rigidRadius: number
@@ -25,6 +27,7 @@ interface ControlPanelProps {
   onCanHeightChange: (v: number) => void
   onWallThicknessChange: (v: number) => void
   onForceChange: (v: number) => void
+  onControlModeChange: (v: ControlMode) => void
   onSpeedChange: (v: number) => void
   onRigidShapeChange: (v: RigidBodyShape) => void
   onRigidRadiusChange: (v: number) => void
@@ -146,6 +149,7 @@ export default function ControlPanel({
   canHeight,
   wallThickness,
   force,
+  controlMode,
   speed,
   rigidShape,
   rigidRadius,
@@ -160,6 +164,7 @@ export default function ControlPanel({
   onCanHeightChange,
   onWallThicknessChange,
   onForceChange,
+  onControlModeChange,
   onSpeedChange,
   onRigidShapeChange,
   onRigidRadiusChange,
@@ -233,6 +238,26 @@ export default function ControlPanel({
       </Section>
 
       <Section title="Load Conditions">
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>Control Mode</div>
+          <select
+            value={controlMode}
+            onChange={e => onControlModeChange(e.target.value as ControlMode)}
+            style={{
+              width: '100%',
+              padding: '4px 8px',
+              border: 'none',
+              borderRadius: 8,
+              background: '#e8ecf1',
+              fontSize: 12,
+              cursor: 'pointer',
+              boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
+            }}
+          >
+            <option value="displacement">Displacement Control</option>
+            <option value="force">Force Control</option>
+          </select>
+        </div>
         <Slider
           label="Max Force"
           value={force}

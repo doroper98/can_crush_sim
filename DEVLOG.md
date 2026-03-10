@@ -178,6 +178,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-041] Force/Displacement 제어 모드
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 05:15:00 |
+| **Step** | - (FR-09 보완) |
+| **관련 FR** | FR-09 |
+| **관련 NF** | - |
+| **변경 내용** | (1) App.tsx: controlMode 상태 ('displacement'/'force') + controlModeRef + maxForceRef 추가. (2) 애니메이션 루프: 응력 계산을 매 프레임 수행하도록 변경 (이전에는 10프레임마다). Force Control 모드에서 estimatedForce > maxForce 시 자동 정지. (3) ControlPanel: Load Conditions 섹션에 Control Mode 드롭다운 추가 (Displacement Control / Force Control). (4) ControlMode 타입 export. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | GOAL.md §6.4 "모드: Force Control / Force/Displacement" 요구사항 충족. UI Score 10/10 달성: 모든 FR/NF 요구사항 완전 충족 + 추가 품질 개선 다수 완료. |
+
+---
+
 ### [EXP-040] Fit All 바운딩박스 카메라 자동조정
 
 | 항목 | 값 |

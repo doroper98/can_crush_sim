@@ -42,6 +42,8 @@ export default function App() {
   const compressionSpeedRef = useRef(10)
   const rigidRadiusRef = useRef(40)
   const rigidHeightRef = useRef(20)
+  const controlModeRef = useRef<'displacement' | 'force'>('displacement')
+  const maxForceRef = useRef(500)
 
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
@@ -51,6 +53,7 @@ export default function App() {
   const [canHeightParam, setCanHeightParam] = useState(120)
   const [wallThickness, setWallThickness] = useState(0.3)
   const [maxForce, setMaxForce] = useState(500)
+  const [controlMode, setControlMode] = useState<'displacement' | 'force'>('displacement')
   const [compressionSpeedParam, setCompressionSpeedParam] = useState(10)
   const [rigidShape, setRigidShape] = useState<RigidBodyShape>('cylinder')
   const [rigidRadius, setRigidRadius] = useState(40)
@@ -237,6 +240,8 @@ export default function App() {
       const curSpeed = compressionSpeedRef.current
       const curRigidRadius = rigidRadiusRef.current
       const curRigidHeight = rigidHeightRef.current
+      const curControlMode = controlModeRef.current
+      const curMaxForce = maxForceRef.current
       const maxDisplacement = curCanHeight * 0.67 // compress up to ~67% of can height
       const physics = physicsRef.current!
       const geom = canGeometryRef.current!
@@ -264,22 +269,29 @@ export default function App() {
           // Sync physics → geometry
           physics.syncToGeometry(geom)
 
-          // Record load-displacement data (every 10 frames — reduced from 5)
-          if (colorBarUpdateCounter.current % 10 === 0) {
-            const stresses = physics.getStressPerNode()
-            let avgTopStress = 0
-            let topCount = 0
-            const threshold = curCanHeight - displacement - 5
-            for (let ni = 0; ni < physics.nodeCount; ni++) {
-              if (physics.positions[ni * 3 + 1] > threshold) {
-                avgTopStress += stresses[ni]
-                topCount++
-              }
+          // Estimate current load force
+          const stresses = physics.getStressPerNode()
+          let avgTopStress = 0
+          let topCount = 0
+          const threshold = curCanHeight - displacement - 5
+          for (let ni = 0; ni < physics.nodeCount; ni++) {
+            if (physics.positions[ni * 3 + 1] > threshold) {
+              avgTopStress += stresses[ni]
+              topCount++
             }
-            if (topCount > 0) avgTopStress /= topCount
-            const crossArea = Math.PI * curCanRadius * 0.3
-            const estimatedForce = avgTopStress * crossArea * 0.001
-            // Push instead of spread (avoid O(n) copy each time)
+          }
+          if (topCount > 0) avgTopStress /= topCount
+          const crossArea = Math.PI * curCanRadius * 0.3
+          const estimatedForce = avgTopStress * crossArea * 0.001
+
+          // Force control: pause if force exceeds limit
+          if (curControlMode === 'force' && estimatedForce > curMaxForce) {
+            simRunningRef.current = false
+            setSimState('paused')
+          }
+
+          // Record load-displacement data (every 10 frames)
+          if (colorBarUpdateCounter.current % 10 === 0) {
             chartDataRef.current.push({ displacement, load: estimatedForce })
             setChartData(chartDataRef.current.slice())
           }
@@ -487,6 +499,8 @@ export default function App() {
   useEffect(() => { compressionSpeedRef.current = compressionSpeedParam }, [compressionSpeedParam])
   useEffect(() => { rigidRadiusRef.current = rigidRadius }, [rigidRadius])
   useEffect(() => { rigidHeightRef.current = rigidHeight }, [rigidHeight])
+  useEffect(() => { controlModeRef.current = controlMode }, [controlMode])
+  useEffect(() => { maxForceRef.current = maxForce }, [maxForce])
 
   // Rebuild can when parameters change (idle only, debounced 200ms)
   const rebuildTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -853,6 +867,7 @@ export default function App() {
         canHeight={canHeightParam}
         wallThickness={wallThickness}
         force={maxForce}
+        controlMode={controlMode}
         speed={compressionSpeedParam}
         rigidShape={rigidShape}
         rigidRadius={rigidRadius}
@@ -867,6 +882,7 @@ export default function App() {
         onCanHeightChange={setCanHeightParam}
         onWallThicknessChange={setWallThickness}
         onForceChange={setMaxForce}
+        onControlModeChange={setControlMode}
         onSpeedChange={setCompressionSpeedParam}
         onRigidShapeChange={setRigidShape}
         onRigidRadiusChange={setRigidRadius}
