@@ -220,6 +220,62 @@ export class MassSpringSystem {
     geometry.computeBoundingSphere()
   }
 
+  /**
+   * Apply rigid body cylinder contact (Penalty Method).
+   * The rigid body pushes particles out of its volume.
+   */
+  applyRigidCylinderContact(
+    cx: number, cy: number, cz: number,  // center of rigid cylinder
+    radius: number,
+    halfHeight: number,
+    penaltyStiffness: number = 5000
+  ) {
+    for (let i = 0; i < this.nodeCount; i++) {
+      if (this.fixed[i]) continue
+      const idx = i * 3
+      const px = this.positions[idx]
+      const py = this.positions[idx + 1]
+      const pz = this.positions[idx + 2]
+
+      // Check if particle is inside the rigid cylinder
+      // Cylinder axis is Y, centered at (cx, cy, cz)
+      const dy = py - cy
+      if (Math.abs(dy) > halfHeight) continue
+
+      const dx = px - cx
+      const dz = pz - cz
+      const distXZ = Math.sqrt(dx * dx + dz * dz)
+
+      if (distXZ >= radius) continue
+
+      // Particle is inside cylinder — push it out
+      // Find shortest escape: radial or axial
+      const radialPen = radius - distXZ
+      const axialPenTop = halfHeight - dy
+      const axialPenBot = halfHeight + dy
+
+      if (radialPen < axialPenTop && radialPen < axialPenBot) {
+        // Push radially
+        if (distXZ > 1e-6) {
+          const nx = dx / distXZ
+          const nz = dz / distXZ
+          this.positions[idx] = cx + nx * radius
+          this.positions[idx + 2] = cz + nz * radius
+          this.prevPositions[idx] = this.positions[idx]
+          this.prevPositions[idx + 2] = this.positions[idx + 2]
+        }
+      } else if (axialPenTop < axialPenBot) {
+        // Push up (above cylinder)
+        this.positions[idx + 1] = cy + halfHeight
+        this.prevPositions[idx + 1] = this.positions[idx + 1]
+      } else {
+        // Push down (below cylinder)
+        this.positions[idx + 1] = cy - halfHeight
+        this.prevPositions[idx + 1] = this.positions[idx + 1]
+      }
+    }
+  }
+
   /** Check if system is stable (no NaN, no explosion) */
   isStable(): boolean {
     for (let i = 0; i < this.positions.length; i++) {

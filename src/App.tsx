@@ -11,9 +11,15 @@ export default function App() {
   const canMeshRef = useRef<THREE.Mesh | null>(null)
   const gridRef = useRef<THREE.GridHelper | null>(null)
   const physicsRef = useRef<MassSpringSystem | null>(null)
+  const rigidBodyRef = useRef<THREE.Mesh | null>(null)
+  const simRunningRef = useRef(false)
+  const simTimeRef = useRef(0)
+  const canGeometryRef = useRef<THREE.CylinderGeometry | null>(null)
+
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
   const [showGrid, setShowGrid] = useState(true)
+  const [simState, setSimState] = useState<'idle' | 'running' | 'paused'>('idle')
 
   useEffect(() => {
     const container = containerRef.current
@@ -43,7 +49,7 @@ export default function App() {
     dirLight.position.set(100, 200, 150)
     scene.add(dirLight)
 
-    // Grid (10mm spacing: 500/50)
+    // Grid
     const grid = new THREE.GridHelper(500, 50, 0xcccccc, 0xe0e0e0)
     scene.add(grid)
     gridRef.current = grid
@@ -54,8 +60,8 @@ export default function App() {
     const canGeometry = new THREE.CylinderGeometry(
       canRadius, canRadius, canHeight, 32, 20, false
     )
-    // Translate geometry so bottom sits at Y=0 (world coords for physics)
     canGeometry.translate(0, canHeight / 2, 0)
+    canGeometryRef.current = canGeometry
     const canMaterial = new THREE.MeshStandardMaterial({
       color: 0xc0c0c0,
       metalness: 0.7,
@@ -70,6 +76,31 @@ export default function App() {
     const physics = new MassSpringSystem(canGeometry)
     physicsRef.current = physics
 
+    // Rigid body (press cylinder) — sits above the can
+    const rigidRadius = 40
+    const rigidHeight = 20
+    const rigidGeometry = new THREE.CylinderGeometry(
+      rigidRadius, rigidRadius, rigidHeight, 32, 1
+    )
+    const rigidMaterial = new THREE.MeshStandardMaterial({
+      color: 0x3b82f6,
+      transparent: true,
+      opacity: 0.6,
+      side: THREE.DoubleSide,
+    })
+    const rigidMesh = new THREE.Mesh(rigidGeometry, rigidMaterial)
+    rigidMesh.position.set(0, canHeight + rigidHeight / 2 + 5, 0) // above can
+    scene.add(rigidMesh)
+    rigidBodyRef.current = rigidMesh
+
+    // Wireframe overlay for rigid body
+    const rigidWire = new THREE.WireframeGeometry(rigidGeometry)
+    const rigidLine = new THREE.LineSegments(
+      rigidWire,
+      new THREE.LineBasicMaterial({ color: 0x2563eb, opacity: 0.8, transparent: true })
+    )
+    rigidMesh.add(rigidLine)
+
     // Controls
     const controls = new CatiaControls(camera, renderer.domElement)
     controls.setTarget(0, canHeight / 2, 0)
@@ -78,10 +109,49 @@ export default function App() {
     // Axis helper
     const axisHelper = new AxisHelper(container)
 
+    // Simulation parameters
+    const compressionSpeed = 10 // mm/s
+    const maxDisplacement = 80  // mm total travel
+
     // Animation loop
     let animId: number
     const animate = () => {
       animId = requestAnimationFrame(animate)
+
+      if (simRunningRef.current) {
+        // Move rigid body down
+        const displacement = simTimeRef.current * compressionSpeed
+        if (displacement < maxDisplacement) {
+          const rigidY = canHeight + rigidHeight / 2 + 5 - displacement
+          rigidMesh.position.y = rigidY
+
+          // Physics step
+          physics.step()
+
+          // Apply rigid body contact
+          physics.applyRigidCylinderContact(
+            0, rigidY, 0,  // rigid body center
+            rigidRadius,
+            rigidHeight / 2
+          )
+
+          // Sync physics → geometry
+          physics.syncToGeometry(canGeometry)
+
+          // Check stability
+          if (!physics.isStable()) {
+            simRunningRef.current = false
+            setSimState('paused')
+            console.warn('Physics instability detected, pausing simulation')
+          }
+
+          simTimeRef.current += 1 / 60 // assume 60fps
+        } else {
+          simRunningRef.current = false
+          setSimState('idle')
+        }
+      }
+
       renderer.render(scene, camera)
       axisHelper.update(camera)
     }
@@ -113,7 +183,6 @@ export default function App() {
           setShowGrid(prev => !prev)
           break
       }
-      // Numpad views
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
       if (e.code === 'Numpad1') controls.setView('front')
@@ -164,6 +233,45 @@ export default function App() {
     setIsWireframe(prev => !prev)
   }, [])
 
+  const handlePlay = useCallback(() => {
+    simRunningRef.current = true
+    setSimState('running')
+  }, [])
+
+  const handlePause = useCallback(() => {
+    simRunningRef.current = false
+    setSimState('paused')
+  }, [])
+
+  const handleReset = useCallback(() => {
+    simRunningRef.current = false
+    simTimeRef.current = 0
+    setSimState('idle')
+    // Reset rigid body position
+    if (rigidBodyRef.current) {
+      rigidBodyRef.current.position.set(0, 120 + 10 + 5, 0)
+    }
+    // Reset can geometry
+    const geom = canGeometryRef.current
+    const physics = physicsRef.current
+    if (geom && physics) {
+      // Recreate geometry and reset physics
+      const posAttr = geom.getAttribute('position')
+      // We need to store original positions — for now regenerate
+      const newGeom = new THREE.CylinderGeometry(33, 33, 120, 32, 20, false)
+      newGeom.translate(0, 60, 0)
+      const newPosAttr = newGeom.getAttribute('position')
+      for (let i = 0; i < posAttr.count; i++) {
+        posAttr.setXYZ(i, newPosAttr.getX(i), newPosAttr.getY(i), newPosAttr.getZ(i))
+      }
+      posAttr.needsUpdate = true
+      geom.computeVertexNormals()
+      geom.computeBoundingSphere()
+      physics.reset(geom)
+      newGeom.dispose()
+    }
+  }, [])
+
   return (
     <div
       ref={containerRef}
@@ -176,6 +284,57 @@ export default function App() {
         onToggleWireframe={handleToggleWireframe}
         isPerspective={isPerspective}
       />
+      {/* Sim controls */}
+      <div style={{
+        position: 'absolute',
+        bottom: 10,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        display: 'flex',
+        gap: 8,
+        zIndex: 10,
+        background: 'rgba(240,244,248,0.9)',
+        padding: '6px 12px',
+        borderRadius: 12,
+        boxShadow: '4px 4px 8px rgba(163,177,198,0.4), -4px -4px 8px rgba(255,255,255,0.7)',
+      }}>
+        <button
+          onClick={simState === 'running' ? handlePause : handlePlay}
+          style={{
+            padding: '6px 16px',
+            border: 'none',
+            borderRadius: 8,
+            background: simState === 'running' ? '#f59e0b' : '#10b981',
+            color: 'white',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          {simState === 'running' ? 'Pause' : 'Play'}
+        </button>
+        <button
+          onClick={handleReset}
+          style={{
+            padding: '6px 16px',
+            border: 'none',
+            borderRadius: 8,
+            background: '#ef4444',
+            color: 'white',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          Reset
+        </button>
+        <span style={{
+          display: 'flex',
+          alignItems: 'center',
+          color: '#64748b',
+          fontSize: 12,
+        }}>
+          {simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating...' : 'Paused'}
+        </span>
+      </div>
     </div>
   )
 }
