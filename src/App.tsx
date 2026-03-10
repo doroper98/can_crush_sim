@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { CatiaControls } from './viewer/CatiaControls'
 import { AxisHelper } from './viewer/AxisHelper'
 import ViewportToolbar from './components/ViewportToolbar'
+import ControlPanel from './components/ControlPanel'
 import { MassSpringSystem } from './engine/MassSpringSystem'
 
 export default function App() {
@@ -20,6 +21,11 @@ export default function App() {
   const [isWireframe, setIsWireframe] = useState(false)
   const [showGrid, setShowGrid] = useState(true)
   const [simState, setSimState] = useState<'idle' | 'running' | 'paused'>('idle')
+  const [canDiameter, setCanDiameter] = useState(66)
+  const [canHeightParam, setCanHeightParam] = useState(120)
+  const [wallThickness, setWallThickness] = useState(0.3)
+  const [maxForce, setMaxForce] = useState(500)
+  const [compressionSpeedParam, setCompressionSpeedParam] = useState(10)
 
   useEffect(() => {
     const container = containerRef.current
@@ -273,68 +279,84 @@ export default function App() {
   }, [])
 
   return (
-    <div
-      ref={containerRef}
-      style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative' }}
-    >
-      <ViewportToolbar
-        onViewChange={handleViewChange}
-        onTogglePerspective={handleTogglePerspective}
-        onFitAll={handleFitAll}
-        onToggleWireframe={handleToggleWireframe}
-        isPerspective={isPerspective}
-      />
-      {/* Sim controls */}
-      <div style={{
-        position: 'absolute',
-        bottom: 10,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        gap: 8,
-        zIndex: 10,
-        background: 'rgba(240,244,248,0.9)',
-        padding: '6px 12px',
-        borderRadius: 12,
-        boxShadow: '4px 4px 8px rgba(163,177,198,0.4), -4px -4px 8px rgba(255,255,255,0.7)',
-      }}>
-        <button
-          onClick={simState === 'running' ? handlePause : handlePlay}
-          style={{
-            padding: '6px 16px',
-            border: 'none',
-            borderRadius: 8,
-            background: simState === 'running' ? '#f59e0b' : '#10b981',
-            color: 'white',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
-        >
-          {simState === 'running' ? 'Pause' : 'Play'}
-        </button>
-        <button
-          onClick={handleReset}
-          style={{
-            padding: '6px 16px',
-            border: 'none',
-            borderRadius: 8,
-            background: '#ef4444',
-            color: 'white',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
-        >
-          Reset
-        </button>
-        <span style={{
+    <div style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+      {/* 3D Viewport (70%) */}
+      <div
+        ref={containerRef}
+        style={{ flex: '1 1 70%', position: 'relative', minWidth: 0 }}
+      >
+        <ViewportToolbar
+          onViewChange={handleViewChange}
+          onTogglePerspective={handleTogglePerspective}
+          onFitAll={handleFitAll}
+          onToggleWireframe={handleToggleWireframe}
+          isPerspective={isPerspective}
+        />
+        {/* Sim controls */}
+        <div style={{
+          position: 'absolute',
+          bottom: 10,
+          left: '50%',
+          transform: 'translateX(-50%)',
           display: 'flex',
-          alignItems: 'center',
-          color: '#64748b',
-          fontSize: 12,
+          gap: 8,
+          zIndex: 10,
+          background: 'rgba(240,244,248,0.9)',
+          padding: '6px 12px',
+          borderRadius: 12,
+          boxShadow: '4px 4px 8px rgba(163,177,198,0.4), -4px -4px 8px rgba(255,255,255,0.7)',
         }}>
-          {simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating...' : 'Paused'}
-        </span>
+          <button
+            onClick={simState === 'running' ? handlePause : handlePlay}
+            style={{
+              padding: '6px 16px',
+              border: 'none',
+              borderRadius: 8,
+              background: simState === 'running' ? '#f59e0b' : '#10b981',
+              color: 'white',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            {simState === 'running' ? 'Pause' : 'Play'}
+          </button>
+          <button
+            onClick={handleReset}
+            style={{
+              padding: '6px 16px',
+              border: 'none',
+              borderRadius: 8,
+              background: '#ef4444',
+              color: 'white',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            Reset
+          </button>
+          <span style={{
+            display: 'flex',
+            alignItems: 'center',
+            color: '#64748b',
+            fontSize: 12,
+          }}>
+            {simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating...' : 'Paused'}
+          </span>
+        </div>
       </div>
+      {/* Control Panel (30%) */}
+      <ControlPanel
+        canDiameter={canDiameter}
+        canHeight={canHeightParam}
+        wallThickness={wallThickness}
+        force={maxForce}
+        speed={compressionSpeedParam}
+        onCanDiameterChange={setCanDiameter}
+        onCanHeightChange={setCanHeightParam}
+        onWallThicknessChange={setWallThickness}
+        onForceChange={setMaxForce}
+        onSpeedChange={setCompressionSpeedParam}
+      />
     </div>
   )
 }
