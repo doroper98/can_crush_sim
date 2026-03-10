@@ -57,6 +57,7 @@ export default function App() {
   const chartDataRef = useRef<{ displacement: number; load: number }[]>([])
   const [timeScale, setTimeScale] = useState(1.0)
   const timeScaleRef = useRef(1.0)
+  const stepOnceRef = useRef(false)
 
   useEffect(() => {
     const container = containerRef.current
@@ -197,7 +198,10 @@ export default function App() {
     const animate = () => {
       animId = requestAnimationFrame(animate)
 
-      if (simRunningRef.current) {
+      const doStep = simRunningRef.current || stepOnceRef.current
+      if (stepOnceRef.current) stepOnceRef.current = false
+
+      if (doStep) {
         // Move rigid body down
         const displacement = simTimeRef.current * compressionSpeed
         if (displacement < maxDisplacement) {
@@ -446,6 +450,11 @@ export default function App() {
     setSimState('paused')
   }, [])
 
+  const handleStep = useCallback(() => {
+    stepOnceRef.current = true
+    setSimState('paused')
+  }, [])
+
   const handleReset = useCallback(() => {
     simRunningRef.current = false
     simTimeRef.current = 0
@@ -566,6 +575,21 @@ export default function App() {
             }}
           >
             {simState === 'running' ? 'Pause' : 'Play'}
+          </button>
+          <button
+            onClick={handleStep}
+            disabled={simState === 'running'}
+            style={{
+              padding: '6px 12px',
+              border: 'none',
+              borderRadius: 8,
+              background: simState === 'running' ? '#94a3b8' : '#6366f1',
+              color: 'white',
+              fontWeight: 600,
+              cursor: simState === 'running' ? 'not-allowed' : 'pointer',
+            }}
+          >
+            Step
           </button>
           <button
             onClick={handleReset}
