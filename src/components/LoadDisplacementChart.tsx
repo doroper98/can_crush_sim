@@ -121,6 +121,20 @@ export default function LoadDisplacementChart({
 
     // Plot data
     if (data.length > 1) {
+      // Energy area fill (under the curve)
+      ctx.fillStyle = darkMode ? 'rgba(59,130,246,0.12)' : 'rgba(59,130,246,0.08)'
+      ctx.beginPath()
+      ctx.moveTo(pad.left + (data[0].displacement / maxDisp) * plotW, pad.top + plotH)
+      for (let i = 0; i < data.length; i++) {
+        const x = pad.left + (data[i].displacement / maxDisp) * plotW
+        const y = pad.top + plotH - (data[i].load / maxLoad) * plotH
+        ctx.lineTo(x, y)
+      }
+      ctx.lineTo(pad.left + (data[data.length - 1].displacement / maxDisp) * plotW, pad.top + plotH)
+      ctx.closePath()
+      ctx.fill()
+
+      // Curve line
       ctx.strokeStyle = '#3b82f6'
       ctx.lineWidth = 1.5
       ctx.beginPath()
