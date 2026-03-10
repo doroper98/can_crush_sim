@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-079] 다크 모드 localStorage 저장
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 10:04:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) darkMode 초기값을 localStorage에서 로드. (2) darkMode useEffect에서 localStorage에 저장. (3) 재방문 시 다크 모드 유지. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 다크 모드 기능 최종 완결편. |
+
+---
+
 ### [EXP-078] SimControls 바 다크 모드
 
 | 항목 | 값 |

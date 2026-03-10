@@ -64,7 +64,7 @@ export default function App() {
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
   const [showGrid, setShowGrid] = useState(true)
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('cancrush_darkMode') === '1')
   const [presetName, setPresetName] = useState('')
   const [simState, setSimState] = useState<'idle' | 'running' | 'paused'>('idle')
   const [canDiameter, setCanDiameter] = useState(66)
@@ -875,6 +875,7 @@ export default function App() {
     if (grid) {
       ;(grid.material as THREE.LineBasicMaterial).color.set(darkMode ? 0x334155 : 0xcccccc)
     }
+    localStorage.setItem('cancrush_darkMode', darkMode ? '1' : '0')
   }, [darkMode])
 
   // Ghost (original shape) overlay
