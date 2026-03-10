@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-086] Toast 애니메이션 CSS 주입
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 10:45:00 |
+| **Step** | - (버그 수정) |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) toast 알림에 사용된 `animation: 'fadeInUp 0.25s ease-out'`의 @keyframes가 정의되지 않아 애니메이션이 작동하지 않던 버그 수정. (2) JSX 내에 `<style>` 태그로 fadeInUp keyframes 주입 (translateY(12px) → 0, opacity 0 → 1). |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 819.86 kB (gzip 223.78 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 숨겨진 버그 발견 및 수정 — CSS-in-JS 프로젝트에서 @keyframes 누락은 흔한 실수. |
+
+---
+
 ### [EXP-085] 변형 메시 STL 내보내기
 
 | 항목 | 값 |

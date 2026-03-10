@@ -1466,6 +1466,12 @@ export default function App() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+    <style>{`
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    `}</style>
     <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
       {/* 3D Viewport (70%) */}
       <FileDropZone onFileLoaded={handleFileLoaded}>
