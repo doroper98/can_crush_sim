@@ -742,6 +742,29 @@ export default function App() {
             })
           }
           break
+        case 'c': case 'C':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            setResultSummary(rs => {
+              if (!rs) { showToastRef.current('No results to copy'); return rs }
+              const lines = [
+                `Can Crush Simulator — Results`,
+                `t: ${simTimeRef.current.toFixed(3)} s`,
+                `d: ${(simTimeRef.current * compressionSpeedRef.current).toFixed(1)} mm`,
+                `σ_max: ${rs.maxStress.toFixed(1)} MPa`,
+                `ε_p_max: ${(rs.maxPlastic * 100).toFixed(2)} %`,
+                `Energy: ${rs.energyAbsorbed.toFixed(3)} J`,
+                `SEA: ${rs.sea.toFixed(1)} J/kg`,
+                `CFE: ${(rs.cfe * 100).toFixed(1)} %`,
+                `Mass: ${(rs.canMass * 1000).toFixed(2)} g`,
+                `Steps: ${simStepCountRef.current}`,
+              ]
+              navigator.clipboard.writeText(lines.join('\n')).then(() => {
+                showToastRef.current('Results copied to clipboard')
+              })
+              return rs
+            })
+          }
+          break
       }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')

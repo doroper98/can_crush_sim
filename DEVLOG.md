@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-103] C키 시뮬레이션 결과 클립보드 복사
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 12:10:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | FR-12 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) C키: resultSummary 텍스트를 navigator.clipboard.writeText로 복사. (2) 복사 내용: t, d, σ_max, ε_p, Energy, SEA, CFE, Mass, Steps. (3) KeyboardHelp에 C 항목 추가. (4) input/select 포커스 시 무시. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 824.93 kB (gzip 225.35 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 엔지니어가 결과를 Excel/문서에 즉시 붙여넣기 가능. 보고서 작성 워크플로우 대폭 개선. |
+
+---
+
 ### [EXP-102] 시뮬레이션 스텝 카운터 StatusBar 표시
 
 | 항목 | 값 |
