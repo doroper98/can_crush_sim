@@ -1300,15 +1300,15 @@ export default function App() {
   const handleSavePreset = useCallback((name: string) => {
     const preset = {
       canDiameter, canHeight: canHeightParam, wallThickness, maxForce, compressionSpeed: compressionSpeedParam,
-      rigidShape, rigidRadius, rigidHeight, materialKey,
-      matYoungsModulus, matYieldStress, matUTS, matHardeningN,
+      controlMode, rigidShape, rigidRadius, rigidHeight, materialKey,
+      matYoungsModulus, matYieldStress, matUTS, matHardeningN, maxCompression,
     }
     const presets = JSON.parse(localStorage.getItem('cancrush_presets') || '{}')
     presets[name] = preset
     localStorage.setItem('cancrush_presets', JSON.stringify(presets))
     setPresetName(name)
     showToast(`Preset "${name}" saved`)
-  }, [canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, rigidShape, rigidRadius, rigidHeight, materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN, showToast])
+  }, [canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, controlMode, rigidShape, rigidRadius, rigidHeight, materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN, maxCompression, showToast])
 
   const handleLoadPreset = useCallback((name: string) => {
     const presets = JSON.parse(localStorage.getItem('cancrush_presets') || '{}')
@@ -1327,6 +1327,8 @@ export default function App() {
     setMatYieldStress(p.matYieldStress)
     setMatUTS(p.matUTS)
     setMatHardeningN(p.matHardeningN)
+    if (p.controlMode != null) setControlMode(p.controlMode)
+    if (p.maxCompression != null) setMaxCompression(p.maxCompression)
     setPresetName(name)
     showToast(`Preset "${name}" loaded`)
   }, [showToast])
