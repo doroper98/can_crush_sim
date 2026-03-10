@@ -15,6 +15,7 @@ const cols: { key: string; label: string; unit: string; fmt: (v: number) => stri
   { key: 'yieldStress', label: 'σy', unit: 'MPa', fmt: v => v.toFixed(0) },
   { key: 'uts', label: 'UTS', unit: 'MPa', fmt: v => v.toFixed(0) },
   { key: 'hardeningExponent', label: 'n', unit: '', fmt: v => v.toFixed(2) },
+  { key: 'K', label: 'K', unit: 'MPa', fmt: v => v.toFixed(0) },
   { key: 'density', label: 'ρ', unit: 'kg/m³', fmt: v => v.toFixed(0) },
   { key: 'wallThickness', label: 't', unit: 'mm', fmt: v => v.toFixed(1) },
 ]
@@ -44,6 +45,9 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
         if (sortKey === 'uts_ratio') {
           va = a[1].uts / a[1].yieldStress
           vb = b[1].uts / b[1].yieldStress
+        } else if (sortKey === 'K') {
+          va = a[1].hardeningK()
+          vb = b[1].hardeningK()
         } else if (sortKey === 'specific_strength') {
           va = a[1].yieldStress / a[1].density * 1000
           vb = b[1].yieldStress / b[1].density * 1000
@@ -133,7 +137,9 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
                     {isCurrent ? '▸ ' : ''}{mat.name}
                   </td>
                   {cols.map(c => {
-                    const val = (mat as unknown as Record<string, number>)[c.key]
+                    const val = c.key === 'K'
+                      ? mat.hardeningK()
+                      : (mat as unknown as Record<string, number>)[c.key]
                     let cellColor = textSec
                     let cellWeight = 400
                     if (c.key === 'density') {
