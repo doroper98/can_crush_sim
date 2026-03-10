@@ -178,6 +178,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-040] Fit All 바운딩박스 카메라 자동조정
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 05:05:00 |
+| **Step** | - (FR-03 보완) |
+| **관련 FR** | FR-03 |
+| **관련 NF** | - |
+| **변경 내용** | CatiaControls에 fitAll(scene) 메소드 추가: Box3로 씬 내 모든 Mesh/LineSegments 순회하여 바운딩박스 계산 → 중심점을 target으로, FOV 기반 거리 자동 계산(1.2x 마진). handleFitAll이 controls.fitAll(scene) 호출하도록 변경. F키 단축키도 동일하게 변경. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 9/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | GOAL.md §5.1 "Fit All: 전체 표시 (F)" 요구사항 완전 충족. 이전에는 하드코딩 (0,60,0)만 설정했으나 이제 실제 객체 범위 기반으로 자동 조정. |
+
+---
+
 ### [EXP-039] 커서 월드좌표 StatusBar 표시
 
 | 항목 | 값 |

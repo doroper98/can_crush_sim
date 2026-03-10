@@ -156,6 +156,34 @@ export class CatiaControls {
     this.updateCamera()
   }
 
+  /** Fit camera to show all objects in the scene */
+  fitAll(scene: THREE.Scene) {
+    const box = new THREE.Box3()
+    scene.traverse((obj) => {
+      if (obj instanceof THREE.Mesh || obj instanceof THREE.LineSegments) {
+        box.expandByObject(obj)
+      }
+    })
+    if (box.isEmpty()) return
+
+    const center = box.getCenter(new THREE.Vector3())
+    const size = box.getSize(new THREE.Vector3())
+    const maxDim = Math.max(size.x, size.y, size.z)
+
+    // Calculate distance to fit the bounding sphere
+    let distance: number
+    if (this.camera instanceof THREE.PerspectiveCamera) {
+      const fov = this.camera.fov * Math.PI / 180
+      distance = (maxDim / 2) / Math.tan(fov / 2) * 1.2 // 1.2x margin
+    } else {
+      distance = maxDim * 1.5
+    }
+
+    this.target.copy(center)
+    this.spherical.radius = distance
+    this.updateCamera()
+  }
+
   dispose() {
     this.domElement.removeEventListener('mousedown', this.onMouseDown)
     this.domElement.removeEventListener('mousemove', this.onMouseMove)

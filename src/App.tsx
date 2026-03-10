@@ -396,7 +396,7 @@ export default function App() {
           setIsPerspective(prev => !prev)
           break
         case 'f': case 'F':
-          controls.setTarget(0, canHeight / 2, 0)
+          controls.fitAll(scene)
           break
         case 'w': case 'W':
           setIsWireframe(prev => !prev)
@@ -610,7 +610,10 @@ export default function App() {
   }, [])
 
   const handleFitAll = useCallback(() => {
-    controlsRef.current?.setTarget(0, 60, 0)
+    const scene = sceneRef.current
+    if (controlsRef.current && scene) {
+      controlsRef.current.fitAll(scene)
+    }
   }, [])
 
   const handleToggleWireframe = useCallback(() => {
