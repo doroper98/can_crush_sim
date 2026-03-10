@@ -132,6 +132,36 @@ export default function LoadDisplacementChart({
       }
       ctx.stroke()
 
+      // Peak force marker (diamond)
+      let peakIdx = 0
+      for (let i = 1; i < data.length; i++) {
+        if (data[i].load > data[peakIdx].load) peakIdx = i
+      }
+      const peakX = pad.left + (data[peakIdx].displacement / maxDisp) * plotW
+      const peakY = pad.top + plotH - (data[peakIdx].load / maxLoad) * plotH
+      ctx.fillStyle = '#f59e0b'
+      ctx.beginPath()
+      ctx.moveTo(peakX, peakY - 4)
+      ctx.lineTo(peakX + 3, peakY)
+      ctx.lineTo(peakX, peakY + 4)
+      ctx.lineTo(peakX - 3, peakY)
+      ctx.closePath()
+      ctx.fill()
+
+      // Mean force line (dashed)
+      let sumLoad = 0
+      for (let i = 0; i < data.length; i++) sumLoad += data[i].load
+      const meanLoad = sumLoad / data.length
+      const meanY = pad.top + plotH - (meanLoad / maxLoad) * plotH
+      ctx.setLineDash([4, 3])
+      ctx.strokeStyle = '#10b981'
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.moveTo(pad.left, meanY)
+      ctx.lineTo(pad.left + plotW, meanY)
+      ctx.stroke()
+      ctx.setLineDash([])
+
       // Current point
       const last = data[data.length - 1]
       const lx = pad.left + (last.displacement / maxDisp) * plotW
