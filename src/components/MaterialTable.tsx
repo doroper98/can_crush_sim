@@ -128,11 +128,22 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
                   <td style={{ padding: '4px 8px', color: isCurrent ? '#3b82f6' : text, fontWeight: isCurrent ? 600 : 400, borderBottom: `1px solid ${borderColor}`, whiteSpace: 'nowrap' }}>
                     {isCurrent ? '▸ ' : ''}{mat.name}
                   </td>
-                  {cols.map(c => (
-                    <td key={c.key} style={{ padding: '4px 6px', textAlign: 'right', color: textSec, borderBottom: `1px solid ${borderColor}`, fontFamily: 'monospace' }}>
-                      {c.fmt((mat as unknown as Record<string, number>)[c.key])}
-                    </td>
-                  ))}
+                  {cols.map(c => {
+                    const val = (mat as unknown as Record<string, number>)[c.key]
+                    let cellColor = textSec
+                    let cellWeight = 400
+                    if (c.key === 'density') {
+                      if (val < 3000) { cellColor = '#10b981'; cellWeight = 600 }
+                      else if (val > 8000) { cellColor = '#f59e0b' }
+                    } else if (c.key === 'yieldStress') {
+                      if (val >= 800) { cellColor = '#ef4444'; cellWeight = 600 }
+                    }
+                    return (
+                      <td key={c.key} style={{ padding: '4px 6px', textAlign: 'right', color: cellColor, borderBottom: `1px solid ${borderColor}`, fontFamily: 'monospace', fontWeight: cellWeight }}>
+                        {c.fmt(val)}
+                      </td>
+                    )
+                  })}
                   <td style={{ padding: '4px 6px', textAlign: 'right', color: (mat.uts / mat.yieldStress) >= 2 ? '#10b981' : textSec, borderBottom: `1px solid ${borderColor}`, fontFamily: 'monospace', fontWeight: (mat.uts / mat.yieldStress) >= 2 ? 600 : 400 }}>
                     {(mat.uts / mat.yieldStress).toFixed(2)}
                   </td>
