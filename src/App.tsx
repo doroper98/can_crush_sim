@@ -138,6 +138,7 @@ export default function App() {
   } | null>(null)
   const [prevResultSummary, setPrevResultSummary] = useState<typeof resultSummary>(null)
   const [panelVisible, setPanelVisible] = useState(true)
+  const [showHUD, setShowHUD] = useState(true)
   const [showGhost, setShowGhost] = useState(false)
   const ghostMeshRef = useRef<THREE.LineSegments | null>(null)
   const [autoStopStress, setAutoStopStress] = useState(true)
@@ -822,6 +823,11 @@ export default function App() {
               showToastRef.current(MATERIALS[nextKey].name)
               return nextKey
             })
+          }
+          break
+        case 'h': case 'H':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            setShowHUD(prev => !prev)
           }
           break
       }
@@ -1841,7 +1847,7 @@ export default function App() {
           </span>
         </div>
         {/* Simulation HUD overlay */}
-        {simState !== 'idle' && resultSummary && (
+        {showHUD && simState !== 'idle' && resultSummary && (
           <div style={{
             position: 'absolute',
             top: 48,
