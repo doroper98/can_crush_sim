@@ -1186,14 +1186,35 @@ export default function App() {
   const handleScreenshot = useCallback(() => {
     const renderer = rendererRef.current
     if (!renderer) return
-    // Force a render to ensure current frame is captured
-    const dataURL = renderer.domElement.toDataURL('image/png')
+    const gl = renderer.domElement
+    const w = gl.width, h = gl.height
+    // Composite: 3D canvas + info watermark
+    const comp = document.createElement('canvas')
+    comp.width = w; comp.height = h
+    const ctx = comp.getContext('2d')!
+    ctx.drawImage(gl, 0, 0)
+    // Watermark text (bottom-right)
+    ctx.font = `${Math.max(12, w * 0.012)}px monospace`
+    ctx.textAlign = 'right'
+    ctx.fillStyle = 'rgba(255,255,255,0.7)'
+    const lines = [
+      `Can Crush Simulator`,
+      `t=${simTime.toFixed(3)}s  d=${simDisplacement.toFixed(1)}mm`,
+    ]
+    if (resultSummary) {
+      lines.push(`σ_max=${resultSummary.maxStress.toFixed(0)}MPa  E=${resultSummary.energyAbsorbed.toFixed(2)}J`)
+    }
+    const lh = Math.max(16, w * 0.016)
+    lines.forEach((line, i) => {
+      ctx.fillText(line, w - 10, h - 10 - (lines.length - 1 - i) * lh)
+    })
+    const dataURL = comp.toDataURL('image/png')
     const link = document.createElement('a')
     link.download = `cancrush_${Date.now()}.png`
     link.href = dataURL
     link.click()
     showToast('Screenshot saved')
-  }, [showToast])
+  }, [showToast, simTime, simDisplacement, resultSummary])
   screenshotRef.current = handleScreenshot
 
   const handleReset = useCallback(() => {
