@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-101] ControlPanel Results 섹션 SEA/CFE 확장
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 12:00:00 |
+| **Step** | - (UI 개선) |
+| **관련 FR** | FR-11, FR-12 |
+| **관련 NF** | NF-06 |
+| **변경 내용** | (1) ControlPanel의 resultSummary 타입에 sea/cfe/canMass 필드 추가. (2) Results 섹션에 SEA(J/kg), CFE(%), Mass(g) 표시. (3) 구분선으로 기본 결과와 내충격성 지표 시각적 분리. (4) CFE 색상 코딩 동일 적용. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 824.10 kB (gzip 225.04 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | HUD는 시뮬 중 빠른 확인용, ControlPanel은 상세 분석용 — 동일 데이터의 이중 접근점. |
+
+---
+
 ### [EXP-100] 🎯 마일스톤 — SEA/CFE 내충격성 지표 HUD
 
 | 항목 | 값 |

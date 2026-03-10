@@ -61,7 +61,7 @@ interface ControlPanelProps {
   clipY: number
   onClipEnabledChange: (v: boolean) => void
   onClipYChange: (v: number) => void
-  resultSummary?: { maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number } | null
+  resultSummary?: { maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number; sea: number; cfe: number; canMass: number } | null
   presetName: string
   presetNames: string[]
   onSavePreset: (name: string) => void
@@ -581,6 +581,11 @@ export default function ControlPanel({
             <div><strong style={{ color: theme.text }}>Max d:</strong> {resultSummary.maxDisp.toFixed(2)} mm</div>
             <div><strong style={{ color: theme.text }}>Max ε_p:</strong> {(resultSummary.maxPlastic * 100).toFixed(2)} %</div>
             <div><strong style={{ color: theme.text }}>Energy:</strong> {resultSummary.energyAbsorbed.toFixed(3)} J</div>
+            <div style={{ borderTop: `1px solid ${theme.border}`, marginTop: 4, paddingTop: 4 }}>
+              <div><strong style={{ color: theme.text }}>SEA:</strong> {resultSummary.sea.toFixed(1)} J/kg</div>
+              <div><strong style={{ color: theme.text }}>CFE:</strong> <span style={{ color: resultSummary.cfe >= 0.7 ? '#10b981' : resultSummary.cfe >= 0.4 ? '#f59e0b' : '#ef4444' }}>{(resultSummary.cfe * 100).toFixed(1)}%</span></div>
+              <div><strong style={{ color: theme.text }}>Mass:</strong> {(resultSummary.canMass * 1000).toFixed(2)} g</div>
+            </div>
           </div>
         </Section>
       )}
