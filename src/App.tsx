@@ -46,6 +46,10 @@ export default function App() {
   const controlModeRef = useRef<'displacement' | 'force'>('displacement')
   const maxForceRef = useRef(500)
   const matUTSRef = useRef(310)
+  const materialKeyRef = useRef('aluminum_6061')
+  const wallThicknessRef = useRef(0.3)
+  const matYieldStressRef = useRef(276)
+  const matHardeningNRef = useRef(0.2)
 
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
@@ -397,7 +401,14 @@ export default function App() {
           canMesh.geometry = newGeom
           canGeometryRef.current = newGeom
           // Rebuild physics for new geometry
-          const newPhysics = new MassSpringSystem(newGeom)
+          const newPhysics = new MassSpringSystem(newGeom, {
+            materialKey: materialKeyRef.current,
+            wallThickness: wallThicknessRef.current,
+            youngsModulus: undefined, // use material default
+            yieldStress: matYieldStressRef.current,
+            uts: matUTSRef.current,
+            hardeningExponent: matHardeningNRef.current,
+          })
           physicsRef.current = newPhysics
           originalPositionsRef.current = new Float32Array(newPhysics.positions)
         }
@@ -568,6 +579,10 @@ export default function App() {
   useEffect(() => { controlModeRef.current = controlMode }, [controlMode])
   useEffect(() => { maxForceRef.current = maxForce }, [maxForce])
   useEffect(() => { matUTSRef.current = matUTS }, [matUTS])
+  useEffect(() => { materialKeyRef.current = materialKey }, [materialKey])
+  useEffect(() => { wallThicknessRef.current = wallThickness }, [wallThickness])
+  useEffect(() => { matYieldStressRef.current = matYieldStress }, [matYieldStress])
+  useEffect(() => { matHardeningNRef.current = matHardeningN }, [matHardeningN])
 
   // Rebuild can when parameters change (idle only, debounced 200ms)
   const rebuildTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -584,7 +599,11 @@ export default function App() {
       mesh.geometry.dispose()
       mesh.geometry = newGeom
       canGeometryRef.current = newGeom
-      const physics = new MassSpringSystem(newGeom, { materialKey: materialKey, wallThickness })
+      const physics = new MassSpringSystem(newGeom, {
+        materialKey, wallThickness,
+        yieldStress: matYieldStress, uts: matUTS, hardeningExponent: matHardeningN,
+        youngsModulus: matYoungsModulus,
+      })
       physicsRef.current = physics
       originalPositionsRef.current = new Float32Array(physics.positions)
       setNodeCount(physics.nodeCount)
@@ -594,7 +613,7 @@ export default function App() {
       }
     }, 200)
     return () => { if (rebuildTimerRef.current) clearTimeout(rebuildTimerRef.current) }
-  }, [canDiameter, canHeightParam, wallThickness, materialKey])
+  }, [canDiameter, canHeightParam, wallThickness, materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN])
 
   // Sync display mode → material vertexColors
   useEffect(() => {
@@ -758,7 +777,11 @@ export default function App() {
       mesh.geometry.dispose()
       mesh.geometry = newGeom
       canGeometryRef.current = newGeom
-      const physics = new MassSpringSystem(newGeom, { materialKey, wallThickness })
+      const physics = new MassSpringSystem(newGeom, {
+        materialKey, wallThickness,
+        yieldStress: matYieldStress, uts: matUTS, hardeningExponent: matHardeningN,
+        youngsModulus: matYoungsModulus,
+      })
       physicsRef.current = physics
       originalPositionsRef.current = new Float32Array(physics.positions)
       setNodeCount(physics.nodeCount)
@@ -769,7 +792,7 @@ export default function App() {
       rigidBodyRef.current.position.set(0, h + rigidHeight / 2 + 5, 0)
       setRigidPosY(Math.round(h + rigidHeight / 2 + 5))
     }
-  }, [canDiameter, canHeightParam, wallThickness, materialKey, rigidHeight])
+  }, [canDiameter, canHeightParam, wallThickness, materialKey, rigidHeight, matYoungsModulus, matYieldStress, matUTS, matHardeningN])
 
   const handleFileLoaded = useCallback(async (buffer: ArrayBuffer, fileName: string, ext: string) => {
     const scene = sceneRef.current

@@ -50,6 +50,9 @@ export class MassSpringSystem {
     density?: number      // kg/m³
     wallThickness?: number // mm
     youngsModulus?: number // MPa
+    yieldStress?: number  // MPa
+    uts?: number          // MPa
+    hardeningExponent?: number
     materialKey?: string  // key from MATERIALS registry
   }) {
     const posAttr = geometry.getAttribute('position')
@@ -98,9 +101,9 @@ export class MassSpringSystem {
     const thickness = options?.wallThickness ?? mat.wallThickness
     const E = options?.youngsModulus ?? mat.youngsModulus
 
-    this.yieldStress = mat.yieldStress
-    this.uts = mat.uts
-    this.hardeningExponent = mat.hardeningExponent
+    this.yieldStress = options?.yieldStress ?? mat.yieldStress
+    this.uts = options?.uts ?? mat.uts
+    this.hardeningExponent = options?.hardeningExponent ?? mat.hardeningExponent
 
     // Estimate average edge length to compute spring stiffness
     let totalLen = 0
@@ -118,7 +121,8 @@ export class MassSpringSystem {
     this.stiffness = E * crossSection / avgLen * 0.01
     this.damping = 0.995
 
-    this.hardeningK = mat.hardeningK()
+    // Recompute hardeningK from (possibly overridden) values
+    this.hardeningK = (this.uts - this.yieldStress) / Math.pow(0.3, this.hardeningExponent)
 
     // Fix bottom nodes (y close to 0)
     this.fixBottomNodes(2.0) // tolerance in mm

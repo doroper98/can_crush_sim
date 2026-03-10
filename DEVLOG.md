@@ -178,6 +178,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-049] 편집 물성값 물리엔진 전달
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 06:20:00 |
+| **Step** | - (FR-06 보완) |
+| **관련 FR** | FR-06 |
+| **관련 NF** | NF-07 |
+| **변경 내용** | (1) MassSpringSystem 생성자 options에 yieldStress, uts, hardeningExponent 추가. 전달된 값이 있으면 재료 기본값 대신 사용. hardeningK 재계산. (2) App.tsx: LOD 재생성, 디바운스 재생성, handleReset 3곳 모두에서 편집된 물성값(matYoungsModulus, matYieldStress, matUTS, matHardeningN) 전달. (3) refs 4개 추가 (materialKeyRef, wallThicknessRef, matYieldStressRef, matHardeningNRef). (4) 디바운스 useEffect deps에 물성값 4개 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 이전에는 물성값 슬라이더를 편집해도 UI에만 반영되고 물리엔진에는 반영되지 않았음. 이제 E/σy/σu/n 변경이 물리 시뮬레이션에 정확히 반영됨. |
+
+---
+
 ### [EXP-048] 시뮬레이션 시간 + 변위 StatusBar 표시
 
 | 항목 | 값 |
