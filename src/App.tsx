@@ -137,6 +137,8 @@ export default function App() {
   const ghostMeshRef = useRef<THREE.LineSegments | null>(null)
   const [autoStopStress, setAutoStopStress] = useState(true)
   const autoStopStressRef = useRef(true)
+  const [autoStopMultiplier, setAutoStopMultiplier] = useState(1.2)
+  const autoStopMultiplierRef = useRef(1.2)
   const [maxCompression, setMaxCompression] = useState(67)
   const [measureMode, setMeasureMode] = useState(false)
   const measureModeRef = useRef(false)
@@ -487,12 +489,12 @@ export default function App() {
             setResultSummary({ maxStress: maxS, maxDisp: maxD, maxPlastic: maxP, energyAbsorbed: energy, sea, cfe, canMass: canMassKg })
 
             // Auto-stop: pause if max stress exceeds 120% UTS
-            if (autoStopStressRef.current && maxS > matUTSRef.current * 1.2) {
+            if (autoStopStressRef.current && maxS > matUTSRef.current * autoStopMultiplierRef.current) {
               simRunningRef.current = false
               setSimState('paused')
               displayModeRef.current = 'stress'
               setDisplayMode('stress')
-              showToastRef.current(`Auto-stopped: σ_max ${maxS.toFixed(0)} MPa > 120% UTS (${(matUTSRef.current * 1.2).toFixed(0)} MPa)`)
+              showToastRef.current(`Auto-stopped: σ_max ${maxS.toFixed(0)} MPa > ${(autoStopMultiplierRef.current * 100).toFixed(0)}% UTS (${(matUTSRef.current * autoStopMultiplierRef.current).toFixed(0)} MPa)`)
             }
           }
 
@@ -1041,6 +1043,7 @@ export default function App() {
 
   useEffect(() => { measureModeRef.current = measureMode }, [measureMode])
   useEffect(() => { autoStopStressRef.current = autoStopStress }, [autoStopStress])
+  useEffect(() => { autoStopMultiplierRef.current = autoStopMultiplier }, [autoStopMultiplier])
   useEffect(() => { maxCompressionRef.current = maxCompression }, [maxCompression])
 
   // Sync clipping plane
@@ -1921,6 +1924,8 @@ export default function App() {
         onDeletePreset={handleDeletePreset}
         autoStopStress={autoStopStress}
         onAutoStopStressChange={setAutoStopStress}
+        autoStopMultiplier={autoStopMultiplier}
+        onAutoStopMultiplierChange={setAutoStopMultiplier}
         maxCompression={maxCompression}
         onMaxCompressionChange={setMaxCompression}
         darkMode={darkMode}

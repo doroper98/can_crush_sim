@@ -70,6 +70,8 @@ interface ControlPanelProps {
   onDeletePreset: (name: string) => void
   autoStopStress?: boolean
   onAutoStopStressChange?: (v: boolean) => void
+  autoStopMultiplier?: number
+  onAutoStopMultiplierChange?: (v: number) => void
   maxCompression?: number
   onMaxCompressionChange?: (v: number) => void
   darkMode?: boolean
@@ -249,6 +251,8 @@ export default function ControlPanel({
   onDeletePreset,
   autoStopStress,
   onAutoStopStressChange,
+  autoStopMultiplier,
+  onAutoStopMultiplierChange,
   maxCompression,
   onMaxCompressionChange,
   darkMode = false,
@@ -393,8 +397,11 @@ export default function ControlPanel({
               onChange={e => onAutoStopStressChange(e.target.checked)}
               style={{ accentColor: '#3b82f6' }}
             />
-            Auto-stop at 120% UTS
+            Auto-stop at {((autoStopMultiplier ?? 1.2) * 100).toFixed(0)}% UTS
           </label>
+        )}
+        {onAutoStopMultiplierChange && autoStopStress && (
+          <Slider label="UTS Threshold" value={(autoStopMultiplier ?? 1.2) * 100} min={100} max={200} step={5} unit="%" onChange={v => onAutoStopMultiplierChange(v / 100)} theme={theme} />
         )}
       </Section>
 
