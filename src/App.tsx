@@ -125,6 +125,7 @@ export default function App() {
   const [resultSummary, setResultSummary] = useState<{
     maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number
   } | null>(null)
+  const [panelVisible, setPanelVisible] = useState(true)
   const [showGhost, setShowGhost] = useState(false)
   const ghostMeshRef = useRef<THREE.LineSegments | null>(null)
   const [autoStopStress, setAutoStopStress] = useState(true)
@@ -1571,8 +1572,32 @@ export default function App() {
         )}
       </div>
       </FileDropZone>
+      {/* Panel toggle button */}
+      <button
+        onClick={() => setPanelVisible(prev => !prev)}
+        style={{
+          position: 'absolute',
+          top: 8,
+          right: panelVisible ? 'calc(30% + 4px)' : 4,
+          zIndex: 20,
+          width: 24,
+          height: 24,
+          border: 'none',
+          borderRadius: 8,
+          background: '#f0f4f8',
+          cursor: 'pointer',
+          fontSize: 12,
+          fontWeight: 700,
+          color: '#64748b',
+          boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+          transition: 'right 0.2s',
+        }}
+        title={panelVisible ? 'Hide Panel' : 'Show Panel'}
+      >
+        {panelVisible ? '»' : '«'}
+      </button>
       {/* Control Panel (30%) */}
-      <ControlPanel
+      {panelVisible && <ControlPanel
         canDiameter={canDiameter}
         canHeight={canHeightParam}
         wallThickness={wallThickness}
@@ -1634,7 +1659,7 @@ export default function App() {
         onDeletePreset={handleDeletePreset}
         autoStopStress={autoStopStress}
         onAutoStopStressChange={setAutoStopStress}
-      />
+      />}
     </div>
     <StatusBar
       simState={simState}
