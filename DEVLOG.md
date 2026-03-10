@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-081] 3D 그리드 다크 모드 양색 처리
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 10:20:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) GridHelper의 material이 실제로는 2개 요소 배열(centerLine, gridLine)인 점 반영. (2) Array.isArray 가드로 양색 개별 업데이트: center=0x475569/0xcccccc, grid=0x1e293b/0xe0e0e0. (3) fallback으로 단일 material 대응 유지. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 817.22 kB (gzip 223.09 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 다크 모드에서 그리드가 배경에 자연스럽게 녹아드는 시각 개선. |
+
+---
+
 ### [EXP-080] Load-Displacement 차트 다크 모드
 
 | 항목 | 값 |

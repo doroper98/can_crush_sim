@@ -873,7 +873,13 @@ export default function App() {
     }
     const grid = gridRef.current
     if (grid) {
-      ;(grid.material as THREE.LineBasicMaterial).color.set(darkMode ? 0x334155 : 0xcccccc)
+      const mats = grid.material as unknown as THREE.LineBasicMaterial[]
+      if (Array.isArray(mats)) {
+        mats[0].color.set(darkMode ? 0x475569 : 0xcccccc) // center lines
+        mats[1].color.set(darkMode ? 0x1e293b : 0xe0e0e0) // grid lines
+      } else {
+        ;(grid.material as THREE.LineBasicMaterial).color.set(darkMode ? 0x334155 : 0xcccccc)
+      }
     }
     localStorage.setItem('cancrush_darkMode', darkMode ? '1' : '0')
   }, [darkMode])
