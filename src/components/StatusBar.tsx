@@ -6,11 +6,12 @@ interface StatusBarProps {
   simTime?: number
   displacement?: number
   simSteps?: number
+  maxDisplacement?: number
   displayInfo?: { mode: string; min: number; max: number } | null
   darkMode?: boolean
 }
 
-export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTime = 0, displacement = 0, simSteps = 0, displayInfo, darkMode = false }: StatusBarProps) {
+export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTime = 0, displacement = 0, simSteps = 0, maxDisplacement = 0, displayInfo, darkMode = false }: StatusBarProps) {
   const stateLabel = simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating' : 'Paused'
   const stateColor = simState === 'idle' ? '#64748b' : simState === 'running' ? '#10b981' : '#f59e0b'
 
@@ -48,7 +49,17 @@ export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTi
 
       {/* Sim Info */}
       {simState !== 'idle' && (
-        <span>t: {simTime.toFixed(3)}s  d: {displacement.toFixed(1)}mm  steps: {simSteps}</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>t: {simTime.toFixed(3)}s  d: {displacement.toFixed(1)}mm  steps: {simSteps}</span>
+          {maxDisplacement > 0 && (
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ width: 60, height: 6, borderRadius: 3, background: darkMode ? '#334155' : '#d0d5dd', overflow: 'hidden' }}>
+                <span style={{ display: 'block', width: `${Math.min((displacement / maxDisplacement) * 100, 100)}%`, height: '100%', borderRadius: 3, background: '#3b82f6', transition: 'width 0.1s' }} />
+              </span>
+              <span style={{ fontSize: 10 }}>{Math.min((displacement / maxDisplacement) * 100, 100).toFixed(0)}%</span>
+            </span>
+          )}
+        </span>
       )}
 
       {/* Display Mode Info */}

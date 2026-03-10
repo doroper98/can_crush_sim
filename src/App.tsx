@@ -1960,6 +1960,7 @@ export default function App() {
         min: colorBarMin,
         max: colorBarMax,
       } : null}
+      maxDisplacement={canHeightParam * (maxCompression / 100)}
       darkMode={darkMode}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} darkMode={darkMode} />
