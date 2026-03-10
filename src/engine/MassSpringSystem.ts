@@ -36,6 +36,13 @@ export class MassSpringSystem {
   floorY: number = 0       // floor plane Y
   subSteps: number = 4
 
+  // Pre-allocated result buffers (avoid GC pressure)
+  private _stressBuf: Float32Array | null = null
+  private _stressCount: Uint16Array | null = null
+  private _dispBuf: Float32Array | null = null
+  private _strainBuf: Float32Array | null = null
+  private _strainCount: Uint16Array | null = null
+
   constructor(geometry: THREE.BufferGeometry, options?: {
     density?: number      // kg/m³
     wallThickness?: number // mm
@@ -239,17 +246,12 @@ export class MassSpringSystem {
     }
   }
 
-  /** Apply positions back to geometry */
+  /** Apply positions back to geometry (optimized: direct array copy) */
   syncToGeometry(geometry: THREE.BufferGeometry) {
     const posAttr = geometry.getAttribute('position')
-    for (let i = 0; i < this.nodeCount; i++) {
-      posAttr.setXYZ(
-        i,
-        this.positions[i * 3],
-        this.positions[i * 3 + 1],
-        this.positions[i * 3 + 2]
-      )
-    }
+    const arr = posAttr.array as Float32Array
+    // Direct typed array copy — faster than per-element setXYZ calls
+    arr.set(this.positions.subarray(0, this.nodeCount * 3))
     posAttr.needsUpdate = true
     geometry.computeVertexNormals()
     geometry.computeBoundingSphere()
@@ -327,12 +329,20 @@ export class MassSpringSystem {
    * This approximates Von Mises equivalent stress for this mass-spring model.
    */
   getStressPerNode(): Float32Array {
-    const stress = new Float32Array(this.nodeCount)
-    const count = new Uint16Array(this.nodeCount)
+    // Reuse pre-allocated buffers
+    if (!this._stressBuf || this._stressBuf.length !== this.nodeCount) {
+      this._stressBuf = new Float32Array(this.nodeCount)
+      this._stressCount = new Uint16Array(this.nodeCount)
+    }
+    const stress = this._stressBuf
+    const count = this._stressCount!
+    stress.fill(0)
+    count.fill(0)
     const E = 69000 // MPa
 
-    for (const spring of this.springs) {
-      const { i: a, j: b } = spring
+    for (let si = 0, len = this.springs.length; si < len; si++) {
+      const spring = this.springs[si]
+      const a = spring.i, b = spring.j
       const ai = a * 3, bi = b * 3
 
       const dx = this.positions[bi] - this.positions[ai]
@@ -340,12 +350,9 @@ export class MassSpringSystem {
       const dz = this.positions[bi + 2] - this.positions[ai + 2]
       const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
 
-      // Engineering strain relative to original rest length
       const strain = (dist - spring.restLength) / spring.restLength
-      // Stress = E * |strain| (elastic), capped by Ludwik-Hollomon for plastic region
       let springStress = E * Math.abs(strain)
 
-      // If plastically deformed, use hardened stress
       if (spring.plasticStrain > 0) {
         const yieldStress = this.yieldStress +
           this.hardeningK * Math.pow(spring.plasticStrain, this.hardeningExponent)
@@ -358,12 +365,12 @@ export class MassSpringSystem {
       count[b]++
     }
 
-    // Average
     for (let i = 0; i < this.nodeCount; i++) {
       if (count[i] > 0) stress[i] /= count[i]
     }
 
-    return stress
+    // Return a copy (caller may transfer ownership)
+    return new Float32Array(stress)
   }
 
   /**
@@ -371,7 +378,10 @@ export class MassSpringSystem {
    * Requires original positions to be stored.
    */
   getDisplacementPerNode(originalPositions: Float32Array): Float32Array {
-    const disp = new Float32Array(this.nodeCount)
+    if (!this._dispBuf || this._dispBuf.length !== this.nodeCount) {
+      this._dispBuf = new Float32Array(this.nodeCount)
+    }
+    const disp = this._dispBuf
     for (let i = 0; i < this.nodeCount; i++) {
       const idx = i * 3
       const dx = this.positions[idx] - originalPositions[idx]
@@ -379,17 +389,24 @@ export class MassSpringSystem {
       const dz = this.positions[idx + 2] - originalPositions[idx + 2]
       disp[i] = Math.sqrt(dx * dx + dy * dy + dz * dz)
     }
-    return disp
+    return new Float32Array(disp)
   }
 
   /**
    * Get plastic strain per node (averaged from connected springs).
    */
   getPlasticStrainPerNode(): Float32Array {
-    const strain = new Float32Array(this.nodeCount)
-    const count = new Uint16Array(this.nodeCount)
+    if (!this._strainBuf || this._strainBuf.length !== this.nodeCount) {
+      this._strainBuf = new Float32Array(this.nodeCount)
+      this._strainCount = new Uint16Array(this.nodeCount)
+    }
+    const strain = this._strainBuf
+    const count = this._strainCount!
+    strain.fill(0)
+    count.fill(0)
 
-    for (const spring of this.springs) {
+    for (let si = 0, len = this.springs.length; si < len; si++) {
+      const spring = this.springs[si]
       strain[spring.i] += spring.plasticStrain
       strain[spring.j] += spring.plasticStrain
       count[spring.i]++
@@ -400,7 +417,7 @@ export class MassSpringSystem {
       if (count[i] > 0) strain[i] /= count[i]
     }
 
-    return strain
+    return new Float32Array(strain)
   }
 
   /** Reset to rest positions */

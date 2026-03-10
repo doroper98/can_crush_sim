@@ -234,24 +234,24 @@ export default function App() {
           // Sync physics → geometry
           physics.syncToGeometry(canGeometry)
 
-          // Record load-displacement data (every 5 frames)
-          if (colorBarUpdateCounter.current % 5 === 0) {
-            // Estimate reaction force from stress at top nodes
+          // Record load-displacement data (every 10 frames — reduced from 5)
+          if (colorBarUpdateCounter.current % 10 === 0) {
             const stresses = physics.getStressPerNode()
             let avgTopStress = 0
             let topCount = 0
+            const threshold = canHeight - displacement - 5
             for (let ni = 0; ni < physics.nodeCount; ni++) {
-              if (physics.positions[ni * 3 + 1] > canHeight - displacement - 5) {
+              if (physics.positions[ni * 3 + 1] > threshold) {
                 avgTopStress += stresses[ni]
                 topCount++
               }
             }
             if (topCount > 0) avgTopStress /= topCount
-            // F ≈ σ_avg * A_cross (cross section area ≈ π*r*t)
-            const crossArea = Math.PI * (canRadius) * 0.3 // mm²
-            const estimatedForce = avgTopStress * crossArea * 0.001 // N (rough)
-            chartDataRef.current = [...chartDataRef.current, { displacement, load: estimatedForce }]
-            setChartData([...chartDataRef.current])
+            const crossArea = Math.PI * canRadius * 0.3
+            const estimatedForce = avgTopStress * crossArea * 0.001
+            // Push instead of spread (avoid O(n) copy each time)
+            chartDataRef.current.push({ displacement, load: estimatedForce })
+            setChartData(chartDataRef.current.slice())
           }
 
           // Apply colormap if display mode is active
