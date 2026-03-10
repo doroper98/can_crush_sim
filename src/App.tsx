@@ -774,6 +774,8 @@ export default function App() {
                 `σ_max: ${rs.maxStress.toFixed(1)} MPa`,
                 `ε_p_max: ${(rs.maxPlastic * 100).toFixed(2)} %`,
                 `Energy: ${rs.energyAbsorbed.toFixed(3)} J`,
+                `F_peak: ${rs.peakForce.toFixed(0)} N`,
+                `F_mean: ${rs.meanForce.toFixed(0)} N`,
                 `SEA: ${rs.sea.toFixed(1)} J/kg`,
                 `CFE: ${(rs.cfe * 100).toFixed(1)} %`,
                 `Mass: ${(rs.canMass * 1000).toFixed(2)} g`,
