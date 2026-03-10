@@ -1891,6 +1891,7 @@ export default function App() {
             <div>ε_p: {(resultSummary.maxPlastic * 100).toFixed(1)} %</div>
             <div>E: {resultSummary.energyAbsorbed.toFixed(2)} J</div>
             <div style={{ borderTop: '1px solid rgba(148,163,184,0.3)', marginTop: 3, paddingTop: 3 }}>
+              <div>F_pk: {resultSummary.peakForce.toFixed(0)} N  F̄: {resultSummary.meanForce.toFixed(0)} N</div>
               <div>SEA: {resultSummary.sea.toFixed(1)} J/kg</div>
               <div>CFE: <span style={{ color: resultSummary.cfe >= 0.7 ? '#10b981' : resultSummary.cfe >= 0.4 ? '#f59e0b' : '#ef4444' }}>{(resultSummary.cfe * 100).toFixed(1)}%</span></div>
               <div style={{ fontSize: 9, color: '#64748b' }}>m: {(resultSummary.canMass * 1000).toFixed(2)} g</div>
