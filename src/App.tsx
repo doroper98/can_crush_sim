@@ -576,21 +576,24 @@ export default function App() {
           display: 'flex',
           gap: 8,
           zIndex: 10,
-          background: 'rgba(240,244,248,0.9)',
-          padding: '6px 12px',
-          borderRadius: 12,
-          boxShadow: '4px 4px 8px rgba(163,177,198,0.4), -4px -4px 8px rgba(255,255,255,0.7)',
+          background: 'rgba(240,244,248,0.95)',
+          padding: '8px 16px',
+          borderRadius: 16,
+          boxShadow: '8px 8px 16px rgba(163,177,198,0.6), -8px -8px 16px rgba(255,255,255,0.8)',
         }}>
           <button
             onClick={simState === 'running' ? handlePause : handlePlay}
             style={{
-              padding: '6px 16px',
+              padding: '7px 18px',
               border: 'none',
-              borderRadius: 8,
+              borderRadius: 12,
               background: simState === 'running' ? '#f59e0b' : '#10b981',
               color: 'white',
               fontWeight: 600,
+              fontSize: 13,
               cursor: 'pointer',
+              boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+              transition: 'box-shadow 0.15s, transform 0.15s',
             }}
           >
             {simState === 'running' ? 'Pause' : 'Play'}
@@ -599,13 +602,16 @@ export default function App() {
             onClick={handleStep}
             disabled={simState === 'running'}
             style={{
-              padding: '6px 12px',
+              padding: '7px 14px',
               border: 'none',
-              borderRadius: 8,
+              borderRadius: 12,
               background: simState === 'running' ? '#94a3b8' : '#6366f1',
               color: 'white',
               fontWeight: 600,
+              fontSize: 13,
               cursor: simState === 'running' ? 'not-allowed' : 'pointer',
+              boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+              transition: 'box-shadow 0.15s, transform 0.15s',
             }}
           >
             Step
@@ -613,13 +619,16 @@ export default function App() {
           <button
             onClick={handleReset}
             style={{
-              padding: '6px 16px',
+              padding: '7px 18px',
               border: 'none',
-              borderRadius: 8,
+              borderRadius: 12,
               background: '#ef4444',
               color: 'white',
               fontWeight: 600,
+              fontSize: 13,
               cursor: 'pointer',
+              boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+              transition: 'box-shadow 0.15s, transform 0.15s',
             }}
           >
             Reset
@@ -627,13 +636,16 @@ export default function App() {
           <button
             onClick={handleToggleRecord}
             style={{
-              padding: '6px 12px',
+              padding: '7px 14px',
               border: 'none',
-              borderRadius: 8,
+              borderRadius: 12,
               background: isRecording ? '#dc2626' : '#374151',
               color: 'white',
               fontWeight: 600,
+              fontSize: 13,
               cursor: 'pointer',
+              boxShadow: '3px 3px 6px rgba(163,177,198,0.5), -3px -3px 6px rgba(255,255,255,0.7)',
+              transition: 'box-shadow 0.15s, transform 0.15s',
             }}
           >
             {isRecording ? 'Stop Rec' : 'Record'}

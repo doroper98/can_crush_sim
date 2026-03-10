@@ -55,18 +55,20 @@ function Section({ title, children, defaultOpen = true }: {
         onClick={() => setOpen(p => !p)}
         style={{
           width: '100%',
-          padding: '8px 12px',
+          padding: '8px 14px',
           border: 'none',
-          borderRadius: 10,
-          background: '#e8ecf1',
+          borderRadius: 12,
+          background: '#f0f4f8',
           color: '#0f172a',
           fontWeight: 600,
           fontSize: 13,
           cursor: 'pointer',
           textAlign: 'left',
+          transition: 'box-shadow 0.15s, transform 0.15s',
           boxShadow: open
-            ? 'inset 2px 2px 4px rgba(163,177,198,0.4), inset -2px -2px 4px rgba(255,255,255,0.8)'
-            : '2px 2px 4px rgba(163,177,198,0.5), -2px -2px 4px rgba(255,255,255,0.8)',
+            ? 'inset 2px 2px 5px rgba(163,177,198,0.5), inset -2px -2px 5px rgba(255,255,255,0.8)'
+            : '4px 4px 8px rgba(163,177,198,0.5), -4px -4px 8px rgba(255,255,255,0.8)',
+          transform: open ? 'scale(0.98)' : 'scale(1)',
         }}
       >
         {open ? '▾' : '▸'} {title}
@@ -171,10 +173,10 @@ export default function ControlPanel({
         width: 280,
         height: '100%',
         background: '#f0f4f8',
-        borderLeft: '1px solid #d0d5dd',
+        borderLeft: 'none',
         padding: '12px',
         overflowY: 'auto',
-        boxShadow: '-4px 0 8px rgba(163,177,198,0.2)',
+        boxShadow: 'inset 4px 4px 8px rgba(163,177,198,0.4), inset -4px -4px 8px rgba(255,255,255,0.9)',
       }}
     >
       <h3 style={{ margin: '0 0 12px', fontSize: 14, color: '#0f172a' }}>Control Panel</h3>

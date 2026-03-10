@@ -18,23 +18,25 @@ export default function ViewportToolbar({
   onGizmoModeChange,
 }: ViewportToolbarProps) {
   const btnStyle: React.CSSProperties = {
-    padding: '4px 10px',
+    padding: '5px 12px',
     margin: '0 2px',
     border: 'none',
-    borderRadius: '6px',
-    background: '#e8ecf1',
+    borderRadius: 12,
+    background: '#f0f4f8',
     color: '#0f172a',
     cursor: 'pointer',
     fontSize: '12px',
     fontWeight: 600,
     boxShadow:
-      '2px 2px 4px rgba(163,177,198,0.5), -2px -2px 4px rgba(255,255,255,0.8)',
+      '4px 4px 8px rgba(163,177,198,0.5), -4px -4px 8px rgba(255,255,255,0.8)',
+    transition: 'box-shadow 0.15s, transform 0.15s',
   }
 
   const activeBtnStyle: React.CSSProperties = {
     ...btnStyle,
     boxShadow:
-      'inset 2px 2px 4px rgba(163,177,198,0.5), inset -2px -2px 4px rgba(255,255,255,0.8)',
+      'inset 2px 2px 5px rgba(163,177,198,0.5), inset -2px -2px 5px rgba(255,255,255,0.8)',
+    transform: 'scale(0.98)',
   }
 
   return (
@@ -46,11 +48,11 @@ export default function ViewportToolbar({
         display: 'flex',
         gap: 2,
         zIndex: 10,
-        background: 'rgba(240,244,248,0.9)',
-        padding: '4px 6px',
-        borderRadius: 10,
+        background: 'rgba(240,244,248,0.95)',
+        padding: '4px 8px',
+        borderRadius: 16,
         boxShadow:
-          '4px 4px 8px rgba(163,177,198,0.4), -4px -4px 8px rgba(255,255,255,0.7)',
+          '8px 8px 16px rgba(163,177,198,0.6), -8px -8px 16px rgba(255,255,255,0.8)',
       }}
     >
       <button style={btnStyle} onClick={() => onViewChange('top')} title="Top View (Num 7)">
