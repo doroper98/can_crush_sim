@@ -178,6 +178,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-039] 커서 월드좌표 StatusBar 표시
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 04:55:00 |
+| **Step** | S5.1 보완 |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | App.tsx: THREE.Raycaster + Y=0 GroundPlane으로 마우스 위치 → 월드 좌표 변환. cursorWorld 상태 추가. container의 mousemove 이벤트에서 raycaster.ray.intersectPlane으로 교차점 계산. StatusBar에 cursorWorld prop 전달. cleanup에서 mousemove 리스너 제거. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 9/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | GOAL.md §4 StatusBar의 "좌표" 요구사항 완전 충족. Y=0 평면 교차이므로 캔/강체 위에 마우스가 있어도 바닥 좌표가 표시됨. |
+
+---
+
 ### [EXP-038] 애니메이션 루프 파라미터 ref화
 
 | 항목 | 값 |

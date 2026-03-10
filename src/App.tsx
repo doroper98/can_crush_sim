@@ -89,6 +89,7 @@ export default function App() {
   const fpsFrames = useRef(0)
   const fpsLastTime = useRef(performance.now())
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
+  const [cursorWorld, setCursorWorld] = useState<{ x: number; y: number; z: number } | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
@@ -425,10 +426,27 @@ export default function App() {
     }
     window.addEventListener('keydown', onKeyDown)
 
+    // Mouse → world coordinate (raycast to Y=0 ground plane)
+    const raycaster = new THREE.Raycaster()
+    const mouse = new THREE.Vector2()
+    const groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
+    const intersectPt = new THREE.Vector3()
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect()
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+      raycaster.setFromCamera(mouse, camera)
+      if (raycaster.ray.intersectPlane(groundPlane, intersectPt)) {
+        setCursorWorld({ x: intersectPt.x, y: intersectPt.y, z: intersectPt.z })
+      }
+    }
+    container.addEventListener('mousemove', onMouseMove)
+
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', onResize)
       window.removeEventListener('keydown', onKeyDown)
+      container.removeEventListener('mousemove', onMouseMove)
       transformControls.detach()
       transformControls.dispose()
       controls.dispose()
@@ -879,6 +897,7 @@ export default function App() {
       simState={simState}
       fps={fps}
       nodeCount={nodeCount}
+      cursorWorld={cursorWorld}
     />
     </div>
   )
