@@ -208,6 +208,13 @@ export default function LoadDisplacementChart({
       ctx.beginPath()
       ctx.arc(lx, ly, 3, 0, Math.PI * 2)
       ctx.fill()
+      // Current point label
+      ctx.font = '7px sans-serif'
+      ctx.fillStyle = '#ef4444'
+      const ptLabel = `${last.displacement.toFixed(1)}, ${last.load.toFixed(0)}`
+      const ptLabelX = lx + 5 > pad.left + plotW - 40 ? lx - ctx.measureText(ptLabel).width - 5 : lx + 5
+      ctx.textAlign = 'left'
+      ctx.fillText(ptLabel, ptLabelX, ly - 4)
 
       // Legend (top-right)
       const lgX = pad.left + plotW - 62, lgY = pad.top + 4
