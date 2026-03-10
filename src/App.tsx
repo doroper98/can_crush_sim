@@ -5,6 +5,7 @@ import { AxisHelper } from './viewer/AxisHelper'
 import ViewportToolbar from './components/ViewportToolbar'
 import ControlPanel, { type RigidBodyShape } from './components/ControlPanel'
 import { MassSpringSystem } from './engine/MassSpringSystem'
+import ColorBar from './components/ColorBar'
 import FileDropZone from './components/FileDropZone'
 import { loadSTL } from './cad/stlLoader'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
@@ -49,6 +50,9 @@ export default function App() {
   const originalPositionsRef = useRef<Float32Array | null>(null)
   const displayModeRef = useRef(displayMode)
   const colormapTypeRef = useRef(colormapType)
+  const [colorBarMin, setColorBarMin] = useState(0)
+  const [colorBarMax, setColorBarMax] = useState(1)
+  const colorBarUpdateCounter = useRef(0)
 
   useEffect(() => {
     const container = containerRef.current
@@ -234,6 +238,13 @@ export default function App() {
             }
 
             applyVertexColors(canGeometry, values, minV, maxV, colormapTypeRef.current)
+
+            // Update colorbar labels (throttled)
+            colorBarUpdateCounter.current++
+            if (colorBarUpdateCounter.current % 10 === 0) {
+              setColorBarMin(minV)
+              setColorBarMax(maxV)
+            }
           }
 
           // Check stability
@@ -491,6 +502,14 @@ export default function App() {
           isPerspective={isPerspective}
           gizmoMode={gizmoMode}
           onGizmoModeChange={setGizmoMode}
+        />
+        <ColorBar
+          minVal={colorBarMin}
+          maxVal={colorBarMax}
+          colormapType={colormapType}
+          label={displayMode === 'stress' ? 'Stress' : displayMode === 'displacement' ? 'Disp.' : displayMode === 'plastic' ? 'ε_p' : ''}
+          unit={displayMode === 'stress' ? 'MPa' : displayMode === 'displacement' ? 'mm' : ''}
+          visible={displayMode !== 'none'}
         />
         {/* Sim controls */}
         <div style={{
