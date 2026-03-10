@@ -1469,7 +1469,7 @@ export default function App() {
 
   const handleExportJSON = useCallback(() => {
     const snapshot = {
-      version: '1.0',
+      version: '1.2',
       timestamp: new Date().toISOString(),
       parameters: {
         canDiameter, canHeight: canHeightParam, wallThickness, maxForce,
@@ -1480,6 +1480,7 @@ export default function App() {
         materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN,
         maxCompression, autoStopStress, autoStopMultiplier,
       },
+      material: { name: (MATERIALS[materialKey] ?? MATERIALS['aluminum_6061']).name, key: materialKey },
       display: { displayMode, colormapType, deformScale, clipEnabled, clipY, darkMode },
       results: resultSummary,
       loadDisplacementCurve: chartData,
