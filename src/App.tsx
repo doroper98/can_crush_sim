@@ -1327,6 +1327,23 @@ export default function App() {
       matUTS, matHardeningN, displayMode, colormapType, deformScale, clipEnabled, clipY,
       darkMode, resultSummary, chartData])
 
+  const handleExportCSV = useCallback(() => {
+    if (chartData.length === 0) {
+      showToast('No simulation data to export')
+      return
+    }
+    const header = 'Displacement (mm),Load (N)\n'
+    const rows = chartData.map(d => `${d.displacement.toFixed(4)},${d.load.toFixed(4)}`).join('\n')
+    const blob = new Blob([header + rows], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.download = `cancrush_load_disp_${Date.now()}.csv`
+    link.href = url
+    link.click()
+    URL.revokeObjectURL(url)
+    showToast(`CSV exported (${chartData.length} points)`)
+  }, [showToast, chartData])
+
   const handleImportJSON = useCallback(() => {
     const input = document.createElement('input')
     input.type = 'file'
@@ -1870,6 +1887,14 @@ export default function App() {
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             Import JSON...
+          </div>
+          <div
+            onClick={() => { handleExportCSV(); setContextMenu(null) }}
+            style={ctxItemStyle}
+            onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            Export CSV...
           </div>
         </div>
       </div>

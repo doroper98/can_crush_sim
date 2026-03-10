@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-084] CSV 데이터 내보내기
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 10:35:00 |
+| **Step** | - (기능 추가) |
+| **관련 FR** | FR-12 |
+| **관련 NF** | - |
+| **변경 내용** | (1) handleExportCSV 콜백 추가: "Displacement (mm),Load (N)" 헤더 + chartData를 CSV로 변환. (2) 빈 데이터 시 toast 경고. (3) 컨텍스트 메뉴에 "Export CSV..." 항목 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 818.25 kB (gzip 223.33 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 하중-변위 곡선 데이터를 Excel/분석 도구로 내보내기 가능. |
+
+---
+
 ### [EXP-083] SimControls 버튼 다크 모드 boxShadow
 
 | 항목 | 값 |
