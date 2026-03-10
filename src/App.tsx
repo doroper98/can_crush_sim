@@ -110,6 +110,7 @@ export default function App() {
   const [clipEnabled, setClipEnabled] = useState(false)
   const [clipY, setClipY] = useState(60) // clipping plane Y position (mm)
   const clipPlaneRef = useRef(new THREE.Plane(new THREE.Vector3(0, -1, 0), 60))
+  const maxStressMarkerRef = useRef<THREE.Sprite | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
@@ -195,6 +196,21 @@ export default function App() {
     )
     bcPoints.name = 'bcMarkers'
     scene.add(bcPoints)
+
+    // Max stress probe marker (SpriteMaterial with canvas texture)
+    const markerCanvas = document.createElement('canvas')
+    markerCanvas.width = 128
+    markerCanvas.height = 48
+    const markerCtx = markerCanvas.getContext('2d')!
+    const markerTexture = new THREE.CanvasTexture(markerCanvas)
+    const markerSprite = new THREE.Sprite(
+      new THREE.SpriteMaterial({ map: markerTexture, transparent: true, depthTest: false })
+    )
+    markerSprite.scale.set(40, 15, 1)
+    markerSprite.visible = false
+    markerSprite.name = 'maxStressMarker'
+    scene.add(markerSprite)
+    maxStressMarkerRef.current = markerSprite
 
     // Rigid body (press cylinder) — sits above the can
     const rigidRadius = 40
@@ -381,6 +397,36 @@ export default function App() {
               setColorBarMin(minV)
               setColorBarMax(maxV)
             }
+
+            // Update max stress marker (throttled)
+            if (dm === 'stress' && colorBarUpdateCounter.current % 10 === 0) {
+              let maxIdx = 0
+              let maxVal = -1
+              for (let vi = 0; vi < values.length; vi++) {
+                if (values[vi] > maxVal) { maxVal = values[vi]; maxIdx = vi }
+              }
+              const marker = maxStressMarkerRef.current
+              if (marker) {
+                const px = physics.positions[maxIdx * 3]
+                const py = physics.positions[maxIdx * 3 + 1]
+                const pz = physics.positions[maxIdx * 3 + 2]
+                marker.position.set(px, py + 8, pz)
+                marker.visible = true
+                // Update label text
+                markerCtx.clearRect(0, 0, 128, 48)
+                markerCtx.fillStyle = 'rgba(220,38,38,0.85)'
+                markerCtx.roundRect(0, 0, 128, 48, 8)
+                markerCtx.fill()
+                markerCtx.fillStyle = '#fff'
+                markerCtx.font = 'bold 18px sans-serif'
+                markerCtx.textAlign = 'center'
+                markerCtx.fillText(`${maxVal.toFixed(0)} MPa`, 64, 32)
+                markerTexture.needsUpdate = true
+              }
+            }
+          } else {
+            // Hide marker when display mode is none or not stress
+            if (maxStressMarkerRef.current) maxStressMarkerRef.current.visible = false
           }
 
           // Check stability
