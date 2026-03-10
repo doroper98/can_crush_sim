@@ -778,6 +778,10 @@ export default function App() {
           }
           break
       }
+      if (e.key === 'Tab') {
+        e.preventDefault()
+        setPanelVisible(prev => !prev)
+      }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
       if (e.code === 'Numpad1') controls.setView('front')

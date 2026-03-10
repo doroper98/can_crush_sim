@@ -21,6 +21,7 @@ const shortcuts = [
   { key: 'N', desc: '다음 프레임 (Step)' },
   { key: 'V', desc: '디스플레이 모드 순환' },
   { key: 'C', desc: '결과 클립보드 복사' },
+  { key: 'Tab', desc: '컨트롤 패널 접힘/펼침' },
   { key: 'Space', desc: '시뮬레이션 Play/Pause 토글' },
   { key: 'Esc', desc: '모달/메뉴 닫기, 측정 취소' },
   { key: 'Num 7', desc: 'Top View (XY)' },
