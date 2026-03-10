@@ -133,6 +133,7 @@ export default function App() {
     maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number
     sea: number; cfe: number; canMass: number
   } | null>(null)
+  const [prevResultSummary, setPrevResultSummary] = useState<typeof resultSummary>(null)
   const [panelVisible, setPanelVisible] = useState(true)
   const [showGhost, setShowGhost] = useState(false)
   const ghostMeshRef = useRef<THREE.LineSegments | null>(null)
@@ -1295,7 +1296,7 @@ export default function App() {
     if (chartDataRef.current.length > 0) setPrevChartData(chartDataRef.current.slice())
     chartDataRef.current = []
     setChartData([])
-    setResultSummary(null)
+    setResultSummary(prev => { if (prev) setPrevResultSummary(prev); return null })
     // Rebuild geometry with current parameters
     const mesh = canMeshRef.current
     if (mesh) {
@@ -1926,6 +1927,7 @@ export default function App() {
         onClipEnabledChange={setClipEnabled}
         onClipYChange={setClipY}
         resultSummary={resultSummary}
+        prevResultSummary={prevResultSummary}
         presetName={presetName}
         presetNames={getPresetNames()}
         onSavePreset={handleSavePreset}
