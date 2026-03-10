@@ -3,6 +3,7 @@ import { MATERIALS } from '../engine/MaterialModel'
 interface MaterialTableProps {
   visible: boolean
   onClose: () => void
+  onSelect?: (key: string) => void
   darkMode?: boolean
   currentMaterial?: string
 }
@@ -17,7 +18,7 @@ const cols: { key: string; label: string; unit: string; fmt: (v: number) => stri
   { key: 'wallThickness', label: 't', unit: 'mm', fmt: v => v.toFixed(1) },
 ]
 
-export default function MaterialTable({ visible, onClose, darkMode = false, currentMaterial }: MaterialTableProps) {
+export default function MaterialTable({ visible, onClose, onSelect, darkMode = false, currentMaterial }: MaterialTableProps) {
   if (!visible) return null
 
   const bg = darkMode ? '#1e293b' : '#f0f4f8'
@@ -25,6 +26,7 @@ export default function MaterialTable({ visible, onClose, darkMode = false, curr
   const textSec = darkMode ? '#94a3b8' : '#475569'
   const borderColor = darkMode ? '#334155' : '#d0d5dd'
   const highlightBg = darkMode ? 'rgba(59,130,246,0.15)' : 'rgba(59,130,246,0.08)'
+  const hoverBg = darkMode ? 'rgba(148,163,184,0.08)' : 'rgba(59,130,246,0.04)'
   const shadow = darkMode
     ? '12px 12px 24px rgba(0,0,0,0.5), -12px -12px 24px rgba(51,65,85,0.4)'
     : '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)'
@@ -75,7 +77,13 @@ export default function MaterialTable({ visible, onClose, darkMode = false, curr
             {entries.map(([key, mat]) => {
               const isCurrent = key === currentMaterial
               return (
-                <tr key={key} style={{ background: isCurrent ? highlightBg : 'transparent' }}>
+                <tr
+                  key={key}
+                  onClick={() => { if (onSelect) { onSelect(key); onClose() } }}
+                  onMouseEnter={e => { if (!isCurrent) (e.currentTarget as HTMLElement).style.background = hoverBg }}
+                  onMouseLeave={e => { if (!isCurrent) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
+                  style={{ background: isCurrent ? highlightBg : 'transparent', cursor: onSelect ? 'pointer' : 'default' }}
+                >
                   <td style={{ padding: '4px 8px', color: isCurrent ? '#3b82f6' : text, fontWeight: isCurrent ? 600 : 400, borderBottom: `1px solid ${borderColor}`, whiteSpace: 'nowrap' }}>
                     {isCurrent ? '▸ ' : ''}{mat.name}
                   </td>
@@ -93,7 +101,7 @@ export default function MaterialTable({ visible, onClose, darkMode = false, curr
           </tbody>
         </table>
         <div style={{ marginTop: 14, textAlign: 'center', fontSize: 11, color: darkMode ? '#64748b' : '#94a3b8' }}>
-          Press I or click outside to close
+          Click row to select · Press I or click outside to close
         </div>
       </div>
     </div>

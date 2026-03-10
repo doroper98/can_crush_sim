@@ -2028,7 +2028,7 @@ export default function App() {
       darkMode={darkMode}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} darkMode={darkMode} />
-    <MaterialTable visible={showMaterialTable} onClose={() => setShowMaterialTable(false)} darkMode={darkMode} currentMaterial={materialKeyRef.current} />
+    <MaterialTable visible={showMaterialTable} onClose={() => setShowMaterialTable(false)} onSelect={setMaterialKey} darkMode={darkMode} currentMaterial={materialKeyRef.current} />
     {/* Toast notifications */}
     <div style={{ position: 'fixed', bottom: 40, left: '50%', transform: 'translateX(-50%)', zIndex: 3000, display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
       {toasts.map(t => (
