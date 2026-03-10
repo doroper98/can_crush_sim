@@ -11,6 +11,7 @@ import { loadSTL } from './cad/stlLoader'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 import { applyVertexColors, type ColormapType } from './viewer/colormap'
 import { CanvasRecorder } from './viewer/recorder'
+import StatusBar from './components/StatusBar'
 
 /** LOD: compute radial/height segments based on camera distance */
 function getLODSegments(cameraDistance: number): { radial: number; height: number } {
@@ -70,6 +71,10 @@ export default function App() {
   const recorderRef = useRef(new CanvasRecorder())
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
   const [isRecording, setIsRecording] = useState(false)
+  const [fps, setFps] = useState(60)
+  const fpsFrames = useRef(0)
+  const fpsLastTime = useRef(performance.now())
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
@@ -87,6 +92,7 @@ export default function App() {
     )
     camera.position.set(200, 150, 200)
     camera.lookAt(0, 0, 0)
+    cameraRef.current = camera
 
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     renderer.setSize(container.clientWidth, container.clientHeight)
@@ -333,6 +339,15 @@ export default function App() {
       }
       colorBarUpdateCounter.current++
 
+      // FPS counter
+      fpsFrames.current++
+      const now = performance.now()
+      if (now - fpsLastTime.current >= 1000) {
+        setFps(fpsFrames.current)
+        fpsFrames.current = 0
+        fpsLastTime.current = now
+      }
+
       renderer.render(scene, camera)
       axisHelper.update(camera)
     }
@@ -573,7 +588,8 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
       {/* 3D Viewport (70%) */}
       <FileDropZone onFileLoaded={handleFileLoaded}>
       <div
@@ -729,6 +745,12 @@ export default function App() {
         timeScale={timeScale}
         onTimeScaleChange={setTimeScale}
       />
+    </div>
+    <StatusBar
+      simState={simState}
+      fps={fps}
+      nodeCount={693}
+    />
     </div>
   )
 }
