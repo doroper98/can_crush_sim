@@ -8,8 +8,10 @@ export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
   const controlsRef = useRef<CatiaControls | null>(null)
   const canMeshRef = useRef<THREE.Mesh | null>(null)
+  const gridRef = useRef<THREE.GridHelper | null>(null)
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
+  const [showGrid, setShowGrid] = useState(true)
 
   useEffect(() => {
     const container = containerRef.current
@@ -39,9 +41,10 @@ export default function App() {
     dirLight.position.set(100, 200, 150)
     scene.add(dirLight)
 
-    // Grid
+    // Grid (10mm spacing: 500/50)
     const grid = new THREE.GridHelper(500, 50, 0xcccccc, 0xe0e0e0)
     scene.add(grid)
+    gridRef.current = grid
 
     // Parametric can mesh
     const canRadius = 33
@@ -99,6 +102,9 @@ export default function App() {
         case 'w': case 'W':
           setIsWireframe(prev => !prev)
           break
+        case 'g': case 'G':
+          setShowGrid(prev => !prev)
+          break
       }
       // Numpad views
       if (e.code === 'Numpad7') controls.setView('top')
@@ -126,6 +132,11 @@ export default function App() {
       ;(mesh.material as THREE.MeshStandardMaterial).wireframe = isWireframe
     }
   }, [isWireframe])
+
+  // Sync grid visibility
+  useEffect(() => {
+    if (gridRef.current) gridRef.current.visible = showGrid
+  }, [showGrid])
 
   const handleViewChange = useCallback(
     (view: 'top' | 'front' | 'right' | 'iso') => {
