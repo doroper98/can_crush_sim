@@ -497,7 +497,7 @@ export default function ControlPanel({
       </Section>
 
       <Section title="Load-Displacement Chart" theme={theme}>
-        <LoadDisplacementChart data={chartData} width={256} height={160} />
+        <LoadDisplacementChart data={chartData} width={256} height={160} darkMode={darkMode} />
         {chartData.length > 0 && (
           <button
             onClick={() => {

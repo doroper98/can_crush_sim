@@ -9,12 +9,14 @@ interface LoadDisplacementChartProps {
   data: DataPoint[]
   width?: number
   height?: number
+  darkMode?: boolean
 }
 
 export default function LoadDisplacementChart({
   data,
   width = 260,
   height = 160,
+  darkMode = false,
 }: LoadDisplacementChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -29,6 +31,13 @@ export default function LoadDisplacementChart({
     canvas.height = height * dpr
     ctx.scale(dpr, dpr)
 
+    // Theme colors
+    const bgColor = darkMode ? '#1e293b' : '#f0f4f8'
+    const borderColor = darkMode ? '#475569' : '#d0d5dd'
+    const gridColor = darkMode ? '#334155' : '#e2e8f0'
+    const axisColor = darkMode ? '#64748b' : '#94a3b8'
+    const labelColor = darkMode ? '#94a3b8' : '#64748b'
+
     // Padding
     const pad = { top: 10, right: 10, bottom: 30, left: 45 }
     const plotW = width - pad.left - pad.right
@@ -38,11 +47,11 @@ export default function LoadDisplacementChart({
     ctx.clearRect(0, 0, width, height)
 
     // Background
-    ctx.fillStyle = '#f0f4f8'
+    ctx.fillStyle = bgColor
     ctx.fillRect(0, 0, width, height)
 
     // Border
-    ctx.strokeStyle = '#d0d5dd'
+    ctx.strokeStyle = borderColor
     ctx.lineWidth = 1
     ctx.strokeRect(0.5, 0.5, width - 1, height - 1)
 
@@ -57,7 +66,7 @@ export default function LoadDisplacementChart({
     maxLoad = Math.ceil(maxLoad / 100) * 100 || 100
 
     // Grid lines
-    ctx.strokeStyle = '#e2e8f0'
+    ctx.strokeStyle = gridColor
     ctx.lineWidth = 0.5
     for (let i = 0; i <= 4; i++) {
       const y = pad.top + (plotH / 4) * i
@@ -75,7 +84,7 @@ export default function LoadDisplacementChart({
     }
 
     // Axes
-    ctx.strokeStyle = '#94a3b8'
+    ctx.strokeStyle = axisColor
     ctx.lineWidth = 1
     ctx.beginPath()
     ctx.moveTo(pad.left, pad.top)
@@ -84,7 +93,7 @@ export default function LoadDisplacementChart({
     ctx.stroke()
 
     // Axis labels
-    ctx.fillStyle = '#64748b'
+    ctx.fillStyle = labelColor
     ctx.font = '9px sans-serif'
     ctx.textAlign = 'center'
     ctx.fillText('Displacement (mm)', pad.left + plotW / 2, height - 4)
@@ -132,7 +141,7 @@ export default function LoadDisplacementChart({
       ctx.arc(lx, ly, 3, 0, Math.PI * 2)
       ctx.fill()
     }
-  }, [data, width, height])
+  }, [data, width, height, darkMode])
 
   return (
     <canvas
@@ -141,7 +150,9 @@ export default function LoadDisplacementChart({
         width,
         height,
         borderRadius: 8,
-        boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
+        boxShadow: darkMode
+          ? 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(51,65,85,0.5)'
+          : 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
       }}
     />
   )
