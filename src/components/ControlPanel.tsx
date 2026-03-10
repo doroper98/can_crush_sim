@@ -44,6 +44,14 @@ interface ControlPanelProps {
   onTimeScaleChange: (v: number) => void
   materialKey?: string
   onMaterialKeyChange?: (v: string) => void
+  matYoungsModulus: number
+  matYieldStress: number
+  matUTS: number
+  matHardeningN: number
+  onMatYoungsModulusChange: (v: number) => void
+  onMatYieldStressChange: (v: number) => void
+  onMatUTSChange: (v: number) => void
+  onMatHardeningNChange: (v: number) => void
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -171,6 +179,14 @@ export default function ControlPanel({
   onTimeScaleChange,
   materialKey = 'aluminum_6061',
   onMaterialKeyChange,
+  matYoungsModulus,
+  matYieldStress,
+  matUTS,
+  matHardeningN,
+  onMatYoungsModulusChange,
+  onMatYieldStressChange,
+  onMatUTSChange,
+  onMatHardeningNChange,
 }: ControlPanelProps) {
   return (
     <div
@@ -426,16 +442,15 @@ export default function ControlPanel({
             ))}
           </select>
         )}
+        <Slider label="E (Young's)" value={matYoungsModulus} min={10000} max={300000} step={1000} unit="MPa" onChange={onMatYoungsModulusChange} />
+        <Slider label="σ_y (Yield)" value={matYieldStress} min={10} max={1500} step={1} unit="MPa" onChange={onMatYieldStressChange} />
+        <Slider label="σ_u (UTS)" value={matUTS} min={20} max={2000} step={1} unit="MPa" onChange={onMatUTSChange} />
+        <Slider label="n (Hardening)" value={matHardeningN} min={0.01} max={1.0} step={0.01} unit="" onChange={onMatHardeningNChange} />
         {(() => {
           const mat = MATERIALS[materialKey] ?? MATERIALS['aluminum_6061']
           return (
-            <div style={{ fontSize: 11, color: '#64748b', lineHeight: 1.6 }}>
-              E = {mat.youngsModulus.toLocaleString()} MPa<br />
-              ν = {mat.poissonRatio}<br />
-              σ_y = {mat.yieldStress} MPa<br />
-              σ_u = {mat.uts} MPa<br />
-              ρ = {mat.density.toLocaleString()} kg/m³<br />
-              n = {mat.hardeningExponent}
+            <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 4 }}>
+              ν = {mat.poissonRatio} · ρ = {mat.density.toLocaleString()} kg/m³
             </div>
           )
         })()}

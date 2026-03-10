@@ -10,6 +10,7 @@ import FileDropZone from './components/FileDropZone'
 import { loadSTL } from './cad/stlLoader'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 import { applyVertexColors, type ColormapType } from './viewer/colormap'
+import { MATERIALS, DEFAULT_MATERIAL } from './engine/MaterialModel'
 import { CanvasRecorder } from './viewer/recorder'
 import StatusBar from './components/StatusBar'
 
@@ -69,6 +70,10 @@ export default function App() {
   const timeScaleRef = useRef(1.0)
   const stepOnceRef = useRef(false)
   const [materialKey, setMaterialKey] = useState('aluminum_6061')
+  const [matYoungsModulus, setMatYoungsModulus] = useState(69000)
+  const [matYieldStress, setMatYieldStress] = useState(276)
+  const [matUTS, setMatUTS] = useState(310)
+  const [matHardeningN, setMatHardeningN] = useState(0.2)
   const recorderRef = useRef(new CanvasRecorder())
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
   const [isRecording, setIsRecording] = useState(false)
@@ -421,6 +426,15 @@ export default function App() {
   useEffect(() => {
     if (gridRef.current) gridRef.current.visible = showGrid
   }, [showGrid])
+
+  // Sync material properties when material key changes
+  useEffect(() => {
+    const mat = MATERIALS[materialKey] ?? MATERIALS[DEFAULT_MATERIAL]
+    setMatYoungsModulus(mat.youngsModulus)
+    setMatYieldStress(mat.yieldStress)
+    setMatUTS(mat.uts)
+    setMatHardeningN(mat.hardeningExponent)
+  }, [materialKey])
 
   // Keep refs in sync
   useEffect(() => { displayModeRef.current = displayMode }, [displayMode])
@@ -781,6 +795,14 @@ export default function App() {
         onTimeScaleChange={setTimeScale}
         materialKey={materialKey}
         onMaterialKeyChange={setMaterialKey}
+        matYoungsModulus={matYoungsModulus}
+        matYieldStress={matYieldStress}
+        matUTS={matUTS}
+        matHardeningN={matHardeningN}
+        onMatYoungsModulusChange={setMatYoungsModulus}
+        onMatYieldStressChange={setMatYieldStress}
+        onMatUTSChange={setMatUTS}
+        onMatHardeningNChange={setMatHardeningN}
       />
     </div>
     <StatusBar
