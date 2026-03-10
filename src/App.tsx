@@ -1327,6 +1327,64 @@ export default function App() {
       matUTS, matHardeningN, displayMode, colormapType, deformScale, clipEnabled, clipY,
       darkMode, resultSummary, chartData])
 
+  const handleExportSTL = useCallback(() => {
+    const geom = canGeometryRef.current
+    if (!geom) {
+      showToast('No mesh to export')
+      return
+    }
+    const posAttr = geom.attributes.position
+    const idx = geom.index
+    if (!idx) { showToast('Mesh has no index buffer'); return }
+    const triCount = idx.count / 3
+    // Binary STL: 80-byte header + 4-byte triangle count + (50 bytes per triangle)
+    const bufLen = 80 + 4 + triCount * 50
+    const buf = new ArrayBuffer(bufLen)
+    const view = new DataView(buf)
+    // Header (80 bytes) — fill with zeros
+    // Triangle count
+    view.setUint32(80, triCount, true)
+    const indices = idx.array
+    let offset = 84
+    const vA = new THREE.Vector3(), vB = new THREE.Vector3(), vC = new THREE.Vector3()
+    const cb = new THREE.Vector3(), ab = new THREE.Vector3()
+    for (let i = 0; i < triCount; i++) {
+      const a = indices[i * 3], b = indices[i * 3 + 1], c = indices[i * 3 + 2]
+      vA.fromBufferAttribute(posAttr, a)
+      vB.fromBufferAttribute(posAttr, b)
+      vC.fromBufferAttribute(posAttr, c)
+      cb.subVectors(vC, vB)
+      ab.subVectors(vA, vB)
+      cb.cross(ab).normalize()
+      // Normal
+      view.setFloat32(offset, cb.x, true); offset += 4
+      view.setFloat32(offset, cb.y, true); offset += 4
+      view.setFloat32(offset, cb.z, true); offset += 4
+      // Vertex A
+      view.setFloat32(offset, vA.x, true); offset += 4
+      view.setFloat32(offset, vA.y, true); offset += 4
+      view.setFloat32(offset, vA.z, true); offset += 4
+      // Vertex B
+      view.setFloat32(offset, vB.x, true); offset += 4
+      view.setFloat32(offset, vB.y, true); offset += 4
+      view.setFloat32(offset, vB.z, true); offset += 4
+      // Vertex C
+      view.setFloat32(offset, vC.x, true); offset += 4
+      view.setFloat32(offset, vC.y, true); offset += 4
+      view.setFloat32(offset, vC.z, true); offset += 4
+      // Attribute byte count
+      view.setUint16(offset, 0, true); offset += 2
+    }
+    const blob = new Blob([buf], { type: 'application/octet-stream' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.download = `cancrush_deformed_${Date.now()}.stl`
+    link.href = url
+    link.click()
+    URL.revokeObjectURL(url)
+    showToast(`STL exported (${triCount} triangles)`)
+  }, [showToast])
+
   const handleExportCSV = useCallback(() => {
     if (chartData.length === 0) {
       showToast('No simulation data to export')
@@ -1895,6 +1953,14 @@ export default function App() {
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             Export CSV...
+          </div>
+          <div
+            onClick={() => { handleExportSTL(); setContextMenu(null) }}
+            style={ctxItemStyle}
+            onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            Export STL...
           </div>
         </div>
       </div>
