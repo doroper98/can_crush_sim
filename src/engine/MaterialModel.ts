@@ -195,6 +195,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.3,
     wallThickness: 1.0,
   }),
+  peek: createMaterial({
+    name: 'PEEK',
+    youngsModulus: 3600,
+    poissonRatio: 0.38,
+    yieldStress: 100,
+    uts: 170,
+    density: 1300,
+    hardeningExponent: 0.25,
+    wallThickness: 1.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */
