@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { MATERIALS } from '../engine/MaterialModel'
 
 interface MaterialTableProps {
@@ -19,6 +20,9 @@ const cols: { key: string; label: string; unit: string; fmt: (v: number) => stri
 ]
 
 export default function MaterialTable({ visible, onClose, onSelect, darkMode = false, currentMaterial }: MaterialTableProps) {
+  const [sortKey, setSortKey] = useState<string | null>(null)
+  const [sortAsc, setSortAsc] = useState(true)
+
   if (!visible) return null
 
   const bg = darkMode ? '#1e293b' : '#f0f4f8'
@@ -32,6 +36,43 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
     : '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)'
 
   const entries = Object.entries(MATERIALS)
+
+  // Sort entries
+  const sorted = sortKey
+    ? [...entries].sort((a, b) => {
+        let va: number, vb: number
+        if (sortKey === 'uts_ratio') {
+          va = a[1].uts / a[1].yieldStress
+          vb = b[1].uts / b[1].yieldStress
+        } else if (sortKey === 'name') {
+          return sortAsc
+            ? a[1].name.localeCompare(b[1].name)
+            : b[1].name.localeCompare(a[1].name)
+        } else {
+          va = (a[1] as unknown as Record<string, number>)[sortKey]
+          vb = (b[1] as unknown as Record<string, number>)[sortKey]
+        }
+        return sortAsc ? va - vb : vb - va
+      })
+    : entries
+
+  const handleSort = (key: string) => {
+    if (sortKey === key) setSortAsc(p => !p)
+    else { setSortKey(key); setSortAsc(true) }
+  }
+
+  const sortIndicator = (key: string) =>
+    sortKey === key ? (sortAsc ? ' ▲' : ' ▼') : ''
+
+  const thStyle = (align: 'left' | 'right' = 'right'): React.CSSProperties => ({
+    padding: align === 'left' ? '4px 8px' : '4px 6px',
+    textAlign: align,
+    color: textSec,
+    borderBottom: `1px solid ${borderColor}`,
+    fontWeight: 600,
+    cursor: 'pointer',
+    userSelect: 'none',
+  })
 
   return (
     <div
@@ -64,17 +105,17 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
           <thead>
             <tr>
-              <th style={{ padding: '4px 8px', textAlign: 'left', color: textSec, borderBottom: `1px solid ${borderColor}`, fontWeight: 600 }}>Material</th>
+              <th onClick={() => handleSort('name')} style={thStyle('left')}>Material{sortIndicator('name')}</th>
               {cols.map(c => (
-                <th key={c.key} style={{ padding: '4px 6px', textAlign: 'right', color: textSec, borderBottom: `1px solid ${borderColor}`, fontWeight: 600 }}>
-                  {c.label}{c.unit ? ` (${c.unit})` : ''}
+                <th key={c.key} onClick={() => handleSort(c.key)} style={thStyle()}>
+                  {c.label}{c.unit ? ` (${c.unit})` : ''}{sortIndicator(c.key)}
                 </th>
               ))}
-              <th style={{ padding: '4px 6px', textAlign: 'right', color: textSec, borderBottom: `1px solid ${borderColor}`, fontWeight: 600 }}>UTS/σy</th>
+              <th onClick={() => handleSort('uts_ratio')} style={thStyle()}>UTS/σy{sortIndicator('uts_ratio')}</th>
             </tr>
           </thead>
           <tbody>
-            {entries.map(([key, mat]) => {
+            {sorted.map(([key, mat]) => {
               const isCurrent = key === currentMaterial
               return (
                 <tr
@@ -101,7 +142,7 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
           </tbody>
         </table>
         <div style={{ marginTop: 14, textAlign: 'center', fontSize: 11, color: darkMode ? '#64748b' : '#94a3b8' }}>
-          Click row to select · Press I or click outside to close
+          Click header to sort · Click row to select · Press I or click outside to close
         </div>
       </div>
     </div>
