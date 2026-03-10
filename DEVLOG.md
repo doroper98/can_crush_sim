@@ -67,23 +67,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-063 기준, 26/03/11 08:10)
+### 누적 통계 (EXP-064 기준, 26/03/11 08:18)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | 63 |
-| 성공 커밋 | 63 |
+| 총 실험 수 | 64 |
+| 성공 커밋 | 64 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 27건, EXP-028~063) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 28건, EXP-028~064) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 809 kB (gzip 221 kB) |
+| 빌드 크기 | 810 kB (gzip 221 kB) |
 
 ---
 
@@ -192,6 +192,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
 | **판정** | ✅ COMMIT (아래) |
 | **비고** | 구조 해석 소프트웨어의 핵심 기능: 단면도(Section View). Y축 기준 클리핑으로 캔 내부 구조와 변형을 관찰 가능. |
+
+---
+
+### [EXP-064] 리얼타임 그림자
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 08:18:00 |
+| **Step** | - (렌더링 품질 개선) |
+| **관련 FR** | FR-10 |
+| **관련 NF** | - |
+| **변경 내용** | (1) WebGLRenderer: shadowMap.enabled=true, PCFSoftShadowMap 설정. (2) DirectionalLight: castShadow=true, shadow.mapSize 1024×1024, shadow camera 범위 ±150. (3) canMesh: castShadow+receiveShadow, rigidMesh: castShadow. (4) ShadowMaterial(opacity:0.15) 바닥 평면 추가 (PlaneGeometry 500×500, Y=0.01). 캔과 강체의 부드러운 바닥 그림자로 3D 공간감 향상. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | PCFSoftShadowMap로 부드러운 가장자리. ShadowMaterial은 그림자만 렌더링하므로 기존 그리드와 자연스럽게 공존. 1024 해상도는 성능/품질 균형점. |
 
 ---
 

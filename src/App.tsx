@@ -149,6 +149,8 @@ export default function App() {
     renderer.setSize(container.clientWidth, container.clientHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.localClippingEnabled = true
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
     container.appendChild(renderer.domElement)
     rendererRef.current = renderer
 
@@ -157,6 +159,15 @@ export default function App() {
     scene.add(ambientLight)
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.8)
     dirLight.position.set(100, 200, 150)
+    dirLight.castShadow = true
+    dirLight.shadow.mapSize.width = 1024
+    dirLight.shadow.mapSize.height = 1024
+    dirLight.shadow.camera.near = 1
+    dirLight.shadow.camera.far = 600
+    dirLight.shadow.camera.left = -150
+    dirLight.shadow.camera.right = 150
+    dirLight.shadow.camera.top = 150
+    dirLight.shadow.camera.bottom = -150
     scene.add(dirLight)
 
     // Grid
@@ -182,8 +193,21 @@ export default function App() {
       clipShadows: true,
     })
     const canMesh = new THREE.Mesh(canGeometry, canMaterial)
+    canMesh.castShadow = true
+    canMesh.receiveShadow = true
     scene.add(canMesh)
     canMeshRef.current = canMesh
+
+    // Shadow-receiving ground plane
+    const shadowPlane = new THREE.Mesh(
+      new THREE.PlaneGeometry(500, 500),
+      new THREE.ShadowMaterial({ opacity: 0.15 })
+    )
+    shadowPlane.rotation.x = -Math.PI / 2
+    shadowPlane.position.y = 0.01
+    shadowPlane.receiveShadow = true
+    shadowPlane.name = 'shadowPlane'
+    scene.add(shadowPlane)
 
     // Physics engine
     const physics = new MassSpringSystem(canGeometry)
@@ -241,6 +265,7 @@ export default function App() {
     })
     const rigidMesh = new THREE.Mesh(rigidGeometry, rigidMaterial)
     rigidMesh.position.set(0, canHeight + rigidHeight / 2 + 5, 0) // above can
+    rigidMesh.castShadow = true
     scene.add(rigidMesh)
     rigidBodyRef.current = rigidMesh
 
