@@ -44,6 +44,9 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
         if (sortKey === 'uts_ratio') {
           va = a[1].uts / a[1].yieldStress
           vb = b[1].uts / b[1].yieldStress
+        } else if (sortKey === 'specific_strength') {
+          va = a[1].yieldStress / a[1].density * 1000
+          vb = b[1].yieldStress / b[1].density * 1000
         } else if (sortKey === 'name') {
           return sortAsc
             ? a[1].name.localeCompare(b[1].name)
@@ -112,6 +115,7 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
                 </th>
               ))}
               <th onClick={() => handleSort('uts_ratio')} style={thStyle()}>UTS/σy{sortIndicator('uts_ratio')}</th>
+              <th onClick={() => handleSort('specific_strength')} style={thStyle()}>σy/ρ{sortIndicator('specific_strength')}</th>
             </tr>
           </thead>
           <tbody>
@@ -147,6 +151,14 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
                   <td style={{ padding: '4px 6px', textAlign: 'right', color: (mat.uts / mat.yieldStress) >= 2 ? '#10b981' : textSec, borderBottom: `1px solid ${borderColor}`, fontFamily: 'monospace', fontWeight: (mat.uts / mat.yieldStress) >= 2 ? 600 : 400 }}>
                     {(mat.uts / mat.yieldStress).toFixed(2)}
                   </td>
+                  {(() => {
+                    const ss = mat.yieldStress / mat.density * 1000 // kNm/kg
+                    return (
+                      <td style={{ padding: '4px 6px', textAlign: 'right', color: ss >= 150 ? '#10b981' : textSec, borderBottom: `1px solid ${borderColor}`, fontFamily: 'monospace', fontWeight: ss >= 150 ? 600 : 400 }}>
+                        {ss.toFixed(0)}
+                      </td>
+                    )
+                  })()}
                 </tr>
               )
             })}
