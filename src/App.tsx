@@ -1454,10 +1454,12 @@ export default function App() {
           display: 'flex',
           gap: 8,
           zIndex: 10,
-          background: 'rgba(240,244,248,0.95)',
+          background: darkMode ? 'rgba(30,41,59,0.95)' : 'rgba(240,244,248,0.95)',
           padding: '8px 16px',
           borderRadius: 16,
-          boxShadow: '8px 8px 16px rgba(163,177,198,0.6), -8px -8px 16px rgba(255,255,255,0.8)',
+          boxShadow: darkMode
+            ? '8px 8px 16px rgba(0,0,0,0.5), -8px -8px 16px rgba(51,65,85,0.4)'
+            : '8px 8px 16px rgba(163,177,198,0.6), -8px -8px 16px rgba(255,255,255,0.8)',
         }}>
           <button
             onClick={simState === 'running' ? handlePause : handlePlay}
@@ -1531,7 +1533,7 @@ export default function App() {
           <span style={{
             display: 'flex',
             alignItems: 'center',
-            color: '#64748b',
+            color: darkMode ? '#94a3b8' : '#64748b',
             fontSize: 12,
           }}>
             {measureMode ? (measurePt1Ref.current ? 'Click 2nd point' : 'Click 1st point') : isRecording ? 'Recording...' : simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating...' : 'Paused'}

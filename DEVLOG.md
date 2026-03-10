@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-078] SimControls 바 다크 모드
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 09:58:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | FR-13 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) App.tsx: SimControls 바 컨테이너 배경/boxShadow를 darkMode 조건부 렌더링. (2) 상태 텍스트(Ready/Simulating.../Paused) 색상 다크 대응 (#94a3b8). |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 하단 SimControls 바도 다크 모드에 대응하여 어두운 배경에서 일관된 경험 제공. |
+
+---
+
 ### [EXP-077] 패널 토글 + ColorBar 다크 모드
 
 | 항목 | 값 |
