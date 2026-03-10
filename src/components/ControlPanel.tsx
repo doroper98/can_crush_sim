@@ -1,16 +1,24 @@
 import { useState } from 'react'
 
+export type RigidBodyShape = 'cylinder' | 'box' | 'sphere' | 'cone'
+
 interface ControlPanelProps {
   canDiameter: number
   canHeight: number
   wallThickness: number
   force: number
   speed: number
+  rigidShape: RigidBodyShape
+  rigidRadius: number
+  rigidHeight: number
   onCanDiameterChange: (v: number) => void
   onCanHeightChange: (v: number) => void
   onWallThicknessChange: (v: number) => void
   onForceChange: (v: number) => void
   onSpeedChange: (v: number) => void
+  onRigidShapeChange: (v: RigidBodyShape) => void
+  onRigidRadiusChange: (v: number) => void
+  onRigidHeightChange: (v: number) => void
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -104,11 +112,17 @@ export default function ControlPanel({
   wallThickness,
   force,
   speed,
+  rigidShape,
+  rigidRadius,
+  rigidHeight,
   onCanDiameterChange,
   onCanHeightChange,
   onWallThicknessChange,
   onForceChange,
   onSpeedChange,
+  onRigidShapeChange,
+  onRigidRadiusChange,
+  onRigidHeightChange,
 }: ControlPanelProps) {
   return (
     <div
@@ -173,6 +187,51 @@ export default function ControlPanel({
           unit="mm/s"
           onChange={onSpeedChange}
         />
+      </Section>
+
+      <Section title="Rigid Body">
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>Shape</div>
+          <select
+            value={rigidShape}
+            onChange={e => onRigidShapeChange(e.target.value as RigidBodyShape)}
+            style={{
+              width: '100%',
+              padding: '4px 8px',
+              border: 'none',
+              borderRadius: 8,
+              background: '#e8ecf1',
+              fontSize: 12,
+              cursor: 'pointer',
+              boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.3), inset -2px -2px 4px rgba(255,255,255,0.7)',
+            }}
+          >
+            <option value="cylinder">Cylinder</option>
+            <option value="box">Box</option>
+            <option value="sphere">Sphere</option>
+            <option value="cone">Cone</option>
+          </select>
+        </div>
+        <Slider
+          label="Radius"
+          value={rigidRadius}
+          min={10}
+          max={100}
+          step={1}
+          unit="mm"
+          onChange={onRigidRadiusChange}
+        />
+        {rigidShape !== 'sphere' && (
+          <Slider
+            label="Height"
+            value={rigidHeight}
+            min={5}
+            max={100}
+            step={1}
+            unit="mm"
+            onChange={onRigidHeightChange}
+          />
+        )}
       </Section>
 
       <Section title="Material (Aluminum)" defaultOpen={false}>

@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { CatiaControls } from './viewer/CatiaControls'
 import { AxisHelper } from './viewer/AxisHelper'
 import ViewportToolbar from './components/ViewportToolbar'
-import ControlPanel from './components/ControlPanel'
+import ControlPanel, { type RigidBodyShape } from './components/ControlPanel'
 import { MassSpringSystem } from './engine/MassSpringSystem'
 import FileDropZone from './components/FileDropZone'
 import { loadSTL } from './cad/stlLoader'
@@ -29,6 +29,9 @@ export default function App() {
   const [wallThickness, setWallThickness] = useState(0.3)
   const [maxForce, setMaxForce] = useState(500)
   const [compressionSpeedParam, setCompressionSpeedParam] = useState(10)
+  const [rigidShape, setRigidShape] = useState<RigidBodyShape>('cylinder')
+  const [rigidRadius, setRigidRadius] = useState(40)
+  const [rigidHeight, setRigidHeight] = useState(20)
 
   useEffect(() => {
     const container = containerRef.current
@@ -393,11 +396,17 @@ export default function App() {
         wallThickness={wallThickness}
         force={maxForce}
         speed={compressionSpeedParam}
+        rigidShape={rigidShape}
+        rigidRadius={rigidRadius}
+        rigidHeight={rigidHeight}
         onCanDiameterChange={setCanDiameter}
         onCanHeightChange={setCanHeightParam}
         onWallThicknessChange={setWallThickness}
         onForceChange={setMaxForce}
         onSpeedChange={setCompressionSpeedParam}
+        onRigidShapeChange={setRigidShape}
+        onRigidRadiusChange={setRigidRadius}
+        onRigidHeightChange={setRigidHeight}
       />
     </div>
   )
