@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-082] Escape 키 모달/메뉴 닫기
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 10:25:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) App.tsx: onKeyDown에 Escape case 추가 — contextMenu, Help, About 닫기 + 측정 모드 취소. (2) KeyboardHelp.tsx: Esc 항목 추가 ("모달/메뉴 닫기, 측정 취소"). |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 817.35 kB (gzip 223.15 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 표준 UX 패턴 적용 — Escape로 현재 활성 오버레이 해제. |
+
+---
+
 ### [EXP-081] 3D 그리드 다크 모드 양색 처리
 
 | 항목 | 값 |

@@ -684,6 +684,15 @@ export default function App() {
             setShowGhost(prev => !prev)
           }
           break
+        case 'Escape':
+          setContextMenu(null)
+          setShowHelp(false)
+          setShowAbout(false)
+          if (measureModeRef.current) {
+            setMeasureMode(false)
+            measurePt1Ref.current = null
+          }
+          break
       }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
