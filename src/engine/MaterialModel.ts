@@ -135,6 +135,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.4,
     wallThickness: 0.3,
   }),
+  zinc_zamak3: createMaterial({
+    name: 'Zinc ZAMAK 3',
+    youngsModulus: 85500,
+    poissonRatio: 0.27,
+    yieldStress: 221,
+    uts: 283,
+    density: 6600,
+    hardeningExponent: 0.18,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
