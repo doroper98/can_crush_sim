@@ -10,7 +10,7 @@ import FileDropZone from './components/FileDropZone'
 import { loadSTL } from './cad/stlLoader'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 import { applyVertexColors, type ColormapType } from './viewer/colormap'
-import { MATERIALS, DEFAULT_MATERIAL } from './engine/MaterialModel'
+import { MATERIALS, DEFAULT_MATERIAL, MATERIAL_KEYS } from './engine/MaterialModel'
 import { CanvasRecorder } from './viewer/recorder'
 import StatusBar from './components/StatusBar'
 import KeyboardHelp from './components/KeyboardHelp'
@@ -806,6 +806,20 @@ export default function App() {
         case 'i': case 'I':
           if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
             setShowMaterialTable(prev => !prev)
+          }
+          break
+        case '[':
+        case ']':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            setMaterialKey(prev => {
+              const idx = MATERIAL_KEYS.indexOf(prev)
+              const next = e.key === ']'
+                ? (idx + 1) % MATERIAL_KEYS.length
+                : (idx - 1 + MATERIAL_KEYS.length) % MATERIAL_KEYS.length
+              const nextKey = MATERIAL_KEYS[next]
+              showToastRef.current(MATERIALS[nextKey].name)
+              return nextKey
+            })
           }
           break
       }
