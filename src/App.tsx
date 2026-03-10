@@ -957,6 +957,7 @@ export default function App() {
     setMatYieldStress(mat.yieldStress)
     setMatUTS(mat.uts)
     setMatHardeningN(mat.hardeningExponent)
+    setWallThickness(mat.wallThickness)
   }, [materialKey])
 
   // Keep refs in sync
