@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import LoadDisplacementChart from './LoadDisplacementChart'
 
 export type RigidBodyShape = 'cylinder' | 'box' | 'sphere' | 'cone'
 export type DisplayMode = 'none' | 'stress' | 'displacement' | 'plastic'
@@ -37,6 +38,7 @@ interface ControlPanelProps {
   colormapType: ColormapName
   onDisplayModeChange: (v: DisplayMode) => void
   onColormapTypeChange: (v: ColormapName) => void
+  chartData: { displacement: number; load: number }[]
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -157,6 +159,7 @@ export default function ControlPanel({
   colormapType,
   onDisplayModeChange,
   onColormapTypeChange,
+  chartData,
 }: ControlPanelProps) {
   return (
     <div
@@ -374,6 +377,10 @@ export default function ControlPanel({
             </select>
           </div>
         )}
+      </Section>
+
+      <Section title="Load-Displacement Chart">
+        <LoadDisplacementChart data={chartData} width={256} height={160} />
       </Section>
 
       <Section title="Material (Aluminum)" defaultOpen={false}>

@@ -53,6 +53,8 @@ export default function App() {
   const [colorBarMin, setColorBarMin] = useState(0)
   const [colorBarMax, setColorBarMax] = useState(1)
   const colorBarUpdateCounter = useRef(0)
+  const [chartData, setChartData] = useState<{ displacement: number; load: number }[]>([])
+  const chartDataRef = useRef<{ displacement: number; load: number }[]>([])
 
   useEffect(() => {
     const container = containerRef.current
@@ -212,6 +214,26 @@ export default function App() {
 
           // Sync physics → geometry
           physics.syncToGeometry(canGeometry)
+
+          // Record load-displacement data (every 5 frames)
+          if (colorBarUpdateCounter.current % 5 === 0) {
+            // Estimate reaction force from stress at top nodes
+            const stresses = physics.getStressPerNode()
+            let avgTopStress = 0
+            let topCount = 0
+            for (let ni = 0; ni < physics.nodeCount; ni++) {
+              if (physics.positions[ni * 3 + 1] > canHeight - displacement - 5) {
+                avgTopStress += stresses[ni]
+                topCount++
+              }
+            }
+            if (topCount > 0) avgTopStress /= topCount
+            // F ≈ σ_avg * A_cross (cross section area ≈ π*r*t)
+            const crossArea = Math.PI * (canRadius) * 0.3 // mm²
+            const estimatedForce = avgTopStress * crossArea * 0.001 // N (rough)
+            chartDataRef.current = [...chartDataRef.current, { displacement, load: estimatedForce }]
+            setChartData([...chartDataRef.current])
+          }
 
           // Apply colormap if display mode is active
           const dm = displayModeRef.current
@@ -425,6 +447,9 @@ export default function App() {
     simRunningRef.current = false
     simTimeRef.current = 0
     setSimState('idle')
+    // Clear chart data
+    chartDataRef.current = []
+    setChartData([])
     // Reset rigid body position
     if (rigidBodyRef.current) {
       rigidBodyRef.current.position.set(0, 120 + 10 + 5, 0)
@@ -598,6 +623,7 @@ export default function App() {
         colormapType={colormapType}
         onDisplayModeChange={setDisplayMode}
         onColormapTypeChange={setColormapType}
+        chartData={chartData}
       />
     </div>
   )
