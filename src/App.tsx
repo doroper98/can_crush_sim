@@ -1832,6 +1832,7 @@ export default function App() {
             <div style={{ fontWeight: 600, color: '#93c5fd', marginBottom: 2 }}>Simulation</div>
             <div>t: {simTime.toFixed(3)} s</div>
             <div>d: {simDisplacement.toFixed(1)} mm</div>
+            {chartData.length > 0 && <div>F: {chartData[chartData.length - 1].load.toFixed(0)} N</div>}
             <div>σ_max: <span style={{ color: resultSummary.maxStress > matUTS ? '#ef4444' : '#10b981' }}>{resultSummary.maxStress.toFixed(0)}</span> MPa</div>
             {/* UTS utilization bar */}
             {matUTS > 0 && (() => {
