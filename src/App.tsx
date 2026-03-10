@@ -1326,6 +1326,11 @@ export default function App() {
       cursorWorld={cursorWorld}
       simTime={simTime}
       displacement={simDisplacement}
+      displayInfo={displayMode !== 'none' ? {
+        mode: displayMode === 'stress' ? 'σ (MPa)' : displayMode === 'displacement' ? 'd (mm)' : 'ε_p',
+        min: colorBarMin,
+        max: colorBarMax,
+      } : null}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} />
     </div>

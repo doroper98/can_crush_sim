@@ -5,9 +5,10 @@ interface StatusBarProps {
   cursorWorld?: { x: number; y: number; z: number } | null
   simTime?: number
   displacement?: number
+  displayInfo?: { mode: string; min: number; max: number } | null
 }
 
-export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTime = 0, displacement = 0 }: StatusBarProps) {
+export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTime = 0, displacement = 0, displayInfo }: StatusBarProps) {
   const stateLabel = simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating' : 'Paused'
   const stateColor = simState === 'idle' ? '#64748b' : simState === 'running' ? '#10b981' : '#f59e0b'
 
@@ -44,6 +45,13 @@ export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTi
       {/* Sim Info */}
       {simState !== 'idle' && (
         <span>t: {simTime.toFixed(3)}s  d: {displacement.toFixed(1)}mm</span>
+      )}
+
+      {/* Display Mode Info */}
+      {displayInfo && (
+        <span style={{ color: '#3b82f6' }}>
+          {displayInfo.mode}: {displayInfo.min.toFixed(1)}~{displayInfo.max.toFixed(1)}
+        </span>
       )}
 
       {/* Node Count */}
