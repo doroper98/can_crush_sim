@@ -67,23 +67,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-052 기준, 26/03/11 06:42)
+### 누적 통계 (EXP-053 기준, 26/03/11 06:50)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | 52 |
-| 성공 커밋 | 52 |
+| 총 실험 수 | 53 |
+| 성공 커밋 | 53 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 16건, EXP-028~052) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 17건, EXP-028~053) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 792 kB (gzip 216 kB) |
+| 빌드 크기 | 794 kB (gzip 217 kB) |
 
 ---
 
@@ -175,6 +175,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 > 에이전트는 여기 아래에 로그를 추가한다.
 > 가장 최근 항목이 맨 위.
+
+---
+
+### [EXP-053] 단면 클리핑 평면
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 06:50:00 |
+| **Step** | - (시각화 보강) |
+| **관련 FR** | FR-11 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) App.tsx: clipEnabled/clipY 상태 + clipPlaneRef (THREE.Plane Y방향) 추가. renderer.localClippingEnabled=true 설정. canMaterial에 clippingPlanes 배열 할당. (2) useEffect로 clipEnabled 토글 시 clippingPlanes 배열 교체, clipY 변경 시 plane.constant 갱신. (3) ControlPanel: Visualization 섹션에 Section Clip 체크박스 + Clip Y 슬라이더 (0~200mm) 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 구조 해석 소프트웨어의 핵심 기능: 단면도(Section View). Y축 기준 클리핑으로 캔 내부 구조와 변형을 관찰 가능. |
 
 ---
 

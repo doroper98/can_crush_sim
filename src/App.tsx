@@ -107,6 +107,9 @@ export default function App() {
   const [pickedNode, setPickedNode] = useState<{
     x: number; y: number; stress: number; disp: number; plastic: number; nodeIdx: number
   } | null>(null)
+  const [clipEnabled, setClipEnabled] = useState(false)
+  const [clipY, setClipY] = useState(60) // clipping plane Y position (mm)
+  const clipPlaneRef = useRef(new THREE.Plane(new THREE.Vector3(0, -1, 0), 60))
 
   useEffect(() => {
     const container = containerRef.current
@@ -129,6 +132,7 @@ export default function App() {
     const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true })
     renderer.setSize(container.clientWidth, container.clientHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.localClippingEnabled = true
     container.appendChild(renderer.domElement)
     rendererRef.current = renderer
 
@@ -158,6 +162,8 @@ export default function App() {
       roughness: 0.3,
       side: THREE.DoubleSide,
       vertexColors: false,
+      clippingPlanes: [clipPlaneRef.current],
+      clipShadows: true,
     })
     const canMesh = new THREE.Mesh(canGeometry, canMaterial)
     scene.add(canMesh)
@@ -635,6 +641,23 @@ export default function App() {
   useEffect(() => { matHardeningNRef.current = matHardeningN }, [matHardeningN])
   useEffect(() => { deformScaleRef.current = deformScale }, [deformScale])
 
+  // Sync clipping plane
+  useEffect(() => {
+    clipPlaneRef.current.constant = clipY
+  }, [clipY])
+
+  useEffect(() => {
+    const mesh = canMeshRef.current
+    if (!mesh) return
+    const mat = mesh.material as THREE.MeshStandardMaterial
+    if (clipEnabled) {
+      mat.clippingPlanes = [clipPlaneRef.current]
+    } else {
+      mat.clippingPlanes = []
+    }
+    mat.needsUpdate = true
+  }, [clipEnabled])
+
   // Rebuild can when parameters change (idle only, debounced 200ms)
   const rebuildTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
@@ -1097,6 +1120,10 @@ export default function App() {
         onMatHardeningNChange={setMatHardeningN}
         deformScale={deformScale}
         onDeformScaleChange={setDeformScale}
+        clipEnabled={clipEnabled}
+        clipY={clipY}
+        onClipEnabledChange={setClipEnabled}
+        onClipYChange={setClipY}
       />
     </div>
     <StatusBar

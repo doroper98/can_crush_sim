@@ -57,6 +57,10 @@ interface ControlPanelProps {
   onMatHardeningNChange: (v: number) => void
   deformScale: number
   onDeformScaleChange: (v: number) => void
+  clipEnabled: boolean
+  clipY: number
+  onClipEnabledChange: (v: boolean) => void
+  onClipYChange: (v: number) => void
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -196,6 +200,10 @@ export default function ControlPanel({
   onMatHardeningNChange,
   deformScale,
   onDeformScaleChange,
+  clipEnabled,
+  clipY,
+  onClipEnabledChange,
+  onClipYChange,
 }: ControlPanelProps) {
   return (
     <div
@@ -451,6 +459,27 @@ export default function ControlPanel({
           unit="×"
           onChange={onDeformScaleChange}
         />
+        <div style={{ marginBottom: 8 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#64748b', cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={clipEnabled}
+              onChange={e => onClipEnabledChange(e.target.checked)}
+            />
+            Section Clip (Y)
+          </label>
+        </div>
+        {clipEnabled && (
+          <Slider
+            label="Clip Y"
+            value={clipY}
+            min={0}
+            max={200}
+            step={1}
+            unit="mm"
+            onChange={onClipYChange}
+          />
+        )}
       </Section>
 
       <Section title="Load-Displacement Chart">
