@@ -1193,6 +1193,45 @@ export default function App() {
           unit={displayMode === 'stress' ? 'MPa' : displayMode === 'displacement' ? 'mm' : ''}
           visible={displayMode !== 'none'}
         />
+        {/* Compression progress bar */}
+        {simState !== 'idle' && (
+          <div style={{
+            position: 'absolute',
+            bottom: 60,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 280,
+            zIndex: 10,
+          }}>
+            <div style={{
+              height: 6,
+              borderRadius: 3,
+              background: 'rgba(163,177,198,0.3)',
+              boxShadow: 'inset 2px 2px 4px rgba(163,177,198,0.4), inset -2px -2px 4px rgba(255,255,255,0.9)',
+              overflow: 'hidden',
+            }}>
+              <div style={{
+                height: '100%',
+                borderRadius: 3,
+                width: `${Math.min(100, (simDisplacement / (canHeightParam * 0.67)) * 100)}%`,
+                background: 'linear-gradient(90deg, #10b981, #3b82f6)',
+                transition: 'width 0.2s',
+              }} />
+            </div>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: 9,
+              color: '#64748b',
+              marginTop: 2,
+              fontFamily: 'monospace',
+            }}>
+              <span>{simDisplacement.toFixed(1)} mm</span>
+              <span>{Math.min(100, (simDisplacement / (canHeightParam * 0.67)) * 100).toFixed(0)}%</span>
+              <span>{(canHeightParam * 0.67).toFixed(0)} mm</span>
+            </div>
+          </div>
+        )}
         {/* Sim controls */}
         <div style={{
           position: 'absolute',
