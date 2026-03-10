@@ -67,19 +67,19 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-050 기준, 26/03/11 06:28)
+### 누적 통계 (EXP-051 기준, 26/03/11 06:35)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | 50 |
-| 성공 커밋 | 50 |
+| 총 실험 수 | 51 |
+| 성공 커밋 | 51 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 14건, EXP-028~050) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 15건, EXP-028~051) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
@@ -175,6 +175,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 > 에이전트는 여기 아래에 로그를 추가한다.
 > 가장 최근 항목이 맨 위.
+
+---
+
+### [EXP-051] 변형 확대 배율 슬라이더
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 06:35:00 |
+| **Step** | - (시각화 보강) |
+| **관련 FR** | FR-11 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) App.tsx: deformScale 상태(기본 1.0) + deformScaleRef + useEffect 동기화 추가. (2) 애니메이션 루프: physics.syncToGeometry 후 deformScale≠1.0이면 originalPositions와 현재 위치를 블렌딩. displayPos = origPos + (curPos - origPos) * scale. 인라인 for 루프로 GC 없이 처리. (3) ControlPanel: Visualization 섹션에 Deform Scale 슬라이더 추가 (0.1~10×, step 0.1). deformScale/onDeformScaleChange props 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 미세 변형을 시각적으로 확대하여 관찰 가능. 구조 해석 소프트웨어의 핵심 기능. scale=1이면 추가 연산 없음(분기 최적화). |
 
 ---
 

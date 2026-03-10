@@ -55,6 +55,8 @@ interface ControlPanelProps {
   onMatYieldStressChange: (v: number) => void
   onMatUTSChange: (v: number) => void
   onMatHardeningNChange: (v: number) => void
+  deformScale: number
+  onDeformScaleChange: (v: number) => void
 }
 
 function Section({ title, children, defaultOpen = true }: {
@@ -192,6 +194,8 @@ export default function ControlPanel({
   onMatYieldStressChange,
   onMatUTSChange,
   onMatHardeningNChange,
+  deformScale,
+  onDeformScaleChange,
 }: ControlPanelProps) {
   return (
     <div
@@ -438,6 +442,15 @@ export default function ControlPanel({
             </select>
           </div>
         )}
+        <Slider
+          label="Deform Scale"
+          value={deformScale}
+          min={0.1}
+          max={10.0}
+          step={0.1}
+          unit="×"
+          onChange={onDeformScaleChange}
+        />
       </Section>
 
       <Section title="Load-Displacement Chart">

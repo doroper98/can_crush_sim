@@ -100,6 +100,8 @@ export default function App() {
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
   const [cursorWorld, setCursorWorld] = useState<{ x: number; y: number; z: number } | null>(null)
   const [showHelp, setShowHelp] = useState(false)
+  const [deformScale, setDeformScale] = useState(1.0)
+  const deformScaleRef = useRef(1.0)
   const [simTime, setSimTime] = useState(0)
   const [simDisplacement, setSimDisplacement] = useState(0)
 
@@ -297,6 +299,18 @@ export default function App() {
 
           // Sync physics → geometry
           physics.syncToGeometry(geom)
+
+          // Apply deformation magnification
+          const curDeformScale = deformScaleRef.current
+          if (curDeformScale !== 1.0 && originalPositionsRef.current) {
+            const pos = geom.attributes.position.array as Float32Array
+            const orig = originalPositionsRef.current
+            const len = pos.length
+            for (let i = 0; i < len; i++) {
+              pos[i] = orig[i] + (pos[i] - orig[i]) * curDeformScale
+            }
+            geom.attributes.position.needsUpdate = true
+          }
 
           // Estimate current load force
           const stresses = physics.getStressPerNode()
@@ -583,6 +597,7 @@ export default function App() {
   useEffect(() => { wallThicknessRef.current = wallThickness }, [wallThickness])
   useEffect(() => { matYieldStressRef.current = matYieldStress }, [matYieldStress])
   useEffect(() => { matHardeningNRef.current = matHardeningN }, [matHardeningN])
+  useEffect(() => { deformScaleRef.current = deformScale }, [deformScale])
 
   // Rebuild can when parameters change (idle only, debounced 200ms)
   const rebuildTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -1021,6 +1036,8 @@ export default function App() {
         onMatYieldStressChange={setMatYieldStress}
         onMatUTSChange={setMatUTS}
         onMatHardeningNChange={setMatHardeningN}
+        deformScale={deformScale}
+        onDeformScaleChange={setDeformScale}
       />
     </div>
     <StatusBar
