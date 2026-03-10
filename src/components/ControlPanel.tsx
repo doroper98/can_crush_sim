@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import LoadDisplacementChart from './LoadDisplacementChart'
+import EnergyChart from './EnergyChart'
 import { MATERIALS, MATERIAL_KEYS } from '../engine/MaterialModel'
 
 export type RigidBodyShape = 'cylinder' | 'box' | 'sphere' | 'cone'
@@ -535,6 +536,10 @@ export default function ControlPanel({
             Export CSV
           </button>
         )}
+      </Section>
+
+      <Section title="Energy-Displacement" defaultOpen={false} theme={theme}>
+        <EnergyChart data={chartData} width={256} height={120} darkMode={darkMode} />
       </Section>
 
       <Section title="Material" defaultOpen={false} theme={theme}>
