@@ -1356,6 +1356,7 @@ export default function App() {
         rigidPosition: { x: rigidPosX, y: rigidPosY, z: rigidPosZ },
         rigidRotation: { x: rigidRotX, y: rigidRotY, z: rigidRotZ },
         materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN,
+        maxCompression,
       },
       display: { displayMode, colormapType, deformScale, clipEnabled, clipY, darkMode },
       results: resultSummary,
@@ -1372,7 +1373,7 @@ export default function App() {
   }, [showToast, canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, controlMode,
       rigidShape, rigidRadius, rigidHeight, rigidPosX, rigidPosY, rigidPosZ,
       rigidRotX, rigidRotY, rigidRotZ, materialKey, matYoungsModulus, matYieldStress,
-      matUTS, matHardeningN, displayMode, colormapType, deformScale, clipEnabled, clipY,
+      matUTS, matHardeningN, maxCompression, displayMode, colormapType, deformScale, clipEnabled, clipY,
       darkMode, resultSummary, chartData])
 
   const handleExportSTL = useCallback(() => {
@@ -1483,6 +1484,7 @@ export default function App() {
             if (p.matYieldStress != null) setMatYieldStress(p.matYieldStress)
             if (p.matUTS != null) setMatUTS(p.matUTS)
             if (p.matHardeningN != null) setMatHardeningN(p.matHardeningN)
+            if (p.maxCompression != null) setMaxCompression(p.maxCompression)
           }
           const d = snap.display
           if (d) {

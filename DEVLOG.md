@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-098] JSON Export/Import maxCompression 포함
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 11:45:00 |
+| **Step** | - (기능 개선) |
+| **관련 FR** | - |
+| **관련 NF** | - |
+| **변경 내용** | (1) JSON export 스냅샷에 maxCompression 필드 포함. (2) JSON import 시 maxCompression null 가드 로드. (3) deps 배열에 maxCompression 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 822.35 kB (gzip 224.48 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | JSON 내보내기/가져오기에 새 파라미터 완전 반영. |
+
+---
+
 ### [EXP-097] 프리셋 저장 항목 확장
 
 | 항목 | 값 |
