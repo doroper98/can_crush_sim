@@ -1365,10 +1365,12 @@ export default function App() {
     input.click()
   }, [])
 
+  const ctxHoverBg = darkMode ? '#334155' : '#e2e8f0'
   const ctxItemStyle: React.CSSProperties = {
     padding: '6px 16px',
     cursor: 'pointer',
     transition: 'background 0.1s',
+    color: darkMode ? '#e2e8f0' : '#0f172a',
   }
 
   return (
@@ -1689,7 +1691,7 @@ export default function App() {
       } : null}
       darkMode={darkMode}
     />
-    <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} />
+    <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} darkMode={darkMode} />
     {/* Toast notifications */}
     <div style={{ position: 'fixed', bottom: 40, left: '50%', transform: 'translateX(-50%)', zIndex: 3000, display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
       {toasts.map(t => (
@@ -1719,21 +1721,23 @@ export default function App() {
             position: 'fixed',
             left: contextMenu.x,
             top: contextMenu.y,
-            background: '#f0f4f8',
+            background: darkMode ? '#1e293b' : '#f0f4f8',
             borderRadius: 12,
             padding: '6px 0',
             minWidth: 180,
-            boxShadow: '8px 8px 16px rgba(163,177,198,0.6), -8px -8px 16px rgba(255,255,255,0.8)',
+            boxShadow: darkMode
+              ? '8px 8px 16px rgba(0,0,0,0.5), -8px -8px 16px rgba(51,65,85,0.4)'
+              : '8px 8px 16px rgba(163,177,198,0.6), -8px -8px 16px rgba(255,255,255,0.8)',
             zIndex: 1501,
             fontSize: 12,
-            color: '#0f172a',
+            color: darkMode ? '#e2e8f0' : '#0f172a',
           }}
         >
           {contextMenu.target === 'can' && (
             <div
               onClick={() => { setDisplayMode(displayMode === 'stress' ? 'none' : 'stress'); setContextMenu(null) }}
               style={ctxItemStyle}
-              onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+              onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               {displayMode === 'stress' ? 'Hide Stress Map' : 'Show Stress Map'}
@@ -1743,7 +1747,7 @@ export default function App() {
             <div
               onClick={() => { setClipEnabled(!clipEnabled); setContextMenu(null) }}
               style={ctxItemStyle}
-              onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+              onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               {clipEnabled ? 'Disable Section Clip' : 'Enable Section Clip'}
@@ -1753,7 +1757,7 @@ export default function App() {
             <div
               onClick={() => { setShowGhost(!showGhost); setContextMenu(null) }}
               style={ctxItemStyle}
-              onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+              onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               {showGhost ? 'Hide Original Shape (O)' : 'Show Original Shape (O)'}
@@ -1763,19 +1767,19 @@ export default function App() {
             <div
               onClick={() => { setShowLoadArrow(!showLoadArrow); setContextMenu(null) }}
               style={ctxItemStyle}
-              onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+              onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               {showLoadArrow ? 'Hide Load Arrow' : 'Show Load Arrow'}
             </div>
           )}
           {contextMenu.target !== 'viewport' && (
-            <div style={{ height: 1, background: '#d0d5dd', margin: '4px 8px' }} />
+            <div style={{ height: 1, background: darkMode ? '#475569' : '#d0d5dd', margin: '4px 8px' }} />
           )}
           <div
             onClick={() => { handleFitAll(); setContextMenu(null) }}
             style={ctxItemStyle}
-            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             Fit All (F)
@@ -1783,7 +1787,7 @@ export default function App() {
           <div
             onClick={() => { setIsWireframe(prev => !prev); setContextMenu(null) }}
             style={ctxItemStyle}
-            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             {isWireframe ? 'Solid Mode (W)' : 'Wireframe (W)'}
@@ -1791,7 +1795,7 @@ export default function App() {
           <div
             onClick={() => { setShowGrid(prev => !prev); setContextMenu(null) }}
             style={ctxItemStyle}
-            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             {showGrid ? 'Hide Grid (G)' : 'Show Grid (G)'}
@@ -1799,16 +1803,16 @@ export default function App() {
           <div
             onClick={() => { setDarkMode(prev => !prev); setContextMenu(null) }}
             style={ctxItemStyle}
-            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             {darkMode ? 'Light Mode (D)' : 'Dark Mode (D)'}
           </div>
-          <div style={{ height: 1, background: '#d0d5dd', margin: '4px 8px' }} />
+          <div style={{ height: 1, background: darkMode ? '#475569' : '#d0d5dd', margin: '4px 8px' }} />
           <div
             onClick={() => { handleScreenshot(); setContextMenu(null) }}
             style={ctxItemStyle}
-            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             Screenshot (S)
@@ -1816,16 +1820,16 @@ export default function App() {
           <div
             onClick={() => { handleReset(); setContextMenu(null) }}
             style={ctxItemStyle}
-            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             Reset Simulation
           </div>
-          <div style={{ height: 1, background: '#d0d5dd', margin: '4px 8px' }} />
+          <div style={{ height: 1, background: darkMode ? '#475569' : '#d0d5dd', margin: '4px 8px' }} />
           <div
             onClick={() => { handleExportJSON(); setContextMenu(null) }}
             style={ctxItemStyle}
-            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             Export JSON...
@@ -1833,7 +1837,7 @@ export default function App() {
           <div
             onClick={() => { handleImportJSON(); setContextMenu(null) }}
             style={ctxItemStyle}
-            onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+            onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             Import JSON...
@@ -1852,16 +1856,18 @@ export default function App() {
         <div
           onClick={e => e.stopPropagation()}
           style={{
-            background: '#f0f4f8', borderRadius: 20, padding: '28px 36px', maxWidth: 480,
-            boxShadow: '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)',
+            background: darkMode ? '#1e293b' : '#f0f4f8', borderRadius: 20, padding: '28px 36px', maxWidth: 480,
+            boxShadow: darkMode
+              ? '12px 12px 24px rgba(0,0,0,0.5), -12px -12px 24px rgba(51,65,85,0.4)'
+              : '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)',
           }}
         >
-          <h2 style={{ margin: '0 0 12px', fontSize: 18, color: '#0f172a' }}>Can Crush Simulator</h2>
-          <p style={{ fontSize: 12, color: '#475569', lineHeight: 1.6, margin: '0 0 12px' }}>
+          <h2 style={{ margin: '0 0 12px', fontSize: 18, color: darkMode ? '#e2e8f0' : '#0f172a' }}>Can Crush Simulator</h2>
+          <p style={{ fontSize: 12, color: darkMode ? '#94a3b8' : '#475569', lineHeight: 1.6, margin: '0 0 12px' }}>
             Real-time elasto-plastic aluminum can crushing simulation with Mass-Spring FEM,
             Ludwik-Hollomon hardening, and Von Mises stress analysis.
           </p>
-          <div style={{ fontSize: 11, color: '#64748b', lineHeight: 1.8 }}>
+          <div style={{ fontSize: 11, color: darkMode ? '#94a3b8' : '#64748b', lineHeight: 1.8 }}>
             <div><strong>Play/Pause/Reset</strong> — Start or stop the simulation</div>
             <div><strong>W</strong> — Wireframe toggle</div>
             <div><strong>M</strong> — Measurement tool</div>

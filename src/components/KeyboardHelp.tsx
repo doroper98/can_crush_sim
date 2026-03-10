@@ -1,6 +1,7 @@
 interface KeyboardHelpProps {
   visible: boolean
   onClose: () => void
+  darkMode?: boolean
 }
 
 const shortcuts = [
@@ -30,8 +31,16 @@ const mouseControls = [
   { input: '좌클릭', desc: '객체 선택' },
 ]
 
-export default function KeyboardHelp({ visible, onClose }: KeyboardHelpProps) {
+export default function KeyboardHelp({ visible, onClose, darkMode = false }: KeyboardHelpProps) {
   if (!visible) return null
+
+  const bg = darkMode ? '#1e293b' : '#f0f4f8'
+  const text = darkMode ? '#e2e8f0' : '#0f172a'
+  const textSec = darkMode ? '#94a3b8' : '#475569'
+  const mouseLabelColor = darkMode ? '#94a3b8' : '#64748b'
+  const shadow = darkMode
+    ? '12px 12px 24px rgba(0,0,0,0.5), -12px -12px 24px rgba(51,65,85,0.4)'
+    : '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)'
 
   return (
     <div
@@ -49,36 +58,36 @@ export default function KeyboardHelp({ visible, onClose }: KeyboardHelpProps) {
       <div
         onClick={e => e.stopPropagation()}
         style={{
-          background: '#f0f4f8',
+          background: bg,
           borderRadius: 20,
           padding: '24px 32px',
           maxWidth: 420,
-          boxShadow: '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)',
+          boxShadow: shadow,
         }}
       >
-        <h3 style={{ margin: '0 0 16px', fontSize: 15, color: '#0f172a' }}>Keyboard Shortcuts</h3>
+        <h3 style={{ margin: '0 0 16px', fontSize: 15, color: text }}>Keyboard Shortcuts</h3>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
           <tbody>
             {shortcuts.map(s => (
               <tr key={s.key}>
                 <td style={{ padding: '3px 8px 3px 0', fontWeight: 600, color: '#3b82f6', whiteSpace: 'nowrap' }}>{s.key}</td>
-                <td style={{ padding: '3px 0', color: '#475569' }}>{s.desc}</td>
+                <td style={{ padding: '3px 0', color: textSec }}>{s.desc}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <h4 style={{ margin: '14px 0 8px', fontSize: 13, color: '#0f172a' }}>Mouse Controls</h4>
+        <h4 style={{ margin: '14px 0 8px', fontSize: 13, color: text }}>Mouse Controls</h4>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
           <tbody>
             {mouseControls.map(m => (
               <tr key={m.input}>
-                <td style={{ padding: '3px 8px 3px 0', fontWeight: 600, color: '#64748b', whiteSpace: 'nowrap' }}>{m.input}</td>
-                <td style={{ padding: '3px 0', color: '#475569' }}>{m.desc}</td>
+                <td style={{ padding: '3px 8px 3px 0', fontWeight: 600, color: mouseLabelColor, whiteSpace: 'nowrap' }}>{m.input}</td>
+                <td style={{ padding: '3px 0', color: textSec }}>{m.desc}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div style={{ marginTop: 14, textAlign: 'center', fontSize: 11, color: '#94a3b8' }}>
+        <div style={{ marginTop: 14, textAlign: 'center', fontSize: 11, color: darkMode ? '#64748b' : '#94a3b8' }}>
           Press ? or click outside to close
         </div>
       </div>
