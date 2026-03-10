@@ -178,6 +178,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-043] 좌클릭 객체 선택 하이라이트
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 05:35:00 |
+| **Step** | - (FR-15 보완) |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | App.tsx: container에 click 이벤트 리스너 추가. Raycaster로 canMesh/rigidMesh 교차 판정. 클릭된 객체의 material.emissive를 0x222244로 설정 (선택 하이라이트). 이전 선택은 emissive 0x000000으로 해제. 강체 클릭 시 TransformControls 부착. cleanup에서 click 리스너 제거. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | GOAL.md §5.2 "좌클릭: 객체 선택" 요구사항 충족. emissive 하이라이트는 vertexColors 모드에서도 동작함. |
+
+---
+
 ### [EXP-042] 응력 UTS 동적 + 커서 스로틀
 
 | 항목 | 값 |

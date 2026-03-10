@@ -459,11 +459,40 @@ export default function App() {
     }
     container.addEventListener('mousemove', onMouseMove)
 
+    // Left-click object selection
+    const selectables = [canMesh, rigidMesh]
+    const onClickSelect = (e: MouseEvent) => {
+      if (e.button !== 0) return
+      const rect = container.getBoundingClientRect()
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+      raycaster.setFromCamera(mouse, camera)
+      const hits = raycaster.intersectObjects(selectables, false)
+      // Clear previous selection highlight
+      for (const obj of selectables) {
+        const mat = obj.material as THREE.MeshStandardMaterial
+        mat.emissive.set(0x000000)
+      }
+      if (hits.length > 0) {
+        const selected = hits[0].object as THREE.Mesh
+        const mat = selected.material as THREE.MeshStandardMaterial
+        mat.emissive.set(0x222244)
+        // Attach gizmo to rigid body if selected
+        if (selected === rigidMesh) {
+          transformControls.attach(rigidMesh)
+        }
+      } else {
+        // Deselect: detach gizmo is optional — keep attached to rigid body
+      }
+    }
+    container.addEventListener('click', onClickSelect)
+
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', onResize)
       window.removeEventListener('keydown', onKeyDown)
       container.removeEventListener('mousemove', onMouseMove)
+      container.removeEventListener('click', onClickSelect)
       transformControls.detach()
       transformControls.dispose()
       controls.dispose()
