@@ -50,6 +50,7 @@ export default function App() {
   const wallThicknessRef = useRef(0.3)
   const matYieldStressRef = useRef(276)
   const matHardeningNRef = useRef(0.2)
+  const maxCompressionRef = useRef(67)
 
   const [toasts, setToasts] = useState<{ id: number; msg: string }[]>([])
   const toastId = useRef(0)
@@ -132,6 +133,7 @@ export default function App() {
   const ghostMeshRef = useRef<THREE.LineSegments | null>(null)
   const [autoStopStress, setAutoStopStress] = useState(true)
   const autoStopStressRef = useRef(true)
+  const [maxCompression, setMaxCompression] = useState(67)
   const [measureMode, setMeasureMode] = useState(false)
   const measureModeRef = useRef(false)
   const [contextMenu, setContextMenu] = useState<{
@@ -370,7 +372,7 @@ export default function App() {
       const curRigidHeight = rigidHeightRef.current
       const curControlMode = controlModeRef.current
       const curMaxForce = maxForceRef.current
-      const maxDisplacement = curCanHeight * 0.67 // compress up to ~67% of can height
+      const maxDisplacement = curCanHeight * (maxCompressionRef.current / 100)
       const physics = physicsRef.current!
       const geom = canGeometryRef.current!
 
@@ -977,6 +979,7 @@ export default function App() {
 
   useEffect(() => { measureModeRef.current = measureMode }, [measureMode])
   useEffect(() => { autoStopStressRef.current = autoStopStress }, [autoStopStress])
+  useEffect(() => { maxCompressionRef.current = maxCompression }, [maxCompression])
 
   // Sync clipping plane
   useEffect(() => {
@@ -1546,7 +1549,7 @@ export default function App() {
               <div style={{
                 height: '100%',
                 borderRadius: 3,
-                width: `${Math.min(100, (simDisplacement / (canHeightParam * 0.67)) * 100)}%`,
+                width: `${Math.min(100, (simDisplacement / (canHeightParam * maxCompression / 100)) * 100)}%`,
                 background: 'linear-gradient(90deg, #10b981, #3b82f6)',
                 transition: 'width 0.2s',
               }} />
@@ -1560,8 +1563,8 @@ export default function App() {
               fontFamily: 'monospace',
             }}>
               <span>{simDisplacement.toFixed(1)} mm</span>
-              <span>{Math.min(100, (simDisplacement / (canHeightParam * 0.67)) * 100).toFixed(0)}%</span>
-              <span>{(canHeightParam * 0.67).toFixed(0)} mm</span>
+              <span>{Math.min(100, (simDisplacement / (canHeightParam * maxCompression / 100)) * 100).toFixed(0)}%</span>
+              <span>{(canHeightParam * maxCompression / 100).toFixed(0)} mm</span>
             </div>
           </div>
         )}
@@ -1664,7 +1667,7 @@ export default function App() {
             color: darkMode ? '#94a3b8' : '#64748b',
             fontSize: 12,
           }}>
-            {measureMode ? (measurePt1Ref.current ? 'Click 2nd point' : 'Click 1st point') : isRecording ? 'Recording...' : simState === 'idle' ? 'Ready' : simState === 'running' ? `Simulating... ${canHeightParam > 0 ? Math.round((simDisplacement / (canHeightParam * 0.67)) * 100) : 0}%` : 'Paused'}
+            {measureMode ? (measurePt1Ref.current ? 'Click 2nd point' : 'Click 1st point') : isRecording ? 'Recording...' : simState === 'idle' ? 'Ready' : simState === 'running' ? `Simulating... ${canHeightParam > 0 ? Math.round((simDisplacement / (canHeightParam * maxCompression / 100)) * 100) : 0}%` : 'Paused'}
             {measureDist !== null && !measureMode && ` | d=${measureDist.toFixed(1)}mm`}
           </span>
         </div>
@@ -1807,6 +1810,8 @@ export default function App() {
         onDeletePreset={handleDeletePreset}
         autoStopStress={autoStopStress}
         onAutoStopStressChange={setAutoStopStress}
+        maxCompression={maxCompression}
+        onMaxCompressionChange={setMaxCompression}
         darkMode={darkMode}
       />}
     </div>

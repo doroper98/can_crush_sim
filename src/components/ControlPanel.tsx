@@ -69,6 +69,8 @@ interface ControlPanelProps {
   onDeletePreset: (name: string) => void
   autoStopStress?: boolean
   onAutoStopStressChange?: (v: boolean) => void
+  maxCompression?: number
+  onMaxCompressionChange?: (v: number) => void
   darkMode?: boolean
 }
 
@@ -246,6 +248,8 @@ export default function ControlPanel({
   onDeletePreset,
   autoStopStress,
   onAutoStopStressChange,
+  maxCompression,
+  onMaxCompressionChange,
   darkMode = false,
 }: ControlPanelProps) {
   const theme = getTheme(darkMode)
@@ -377,6 +381,9 @@ export default function ControlPanel({
         <Slider label="Max Force" value={force} min={0} max={10000} step={50} unit="N" onChange={onForceChange} theme={theme} />
         <Slider label="Compression Speed" value={speed} min={1} max={100} step={1} unit="mm/s" onChange={onSpeedChange} theme={theme} />
         <Slider label="Time Scale" value={timeScale} min={0.1} max={5.0} step={0.1} unit="×" onChange={onTimeScaleChange} theme={theme} />
+        {onMaxCompressionChange && (
+          <Slider label="Max Compression" value={maxCompression ?? 67} min={10} max={90} step={1} unit="%" onChange={onMaxCompressionChange} theme={theme} />
+        )}
         {onAutoStopStressChange && (
           <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: theme.textSec, marginTop: 4, cursor: 'pointer' }}>
             <input
