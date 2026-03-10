@@ -115,6 +115,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.1,
     wallThickness: 0.3,
   }),
+  brass_c260: createMaterial({
+    name: 'Brass C260 (Cartridge)',
+    youngsModulus: 110000,
+    poissonRatio: 0.35,
+    yieldStress: 200,
+    uts: 365,
+    density: 8530,
+    hardeningExponent: 0.42,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
