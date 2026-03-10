@@ -315,6 +315,80 @@ export class MassSpringSystem {
     }
   }
 
+  /**
+   * Apply self-contact: prevent non-connected nodes from overlapping.
+   * Uses spatial grid for O(n) average-case performance.
+   */
+  applySelfContact(minDist: number = 2.0) {
+    const cellSize = minDist * 2
+    const invCell = 1 / cellSize
+    const grid = new Map<string, number[]>()
+
+    // Build spatial grid
+    for (let i = 0; i < this.nodeCount; i++) {
+      if (this.fixed[i]) continue
+      const cx = Math.floor(this.positions[i * 3] * invCell)
+      const cy = Math.floor(this.positions[i * 3 + 1] * invCell)
+      const cz = Math.floor(this.positions[i * 3 + 2] * invCell)
+      const key = `${cx},${cy},${cz}`
+      let list = grid.get(key)
+      if (!list) { list = []; grid.set(key, list) }
+      list.push(i)
+    }
+
+    // Build adjacency set for fast lookup
+    if (!this._adjSet) {
+      this._adjSet = new Set<number>()
+      for (const spring of this.springs) {
+        const a = spring.i, b = spring.j
+        const key = a < b ? a * this.nodeCount + b : b * this.nodeCount + a
+        this._adjSet.add(key)
+      }
+    }
+
+    // Check nearby cells for each node
+    const minDist2 = minDist * minDist
+    for (const [, nodes] of grid) {
+      for (let ni = 0; ni < nodes.length; ni++) {
+        const a = nodes[ni]
+        const ai = a * 3
+        for (let nj = ni + 1; nj < nodes.length; nj++) {
+          const b = nodes[nj]
+          // Skip if connected by spring
+          const adjKey = a < b ? a * this.nodeCount + b : b * this.nodeCount + a
+          if (this._adjSet.has(adjKey)) continue
+
+          const bi = b * 3
+          const dx = this.positions[bi] - this.positions[ai]
+          const dy = this.positions[bi + 1] - this.positions[ai + 1]
+          const dz = this.positions[bi + 2] - this.positions[ai + 2]
+          const dist2 = dx * dx + dy * dy + dz * dz
+
+          if (dist2 < minDist2 && dist2 > 1e-10) {
+            const dist = Math.sqrt(dist2)
+            const overlap = (minDist - dist) * 0.5
+            const nx = dx / dist
+            const ny = dy / dist
+            const nz = dz / dist
+
+            if (!this.fixed[a]) {
+              this.positions[ai] -= nx * overlap
+              this.positions[ai + 1] -= ny * overlap
+              this.positions[ai + 2] -= nz * overlap
+            }
+            if (!this.fixed[b]) {
+              this.positions[bi] += nx * overlap
+              this.positions[bi + 1] += ny * overlap
+              this.positions[bi + 2] += nz * overlap
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private _adjSet: Set<number> | null = null
+
   /** Check if system is stable (no NaN, no explosion) */
   isStable(): boolean {
     for (let i = 0; i < this.positions.length; i++) {

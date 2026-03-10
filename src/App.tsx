@@ -244,6 +244,9 @@ export default function App() {
             rigidHeight / 2
           )
 
+          // Apply self-contact (prevent wall overlap)
+          physics.applySelfContact(2.0)
+
           // Sync physics → geometry
           physics.syncToGeometry(canGeometry)
 
