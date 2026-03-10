@@ -33,6 +33,7 @@ export default function App() {
   const simRunningRef = useRef(false)
   const simTimeRef = useRef(0)
   const simStepCountRef = useRef(0)
+  const simWallStartRef = useRef(0)
   const canGeometryRef = useRef<THREE.CylinderGeometry | null>(null)
   const transformControlsRef = useRef<TransformControls | null>(null)
   const loadArrowRef = useRef<THREE.ArrowHelper | null>(null)
@@ -573,7 +574,8 @@ export default function App() {
           setSimState('paused')
           displayModeRef.current = 'stress'
           setDisplayMode('stress')
-          showToastRef.current(`Compression complete: ${maxDisplacement.toFixed(1)} mm (${((maxDisplacement / curCanHeight) * 100).toFixed(0)}% of height)`)
+          const wallSec = ((performance.now() - simWallStartRef.current) / 1000).toFixed(1)
+          showToastRef.current(`Done! d=${maxDisplacement.toFixed(1)}mm (${maxCompressionRef.current}%) · ${simStepCountRef.current} steps · ${wallSec}s`)
         }
       }
 
@@ -722,6 +724,7 @@ export default function App() {
               simRunningRef.current = false
               setSimState('paused')
             } else {
+              if (simStepCountRef.current === 0) simWallStartRef.current = performance.now()
               simRunningRef.current = true
               setSimState('running')
             }
@@ -1214,6 +1217,7 @@ export default function App() {
   }, [])
 
   const handlePlay = useCallback(() => {
+    if (simStepCountRef.current === 0) simWallStartRef.current = performance.now()
     simRunningRef.current = true
     setSimState('running')
   }, [])
@@ -1281,6 +1285,7 @@ export default function App() {
     simRunningRef.current = false
     simTimeRef.current = 0
     simStepCountRef.current = 0
+    simWallStartRef.current = 0
     setSimSteps(0)
     setSimState('idle')
     chartDataRef.current = []
