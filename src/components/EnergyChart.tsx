@@ -168,6 +168,13 @@ export default function EnergyChart({
       ctx.beginPath()
       ctx.arc(lx, ly, 3, 0, Math.PI * 2)
       ctx.fill()
+      // Current energy label
+      ctx.font = '7px sans-serif'
+      ctx.fillStyle = '#f59e0b'
+      const eLabel = `${last.energy.toFixed(3)} J`
+      const eLabelX = lx + 5 > pad.left + plotW - 30 ? lx - ctx.measureText(eLabel).width - 5 : lx + 5
+      ctx.textAlign = 'left'
+      ctx.fillText(eLabel, eLabelX, ly - 4)
     }
   }, [data, prevData, width, height, darkMode])
 
