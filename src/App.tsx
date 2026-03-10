@@ -1270,9 +1270,12 @@ export default function App() {
     ctx.font = `${Math.max(12, w * 0.012)}px monospace`
     ctx.textAlign = 'right'
     ctx.fillStyle = 'rgba(255,255,255,0.7)'
+    const mat = MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]
+    const maxDisp = canHeightParam * (maxCompression / 100)
+    const progress = maxDisp > 0 ? Math.min((simDisplacement / maxDisp) * 100, 100) : 0
     const lines = [
-      `Can Crush Simulator`,
-      `t=${simTime.toFixed(3)}s  d=${simDisplacement.toFixed(1)}mm`,
+      `Can Crush Simulator — ${mat.name}`,
+      `t=${simTime.toFixed(3)}s  d=${simDisplacement.toFixed(1)}mm  (${progress.toFixed(0)}%)`,
     ]
     if (resultSummary) {
       lines.push(`σ_max=${resultSummary.maxStress.toFixed(0)}MPa  E=${resultSummary.energyAbsorbed.toFixed(2)}J`)
@@ -1288,7 +1291,7 @@ export default function App() {
     link.href = dataURL
     link.click()
     showToast('Screenshot saved')
-  }, [showToast, simTime, simDisplacement, resultSummary])
+  }, [showToast, simTime, simDisplacement, resultSummary, canHeightParam, maxCompression])
   screenshotRef.current = handleScreenshot
 
   const handleReset = useCallback(() => {
