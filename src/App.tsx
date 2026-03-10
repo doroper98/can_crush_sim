@@ -1784,6 +1784,20 @@ export default function App() {
             <div>t: {simTime.toFixed(3)} s</div>
             <div>d: {simDisplacement.toFixed(1)} mm</div>
             <div>σ_max: <span style={{ color: resultSummary.maxStress > matUTS ? '#ef4444' : '#10b981' }}>{resultSummary.maxStress.toFixed(0)}</span> MPa</div>
+            {/* UTS utilization bar */}
+            {matUTS > 0 && (() => {
+              const util = Math.min(resultSummary.maxStress / matUTS, 1.5)
+              const pct = Math.min(util * 100, 100)
+              const barColor = util > 1 ? '#ef4444' : util > 0.8 ? '#f59e0b' : '#10b981'
+              return (
+                <div style={{ margin: '2px 0', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <div style={{ flex: 1, height: 4, borderRadius: 2, background: 'rgba(100,116,139,0.3)' }}>
+                    <div style={{ width: `${pct}%`, height: '100%', borderRadius: 2, background: barColor, transition: 'width 0.15s' }} />
+                  </div>
+                  <span style={{ fontSize: 8, color: '#64748b' }}>{(util * 100).toFixed(0)}% UTS</span>
+                </div>
+              )
+            })()}
             <div>ε_p: {(resultSummary.maxPlastic * 100).toFixed(1)} %</div>
             <div>E: {resultSummary.energyAbsorbed.toFixed(2)} J</div>
             <div style={{ borderTop: '1px solid rgba(148,163,184,0.3)', marginTop: 3, paddingTop: 3 }}>
