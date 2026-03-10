@@ -41,7 +41,7 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | S2.3 | STL 직접 로드 | FR-01 | - | ✅ 완료 | 26/03/11 01:10 |
 | S2.4 | 강체 형상 변경 | FR-07 | - | ✅ 완료 | 26/03/11 01:16 |
 | S2.5 | 강체 위치/방향 수치입력 | FR-08 | - | ✅ 완료 | 26/03/11 01:25 |
-| S2.6 | 3D Transform Gizmo | FR-08 | - | ⬜ 미착수 | - |
+| S2.6 | 3D Transform Gizmo | FR-08 | - | ✅ 완료 | 26/03/11 01:35 |
 | S2.7 | 하중 방향 화살표 시각화 | FR-09 | - | ⬜ 미착수 | - |
 | S3.1 | Von Mises 응력 계산 | FR-11 | - | ⬜ 미착수 | - |
 | S3.2 | 응력 컬러맵 | FR-11 | - | ⬜ 미착수 | - |
@@ -152,6 +152,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 > 에이전트는 여기 아래에 로그를 추가한다.
 > 가장 최근 항목이 맨 위.
+
+---
+
+### [EXP-015] 3D Transform Gizmo
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 01:35:00 |
+| **Step** | S2.6 |
+| **관련 FR** | FR-08 |
+| **관련 NF** | - |
+| **변경 내용** | Three.js TransformControls 통합. rigidBody mesh에 gizmo 부착. Translate/Rotate 모드 전환(T/R 키, 또는 toolbar 버튼). gizmo 드래그 시 orbit 제어 비활성화. gizmo↔ControlPanel 양방향 동기화(드래그→state, state→mesh). ViewportToolbar에 Move/Rot 버튼 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 6/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | TransformControls event 타입에서 value가 unknown이라 as boolean 캐스팅 필요. 다음: S2.7 하중 방향 화살표 시각화. |
 
 ---
 

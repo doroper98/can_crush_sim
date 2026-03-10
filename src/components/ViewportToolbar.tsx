@@ -4,6 +4,8 @@ interface ViewportToolbarProps {
   onFitAll: () => void
   onToggleWireframe: () => void
   isPerspective: boolean
+  gizmoMode?: 'translate' | 'rotate'
+  onGizmoModeChange?: (mode: 'translate' | 'rotate') => void
 }
 
 export default function ViewportToolbar({
@@ -12,6 +14,8 @@ export default function ViewportToolbar({
   onFitAll,
   onToggleWireframe,
   isPerspective,
+  gizmoMode = 'translate',
+  onGizmoModeChange,
 }: ViewportToolbarProps) {
   const btnStyle: React.CSSProperties = {
     padding: '4px 10px',
@@ -75,6 +79,25 @@ export default function ViewportToolbar({
       <button style={btnStyle} onClick={onToggleWireframe} title="Wireframe (W)">
         Wire
       </button>
+      {onGizmoModeChange && (
+        <>
+          <span style={{ width: 1, background: '#ccc', margin: '0 4px' }} />
+          <button
+            style={gizmoMode === 'translate' ? activeBtnStyle : btnStyle}
+            onClick={() => onGizmoModeChange('translate')}
+            title="Translate Gizmo (T)"
+          >
+            Move
+          </button>
+          <button
+            style={gizmoMode === 'rotate' ? activeBtnStyle : btnStyle}
+            onClick={() => onGizmoModeChange('rotate')}
+            title="Rotate Gizmo (R)"
+          >
+            Rot
+          </button>
+        </>
+      )}
     </div>
   )
 }

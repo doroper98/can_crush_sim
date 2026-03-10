@@ -7,6 +7,7 @@ import ControlPanel, { type RigidBodyShape } from './components/ControlPanel'
 import { MassSpringSystem } from './engine/MassSpringSystem'
 import FileDropZone from './components/FileDropZone'
 import { loadSTL } from './cad/stlLoader'
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -19,6 +20,7 @@ export default function App() {
   const simRunningRef = useRef(false)
   const simTimeRef = useRef(0)
   const canGeometryRef = useRef<THREE.CylinderGeometry | null>(null)
+  const transformControlsRef = useRef<TransformControls | null>(null)
 
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
@@ -38,6 +40,7 @@ export default function App() {
   const [rigidRotX, setRigidRotX] = useState(0)
   const [rigidRotY, setRigidRotY] = useState(0)
   const [rigidRotZ, setRigidRotZ] = useState(0)
+  const [gizmoMode, setGizmoMode] = useState<'translate' | 'rotate'>('translate')
 
   useEffect(() => {
     const container = containerRef.current
@@ -122,6 +125,33 @@ export default function App() {
 
     // Controls
     const controls = new CatiaControls(camera, renderer.domElement)
+
+    // Transform Gizmo for rigid body
+    const transformControls = new TransformControls(camera, renderer.domElement)
+    transformControls.attach(rigidMesh)
+    transformControls.setMode('translate')
+    transformControls.setSize(0.8)
+    scene.add(transformControls.getHelper())
+    transformControlsRef.current = transformControls
+
+    // Disable orbit while gizmo is dragging
+    transformControls.addEventListener('dragging-changed', (event) => {
+      controls.enabled = !(event.value as boolean)
+    })
+
+    // Sync gizmo → state
+    transformControls.addEventListener('change', () => {
+      if (transformControls.dragging) {
+        const pos = rigidMesh.position
+        const rot = rigidMesh.rotation
+        setRigidPosX(Math.round(pos.x))
+        setRigidPosY(Math.round(pos.y))
+        setRigidPosZ(Math.round(pos.z))
+        setRigidRotX(Math.round(rot.x * 180 / Math.PI))
+        setRigidRotY(Math.round(rot.y * 180 / Math.PI))
+        setRigidRotZ(Math.round(rot.z * 180 / Math.PI))
+      }
+    })
     controls.setTarget(0, canHeight / 2, 0)
     controlsRef.current = controls
 
@@ -201,6 +231,12 @@ export default function App() {
         case 'g': case 'G':
           setShowGrid(prev => !prev)
           break
+        case 't': case 'T':
+          setGizmoMode('translate')
+          break
+        case 'r': case 'R':
+          setGizmoMode('rotate')
+          break
       }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
@@ -213,6 +249,8 @@ export default function App() {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', onResize)
       window.removeEventListener('keydown', onKeyDown)
+      transformControls.detach()
+      transformControls.dispose()
       controls.dispose()
       axisHelper.dispose()
       renderer.dispose()
@@ -232,6 +270,13 @@ export default function App() {
   useEffect(() => {
     if (gridRef.current) gridRef.current.visible = showGrid
   }, [showGrid])
+
+  // Sync gizmo mode
+  useEffect(() => {
+    if (transformControlsRef.current) {
+      transformControlsRef.current.setMode(gizmoMode)
+    }
+  }, [gizmoMode])
 
   // Sync rigid body position/rotation from control panel
   useEffect(() => {
@@ -354,6 +399,8 @@ export default function App() {
           onFitAll={handleFitAll}
           onToggleWireframe={handleToggleWireframe}
           isPerspective={isPerspective}
+          gizmoMode={gizmoMode}
+          onGizmoModeChange={setGizmoMode}
         />
         {/* Sim controls */}
         <div style={{
