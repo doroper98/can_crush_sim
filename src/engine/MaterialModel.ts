@@ -85,6 +85,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.15,
     wallThickness: 0.5,
   }),
+  steel_4340: createMaterial({
+    name: 'AISI 4340 Steel',
+    youngsModulus: 205000,
+    poissonRatio: 0.29,
+    yieldStress: 710,
+    uts: 1080,
+    density: 7850,
+    hardeningExponent: 0.12,
+    wallThickness: 0.5,
+  }),
   steel_ss304: createMaterial({
     name: 'Stainless Steel 304',
     youngsModulus: 193000,
