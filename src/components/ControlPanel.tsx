@@ -550,7 +550,7 @@ export default function ControlPanel({
       </Section>
 
       <Section title="Energy-Displacement" defaultOpen={false} theme={theme}>
-        <EnergyChart data={chartData} width={256} height={120} darkMode={darkMode} />
+        <EnergyChart data={chartData} prevData={prevChartData} width={256} height={120} darkMode={darkMode} />
       </Section>
 
       <Section title="Material" defaultOpen={false} theme={theme}>

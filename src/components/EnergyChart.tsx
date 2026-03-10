@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react'
 
 interface EnergyChartProps {
   data: { displacement: number; load: number }[]
+  prevData?: { displacement: number; load: number }[]
   width?: number
   height?: number
   darkMode?: boolean
@@ -9,6 +10,7 @@ interface EnergyChartProps {
 
 export default function EnergyChart({
   data,
+  prevData,
   width = 260,
   height = 120,
   darkMode = false,
@@ -53,8 +55,22 @@ export default function EnergyChart({
       energyData.push({ displacement: data[i].displacement, energy: cumEnergy })
     }
 
+    // Compute prev energy data
+    const prevEnergyData: { displacement: number; energy: number }[] = []
+    if (prevData) {
+      let prevCum = 0
+      for (let i = 0; i < prevData.length; i++) {
+        if (i > 0) prevCum += 0.5 * (prevData[i - 1].load + prevData[i].load) * (prevData[i].displacement - prevData[i - 1].displacement) * 0.001
+        prevEnergyData.push({ displacement: prevData[i].displacement, energy: prevCum })
+      }
+    }
+
     let maxDisp = 1, maxEnergy = 0.1
     for (const p of energyData) {
+      if (p.displacement > maxDisp) maxDisp = p.displacement
+      if (p.energy > maxEnergy) maxEnergy = p.energy
+    }
+    for (const p of prevEnergyData) {
       if (p.displacement > maxDisp) maxDisp = p.displacement
       if (p.energy > maxEnergy) maxEnergy = p.energy
     }
@@ -103,6 +119,22 @@ export default function EnergyChart({
       ctx.fillText(((maxEnergy / 4) * i).toFixed(2), pad.left - 4, y + 3)
     }
 
+    // Previous data ghost curve
+    if (prevEnergyData.length > 1) {
+      ctx.strokeStyle = darkMode ? 'rgba(148,163,184,0.4)' : 'rgba(100,116,139,0.3)'
+      ctx.lineWidth = 1
+      ctx.setLineDash([3, 3])
+      ctx.beginPath()
+      for (let i = 0; i < prevEnergyData.length; i++) {
+        const x = pad.left + (prevEnergyData[i].displacement / maxDisp) * plotW
+        const y = pad.top + plotH - (prevEnergyData[i].energy / maxEnergy) * plotH
+        if (i === 0) ctx.moveTo(x, y)
+        else ctx.lineTo(x, y)
+      }
+      ctx.stroke()
+      ctx.setLineDash([])
+    }
+
     // Plot
     if (energyData.length > 1) {
       // Area fill
@@ -137,7 +169,7 @@ export default function EnergyChart({
       ctx.arc(lx, ly, 3, 0, Math.PI * 2)
       ctx.fill()
     }
-  }, [data, width, height, darkMode])
+  }, [data, prevData, width, height, darkMode])
 
   return (
     <canvas
