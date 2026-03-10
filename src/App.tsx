@@ -10,6 +10,7 @@ import FileDropZone from './components/FileDropZone'
 import { loadSTL } from './cad/stlLoader'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 import { applyVertexColors, type ColormapType } from './viewer/colormap'
+import { CanvasRecorder } from './viewer/recorder'
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -58,6 +59,9 @@ export default function App() {
   const [timeScale, setTimeScale] = useState(1.0)
   const timeScaleRef = useRef(1.0)
   const stepOnceRef = useRef(false)
+  const recorderRef = useRef(new CanvasRecorder())
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
+  const [isRecording, setIsRecording] = useState(false)
 
   useEffect(() => {
     const container = containerRef.current
@@ -80,6 +84,7 @@ export default function App() {
     renderer.setSize(container.clientWidth, container.clientHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
     container.appendChild(renderer.domElement)
+    rendererRef.current = renderer
 
     // Lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
@@ -455,6 +460,20 @@ export default function App() {
     setSimState('paused')
   }, [])
 
+  const handleToggleRecord = useCallback(() => {
+    const recorder = recorderRef.current
+    const renderer = rendererRef.current
+    if (!renderer) return
+
+    if (recorder.isRecording) {
+      recorder.stop()
+      setIsRecording(false)
+    } else {
+      recorder.start(renderer.domElement, 30)
+      setIsRecording(true)
+    }
+  }, [])
+
   const handleReset = useCallback(() => {
     simRunningRef.current = false
     simTimeRef.current = 0
@@ -605,13 +624,27 @@ export default function App() {
           >
             Reset
           </button>
+          <button
+            onClick={handleToggleRecord}
+            style={{
+              padding: '6px 12px',
+              border: 'none',
+              borderRadius: 8,
+              background: isRecording ? '#dc2626' : '#374151',
+              color: 'white',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            {isRecording ? 'Stop Rec' : 'Record'}
+          </button>
           <span style={{
             display: 'flex',
             alignItems: 'center',
             color: '#64748b',
             fontSize: 12,
           }}>
-            {simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating...' : 'Paused'}
+            {isRecording ? 'Recording...' : simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating...' : 'Paused'}
           </span>
         </div>
       </div>
