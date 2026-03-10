@@ -320,6 +320,89 @@ export class MassSpringSystem {
     return true
   }
 
+  /**
+   * Compute approximate stress per node (MPa).
+   * For each spring, compute engineering stress = E * strain.
+   * Each node's stress is the average of connected springs' |stress|.
+   * This approximates Von Mises equivalent stress for this mass-spring model.
+   */
+  getStressPerNode(): Float32Array {
+    const stress = new Float32Array(this.nodeCount)
+    const count = new Uint16Array(this.nodeCount)
+    const E = 69000 // MPa
+
+    for (const spring of this.springs) {
+      const { i: a, j: b } = spring
+      const ai = a * 3, bi = b * 3
+
+      const dx = this.positions[bi] - this.positions[ai]
+      const dy = this.positions[bi + 1] - this.positions[ai + 1]
+      const dz = this.positions[bi + 2] - this.positions[ai + 2]
+      const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
+
+      // Engineering strain relative to original rest length
+      const strain = (dist - spring.restLength) / spring.restLength
+      // Stress = E * |strain| (elastic), capped by Ludwik-Hollomon for plastic region
+      let springStress = E * Math.abs(strain)
+
+      // If plastically deformed, use hardened stress
+      if (spring.plasticStrain > 0) {
+        const yieldStress = this.yieldStress +
+          this.hardeningK * Math.pow(spring.plasticStrain, this.hardeningExponent)
+        springStress = Math.max(springStress, yieldStress)
+      }
+
+      stress[a] += springStress
+      stress[b] += springStress
+      count[a]++
+      count[b]++
+    }
+
+    // Average
+    for (let i = 0; i < this.nodeCount; i++) {
+      if (count[i] > 0) stress[i] /= count[i]
+    }
+
+    return stress
+  }
+
+  /**
+   * Compute displacement magnitude per node (mm).
+   * Requires original positions to be stored.
+   */
+  getDisplacementPerNode(originalPositions: Float32Array): Float32Array {
+    const disp = new Float32Array(this.nodeCount)
+    for (let i = 0; i < this.nodeCount; i++) {
+      const idx = i * 3
+      const dx = this.positions[idx] - originalPositions[idx]
+      const dy = this.positions[idx + 1] - originalPositions[idx + 1]
+      const dz = this.positions[idx + 2] - originalPositions[idx + 2]
+      disp[i] = Math.sqrt(dx * dx + dy * dy + dz * dz)
+    }
+    return disp
+  }
+
+  /**
+   * Get plastic strain per node (averaged from connected springs).
+   */
+  getPlasticStrainPerNode(): Float32Array {
+    const strain = new Float32Array(this.nodeCount)
+    const count = new Uint16Array(this.nodeCount)
+
+    for (const spring of this.springs) {
+      strain[spring.i] += spring.plasticStrain
+      strain[spring.j] += spring.plasticStrain
+      count[spring.i]++
+      count[spring.j]++
+    }
+
+    for (let i = 0; i < this.nodeCount; i++) {
+      if (count[i] > 0) strain[i] /= count[i]
+    }
+
+    return strain
+  }
+
   /** Reset to rest positions */
   reset(geometry: THREE.BufferGeometry) {
     const posAttr = geometry.getAttribute('position')
