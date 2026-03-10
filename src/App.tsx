@@ -1662,7 +1662,7 @@ export default function App() {
             color: darkMode ? '#94a3b8' : '#64748b',
             fontSize: 12,
           }}>
-            {measureMode ? (measurePt1Ref.current ? 'Click 2nd point' : 'Click 1st point') : isRecording ? 'Recording...' : simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating...' : 'Paused'}
+            {measureMode ? (measurePt1Ref.current ? 'Click 2nd point' : 'Click 1st point') : isRecording ? 'Recording...' : simState === 'idle' ? 'Ready' : simState === 'running' ? `Simulating... ${canHeightParam > 0 ? Math.round((simDisplacement / (canHeightParam * 0.67)) * 100) : 0}%` : 'Paused'}
             {measureDist !== null && !measureMode && ` | d=${measureDist.toFixed(1)}mm`}
           </span>
         </div>
