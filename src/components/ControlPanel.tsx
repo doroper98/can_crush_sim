@@ -63,8 +63,8 @@ interface ControlPanelProps {
   clipY: number
   onClipEnabledChange: (v: boolean) => void
   onClipYChange: (v: number) => void
-  resultSummary?: { maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number; sea: number; cfe: number; canMass: number } | null
-  prevResultSummary?: { maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number; sea: number; cfe: number; canMass: number } | null
+  resultSummary?: { maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number; sea: number; cfe: number; canMass: number; peakForce: number; meanForce: number } | null
+  prevResultSummary?: { maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number; sea: number; cfe: number; canMass: number; peakForce: number; meanForce: number } | null
   presetName: string
   presetNames: string[]
   onSavePreset: (name: string) => void
@@ -606,6 +606,8 @@ export default function ControlPanel({
             <div><strong style={{ color: theme.text }}>Max d:</strong> {resultSummary.maxDisp.toFixed(2)} mm{delta(resultSummary.maxDisp, p?.maxDisp, ' mm')}</div>
             <div><strong style={{ color: theme.text }}>Max ε_p:</strong> {(resultSummary.maxPlastic * 100).toFixed(2)} %{delta(resultSummary.maxPlastic * 100, p ? p.maxPlastic * 100 : undefined, '%', true)}</div>
             <div><strong style={{ color: theme.text }}>Energy:</strong> {resultSummary.energyAbsorbed.toFixed(3)} J{delta(resultSummary.energyAbsorbed, p?.energyAbsorbed, 'J')}</div>
+            <div><strong style={{ color: theme.text }}>F_peak:</strong> {resultSummary.peakForce.toFixed(0)} N{delta(resultSummary.peakForce, p?.peakForce, ' N', true)}</div>
+            <div><strong style={{ color: theme.text }}>F_mean:</strong> {resultSummary.meanForce.toFixed(0)} N{delta(resultSummary.meanForce, p?.meanForce, ' N')}</div>
             <div style={{ borderTop: `1px solid ${theme.border}`, marginTop: 4, paddingTop: 4 }}>
               <div><strong style={{ color: theme.text }}>SEA:</strong> {resultSummary.sea.toFixed(1)} J/kg{delta(resultSummary.sea, p?.sea, ' J/kg')}</div>
               <div><strong style={{ color: theme.text }}>CFE:</strong> <span style={{ color: resultSummary.cfe >= 0.7 ? '#10b981' : resultSummary.cfe >= 0.4 ? '#f59e0b' : '#ef4444' }}>{(resultSummary.cfe * 100).toFixed(1)}%</span>{delta(resultSummary.cfe * 100, p ? p.cfe * 100 : undefined, '%')}</div>

@@ -435,6 +435,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-130] 결과 패널에 피크/평균 하중 표시
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 14:30:00 |
+| **Step** | - (결과 정보 확장) |
+| **관련 FR** | FR-12 |
+| **관련 NF** | - |
+| **변경 내용** | (1) resultSummary에 peakForce, meanForce 필드 추가. (2) ControlPanel Results 섹션에 F_peak (N), F_mean (N) 표시. (3) 이전 결과 대비 델타 표시 (F_peak: 감소=개선, F_mean: 증가=개선). |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 836.84 kB (gzip 228.64 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | CFE = F_mean/F_peak이므로 이 두 값을 직접 확인하면 CFE 원인 분석 가능. |
+
+---
+
 ### [EXP-115] About 모달 재료 수 동적 표시
 
 | 항목 | 값 |

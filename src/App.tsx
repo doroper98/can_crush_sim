@@ -133,7 +133,7 @@ export default function App() {
   const maxStressMarkerRef = useRef<THREE.Sprite | null>(null)
   const [resultSummary, setResultSummary] = useState<{
     maxStress: number; maxDisp: number; maxPlastic: number; energyAbsorbed: number
-    sea: number; cfe: number; canMass: number
+    sea: number; cfe: number; canMass: number; peakForce: number; meanForce: number
   } | null>(null)
   const [prevResultSummary, setPrevResultSummary] = useState<typeof resultSummary>(null)
   const [panelVisible, setPanelVisible] = useState(true)
@@ -490,7 +490,7 @@ export default function App() {
             }
             meanForce = cd.length > 0 ? meanForce / cd.length : 0
             const cfe = peakForce > 0 ? meanForce / peakForce : 0
-            setResultSummary({ maxStress: maxS, maxDisp: maxD, maxPlastic: maxP, energyAbsorbed: energy, sea, cfe, canMass: canMassKg })
+            setResultSummary({ maxStress: maxS, maxDisp: maxD, maxPlastic: maxP, energyAbsorbed: energy, sea, cfe, canMass: canMassKg, peakForce, meanForce })
 
             // Auto-stop: pause if max stress exceeds 120% UTS
             if (autoStopStressRef.current && maxS > matUTSRef.current * autoStopMultiplierRef.current) {
