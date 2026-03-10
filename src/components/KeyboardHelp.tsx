@@ -18,6 +18,8 @@ const shortcuts = [
   { key: 'M', desc: '측정 도구 토글' },
   { key: 'O', desc: '원래 형상 고스트 토글' },
   { key: '?', desc: '단축키 도움말 토글' },
+  { key: 'N', desc: '다음 프레임 (Step)' },
+  { key: 'V', desc: '디스플레이 모드 순환' },
   { key: 'Space', desc: '시뮬레이션 Play/Pause 토글' },
   { key: 'Esc', desc: '모달/메뉴 닫기, 측정 취소' },
   { key: 'Num 7', desc: 'Top View (XY)' },

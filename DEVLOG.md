@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-099] N키 Step + V키 디스플레이 모드 순환
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 11:50:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | FR-11, FR-13 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) N키: stepOnceRef 활성화 + simState를 'paused'로 설정하여 한 프레임 전진. (2) V키: displayMode 순환 (none → stress → displacement → plastic → none). (3) KeyboardHelp에 N, V 항목 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 822.78 kB (gzip 224.58 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 키보드만으로 시뮬레이션 프레임 단위 분석 및 컬러맵 전환 가능. |
+
+---
+
 ### [EXP-098] JSON Export/Import maxCompression 포함
 
 | 항목 | 값 |

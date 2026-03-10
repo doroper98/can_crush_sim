@@ -707,6 +707,21 @@ export default function App() {
             }
           }
           break
+        case 'n': case 'N':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            stepOnceRef.current = true
+            setSimState('paused')
+          }
+          break
+        case 'v': case 'V':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            setDisplayMode(prev => {
+              const modes: Array<'none' | 'stress' | 'displacement' | 'plastic'> = ['none', 'stress', 'displacement', 'plastic']
+              const idx = modes.indexOf(prev)
+              return modes[(idx + 1) % modes.length]
+            })
+          }
+          break
       }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
