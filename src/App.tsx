@@ -753,8 +753,13 @@ export default function App() {
           if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
             setResultSummary(rs => {
               if (!rs) { showToastRef.current('No results to copy'); return rs }
+              const mat = MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]
               const lines = [
                 `Can Crush Simulator — Results`,
+                `Material: ${mat.name}`,
+                `  E=${(mat.youngsModulus / 1000).toFixed(0)} GPa  σy=${mat.yieldStress.toFixed(0)} MPa  UTS=${mat.uts.toFixed(0)} MPa  n=${mat.hardeningExponent}  ρ=${mat.density} kg/m³`,
+                `Geometry: ⌀${(canRadiusRef.current * 2).toFixed(0)} × ${canHeightRef.current.toFixed(0)} mm  t=${wallThicknessRef.current} mm`,
+                `---`,
                 `t: ${simTimeRef.current.toFixed(3)} s`,
                 `d: ${(simTimeRef.current * compressionSpeedRef.current).toFixed(1)} mm`,
                 `σ_max: ${rs.maxStress.toFixed(1)} MPa`,
