@@ -104,6 +104,9 @@ export default function App() {
   const deformScaleRef = useRef(1.0)
   const [simTime, setSimTime] = useState(0)
   const [simDisplacement, setSimDisplacement] = useState(0)
+  const [pickedNode, setPickedNode] = useState<{
+    x: number; y: number; stress: number; disp: number; plastic: number; nodeIdx: number
+  } | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
@@ -512,6 +515,39 @@ export default function App() {
       raycaster.setFromCamera(mouse, camera)
       if (raycaster.ray.intersectPlane(groundPlane, intersectPt)) {
         setCursorWorld({ x: intersectPt.x, y: intersectPt.y, z: intersectPt.z })
+      }
+      // Node picking: raycast against canMesh for per-node info tooltip
+      const hits = raycaster.intersectObject(canMesh, false)
+      if (hits.length > 0 && physicsRef.current && simRunningRef.current === false) {
+        const hit = hits[0]
+        const face = hit.face
+        if (face) {
+          const pos = canGeometryRef.current?.attributes.position
+          if (pos) {
+            // Find nearest vertex index from the hit face
+            const va = new THREE.Vector3().fromBufferAttribute(pos, face.a)
+            const vb = new THREE.Vector3().fromBufferAttribute(pos, face.b)
+            const vc = new THREE.Vector3().fromBufferAttribute(pos, face.c)
+            const hp = hit.point
+            const da = va.distanceToSquared(hp)
+            const db = vb.distanceToSquared(hp)
+            const dc = vc.distanceToSquared(hp)
+            const nearestIdx = da <= db && da <= dc ? face.a : db <= dc ? face.b : face.c
+            const phys = physicsRef.current
+            const stresses = phys.getStressPerNode()
+            const disps = originalPositionsRef.current ? phys.getDisplacementPerNode(originalPositionsRef.current) : null
+            const plastics = phys.getPlasticStrainPerNode()
+            setPickedNode({
+              x: e.clientX, y: e.clientY,
+              stress: stresses[nearestIdx],
+              disp: disps ? disps[nearestIdx] : 0,
+              plastic: plastics[nearestIdx],
+              nodeIdx: nearestIdx,
+            })
+          }
+        }
+      } else {
+        setPickedNode(null)
       }
     }
     container.addEventListener('mousemove', onMouseMove)
@@ -985,6 +1021,29 @@ export default function App() {
             {isRecording ? 'Recording...' : simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating...' : 'Paused'}
           </span>
         </div>
+        {/* Node info tooltip */}
+        {pickedNode && (
+          <div style={{
+            position: 'fixed',
+            left: pickedNode.x + 12,
+            top: pickedNode.y - 10,
+            background: 'rgba(15,23,42,0.9)',
+            color: '#e2e8f0',
+            padding: '6px 10px',
+            borderRadius: 8,
+            fontSize: 11,
+            lineHeight: 1.5,
+            pointerEvents: 'none',
+            zIndex: 100,
+            whiteSpace: 'nowrap',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+          }}>
+            <div style={{ fontWeight: 600, color: '#93c5fd', marginBottom: 2 }}>Node #{pickedNode.nodeIdx}</div>
+            <div>σ: {pickedNode.stress.toFixed(1)} MPa</div>
+            <div>d: {pickedNode.disp.toFixed(3)} mm</div>
+            <div>ε_p: {(pickedNode.plastic * 100).toFixed(2)} %</div>
+          </div>
+        )}
       </div>
       </FileDropZone>
       {/* Control Panel (30%) */}
