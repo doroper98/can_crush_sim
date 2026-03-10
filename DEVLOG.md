@@ -195,6 +195,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-088] Reset 시 Fit All + DisplayMode 초기화
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 10:55:00 |
+| **Step** | - (UX 개선) |
+| **관련 FR** | FR-13 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | (1) handleReset에 controlsRef.fitAll(scene) 자동 호출 추가. (2) displayMode를 'none'으로 리셋. (3) toast로 "Simulation reset" 알림. (4) showToast를 deps에 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 820.25 kB (gzip 223.92 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | Reset 후 카메라가 자동으로 전체 모델을 표시하여 사용성 향상. |
+
+---
+
 ### [EXP-087] Space 키 시뮬레이션 Play/Pause 토글
 
 | 항목 | 값 |

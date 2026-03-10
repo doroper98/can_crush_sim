@@ -1225,7 +1225,16 @@ export default function App() {
       rigidBodyRef.current.position.set(0, h + rigidHeight / 2 + 5, 0)
       setRigidPosY(Math.round(h + rigidHeight / 2 + 5))
     }
-  }, [canDiameter, canHeightParam, wallThickness, materialKey, rigidHeight, matYoungsModulus, matYieldStress, matUTS, matHardeningN])
+    // Auto Fit All after reset
+    const scene = sceneRef.current
+    if (controlsRef.current && scene) {
+      controlsRef.current.fitAll(scene)
+    }
+    // Reset display mode to none
+    displayModeRef.current = 'none'
+    setDisplayMode('none')
+    showToast('Simulation reset')
+  }, [canDiameter, canHeightParam, wallThickness, materialKey, rigidHeight, matYoungsModulus, matYieldStress, matUTS, matHardeningN, showToast])
 
   const handleFileLoaded = useCallback(async (buffer: ArrayBuffer, fileName: string, ext: string) => {
     const scene = sceneRef.current
