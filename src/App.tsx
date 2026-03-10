@@ -21,6 +21,7 @@ export default function App() {
   const simTimeRef = useRef(0)
   const canGeometryRef = useRef<THREE.CylinderGeometry | null>(null)
   const transformControlsRef = useRef<TransformControls | null>(null)
+  const loadArrowRef = useRef<THREE.ArrowHelper | null>(null)
 
   const [isPerspective, setIsPerspective] = useState(true)
   const [isWireframe, setIsWireframe] = useState(false)
@@ -41,6 +42,7 @@ export default function App() {
   const [rigidRotY, setRigidRotY] = useState(0)
   const [rigidRotZ, setRigidRotZ] = useState(0)
   const [gizmoMode, setGizmoMode] = useState<'translate' | 'rotate'>('translate')
+  const [showLoadArrow, setShowLoadArrow] = useState(true)
 
   useEffect(() => {
     const container = containerRef.current
@@ -155,6 +157,16 @@ export default function App() {
     controls.setTarget(0, canHeight / 2, 0)
     controlsRef.current = controls
 
+    // Load direction arrow (points downward from rigid body)
+    const arrowDir = new THREE.Vector3(0, -1, 0)
+    const arrowOrigin = new THREE.Vector3(0, canHeight + rigidHeight + 10, 0)
+    const arrowLength = 40
+    const arrowColor = 0xef4444 // red
+    const loadArrow = new THREE.ArrowHelper(arrowDir, arrowOrigin, arrowLength, arrowColor, 10, 6)
+    loadArrow.name = 'loadArrow'
+    scene.add(loadArrow)
+    loadArrowRef.current = loadArrow
+
     // Axis helper
     const axisHelper = new AxisHelper(container)
 
@@ -201,6 +213,15 @@ export default function App() {
         }
       }
 
+      // Update load arrow position to follow rigid body
+      if (loadArrow.visible) {
+        loadArrow.position.set(
+          rigidMesh.position.x,
+          rigidMesh.position.y + rigidHeight / 2 + 5,
+          rigidMesh.position.z
+        )
+      }
+
       renderer.render(scene, camera)
       axisHelper.update(camera)
     }
@@ -237,6 +258,9 @@ export default function App() {
         case 'r': case 'R':
           setGizmoMode('rotate')
           break
+        case 'l': case 'L':
+          setShowLoadArrow(prev => !prev)
+          break
       }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
@@ -270,6 +294,11 @@ export default function App() {
   useEffect(() => {
     if (gridRef.current) gridRef.current.visible = showGrid
   }, [showGrid])
+
+  // Sync load arrow visibility
+  useEffect(() => {
+    if (loadArrowRef.current) loadArrowRef.current.visible = showLoadArrow
+  }, [showLoadArrow])
 
   // Sync gizmo mode
   useEffect(() => {
