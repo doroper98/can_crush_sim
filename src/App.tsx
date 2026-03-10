@@ -1521,6 +1521,31 @@ export default function App() {
             {measureDist !== null && !measureMode && ` | d=${measureDist.toFixed(1)}mm`}
           </span>
         </div>
+        {/* Simulation HUD overlay */}
+        {simState !== 'idle' && resultSummary && (
+          <div style={{
+            position: 'absolute',
+            top: 48,
+            right: 12,
+            background: 'rgba(15,23,42,0.75)',
+            color: '#e2e8f0',
+            padding: '8px 12px',
+            borderRadius: 10,
+            fontSize: 10,
+            lineHeight: 1.6,
+            fontFamily: 'monospace',
+            pointerEvents: 'none',
+            zIndex: 10,
+            minWidth: 140,
+          }}>
+            <div style={{ fontWeight: 600, color: '#93c5fd', marginBottom: 2 }}>Simulation</div>
+            <div>t: {simTime.toFixed(3)} s</div>
+            <div>d: {simDisplacement.toFixed(1)} mm</div>
+            <div>σ_max: <span style={{ color: resultSummary.maxStress > matUTS ? '#ef4444' : '#10b981' }}>{resultSummary.maxStress.toFixed(0)}</span> MPa</div>
+            <div>ε_p: {(resultSummary.maxPlastic * 100).toFixed(1)} %</div>
+            <div>E: {resultSummary.energyAbsorbed.toFixed(2)} J</div>
+          </div>
+        )}
         {/* Node info tooltip */}
         {pickedNode && (
           <div style={{
