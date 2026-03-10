@@ -830,6 +830,11 @@ export default function App() {
             setShowHUD(prev => !prev)
           }
           break
+        case 'j': case 'J':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            handleExportJSON()
+          }
+          break
       }
       if (e.key === 'Tab') {
         e.preventDefault()
