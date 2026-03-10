@@ -178,6 +178,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-037] 강체 형상 변경 시 메시 재생성
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 04:35:00 |
+| **Step** | - (FR-07 보완) |
+| **관련 FR** | FR-07 |
+| **관련 NF** | - |
+| **변경 내용** | App.tsx에 useEffect 추가: rigidShape, rigidRadius, rigidHeight 변경 시 (idle 상태에서만) rigidBody 메시의 geometry를 교체. CylinderGeometry/BoxGeometry/SphereGeometry/ConeGeometry 4종 분기. 기존 와이어프레임 LineSegments 자식 제거 후 새 WireframeGeometry로 재생성. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok · ui: 9/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 이전에는 드롭다운으로 형상을 변경해도 실린더 모양이 유지되는 버그가 있었음. FR-07 완전 충족. |
+
+---
+
 ### [EXP-036] Reset 개선 + S 단축키
 
 | 항목 | 값 |

@@ -510,6 +510,44 @@ export default function App() {
     }
   }, [gizmoMode])
 
+  // Rebuild rigid body geometry when shape/size changes
+  useEffect(() => {
+    const rb = rigidBodyRef.current
+    if (!rb || simState !== 'idle') return
+    let newGeom: THREE.BufferGeometry
+    switch (rigidShape) {
+      case 'box':
+        newGeom = new THREE.BoxGeometry(rigidRadius * 2, rigidHeight, rigidRadius * 2, 4, 4, 4)
+        break
+      case 'sphere':
+        newGeom = new THREE.SphereGeometry(rigidRadius, 32, 16)
+        break
+      case 'cone':
+        newGeom = new THREE.ConeGeometry(rigidRadius, rigidHeight, 32)
+        break
+      default: // cylinder
+        newGeom = new THREE.CylinderGeometry(rigidRadius, rigidRadius, rigidHeight, 32, 1)
+        break
+    }
+    // Dispose old geometry and wireframe overlay
+    rb.geometry.dispose()
+    rb.geometry = newGeom
+    // Replace wireframe child
+    if (rb.children.length > 0) {
+      const oldWire = rb.children[0]
+      if (oldWire instanceof THREE.LineSegments) {
+        oldWire.geometry.dispose()
+        rb.remove(oldWire)
+      }
+    }
+    const wireGeom = new THREE.WireframeGeometry(newGeom)
+    const wireLine = new THREE.LineSegments(
+      wireGeom,
+      new THREE.LineBasicMaterial({ color: 0x2563eb, opacity: 0.8, transparent: true })
+    )
+    rb.add(wireLine)
+  }, [rigidShape, rigidRadius, rigidHeight, simState])
+
   // Sync rigid body position/rotation from control panel
   useEffect(() => {
     const rb = rigidBodyRef.current
