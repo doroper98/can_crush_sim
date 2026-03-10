@@ -1840,7 +1840,7 @@ export default function App() {
             zIndex: 10,
             minWidth: 140,
           }}>
-            <div style={{ fontWeight: 600, color: '#93c5fd', marginBottom: 2 }}>Simulation</div>
+            <div style={{ fontWeight: 600, color: '#93c5fd', marginBottom: 2 }}>{(MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]).name}</div>
             <div>t: {simTime.toFixed(3)} s</div>
             <div>d: {simDisplacement.toFixed(1)} mm</div>
             {chartData.length > 0 && <div>F: {chartData[chartData.length - 1].load.toFixed(0)} N</div>}
