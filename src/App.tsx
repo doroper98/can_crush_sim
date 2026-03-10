@@ -693,6 +693,18 @@ export default function App() {
             measurePt1Ref.current = null
           }
           break
+        case ' ':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.target instanceof HTMLButtonElement)) {
+            e.preventDefault()
+            if (simRunningRef.current) {
+              simRunningRef.current = false
+              setSimState('paused')
+            } else {
+              simRunningRef.current = true
+              setSimState('running')
+            }
+          }
+          break
       }
       if (e.code === 'Numpad7') controls.setView('top')
       if (e.code === 'Numpad3') controls.setView('right')
