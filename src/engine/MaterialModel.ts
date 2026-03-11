@@ -2105,6 +2105,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.22,
     wallThickness: 0.3,
   }),
+  tin_babbitt: createMaterial({
+    name: 'Babbitt Metal (SAE 12)',
+    youngsModulus: 50000,
+    poissonRatio: 0.35,
+    yieldStress: 40,
+    uts: 75,
+    density: 7380,
+    hardeningExponent: 0.15,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
