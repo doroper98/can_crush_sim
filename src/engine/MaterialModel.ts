@@ -1985,6 +1985,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.28,
     wallThickness: 0.3,
   }),
+  steel_s7: createMaterial({
+    name: 'AISI S7 Shock-Resisting',
+    youngsModulus: 207000,
+    poissonRatio: 0.29,
+    yieldStress: 1420,
+    uts: 1620,
+    density: 7840,
+    hardeningExponent: 0.05,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
