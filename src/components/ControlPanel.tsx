@@ -614,9 +614,9 @@ export default function ControlPanel({
             </>
           )
         })()}
-        <Slider label="E (Young's)" value={matYoungsModulus} min={10000} max={300000} step={1000} unit="MPa" onChange={onMatYoungsModulusChange} theme={theme} />
-        <Slider label="σ_y (Yield)" value={matYieldStress} min={10} max={1500} step={1} unit="MPa" onChange={onMatYieldStressChange} theme={theme} />
-        <Slider label="σ_u (UTS)" value={matUTS} min={20} max={2000} step={1} unit="MPa" onChange={onMatUTSChange} theme={theme} />
+        <Slider label="E (Young's)" value={matYoungsModulus} min={100} max={600000} step={100} unit="MPa" onChange={onMatYoungsModulusChange} theme={theme} />
+        <Slider label="σ_y (Yield)" value={matYieldStress} min={1} max={3000} step={1} unit="MPa" onChange={onMatYieldStressChange} theme={theme} />
+        <Slider label="σ_u (UTS)" value={matUTS} min={5} max={3500} step={1} unit="MPa" onChange={onMatUTSChange} theme={theme} />
         <Slider label="n (Hardening)" value={matHardeningN} min={0.01} max={1.0} step={0.01} unit="" onChange={onMatHardeningNChange} theme={theme} />
         {(() => {
           const mat = MATERIALS[materialKey] ?? MATERIALS['aluminum_6061']
