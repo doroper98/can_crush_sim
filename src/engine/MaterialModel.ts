@@ -805,6 +805,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.20,
     wallThickness: 1.5,
   }),
+  nickel_haynes230: createMaterial({
+    name: 'Haynes 230',
+    youngsModulus: 211000,
+    poissonRatio: 0.31,
+    yieldStress: 390,
+    uts: 860,
+    density: 8970,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
