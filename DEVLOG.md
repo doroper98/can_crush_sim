@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-350 기준, 26/03/12 09:30)
+### 누적 통계 (EXP-360 기준, 26/03/12 10:25)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **350** |
-| 성공 커밋 | 350 |
+| 총 실험 수 | **360** |
+| 성공 커밋 | 360 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 314건, EXP-028~350) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 324건, EXP-028~360) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 877 kB (gzip 238 kB) |
-| 재료 라이브러리 | **175종** (Al×18, Fe×31, Cu×22, Ti×11, Ni×23, Poly×22, Co×6, Mg×6, Zn×4, Sn×3, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×4, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
+| 빌드 크기 | 878 kB (gzip 239 kB) |
+| 재료 라이브러리 | **185종** (Al×19, Fe×35, Cu×24, Ti×11, Ni×24, Poly×23, Co×6, Mg×7, Zn×4, Sn×3, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×4, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
 | 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **175 재료**, 31카테고리, Ti-17/W1공구강/LDPE(최저E,σy,ρ)/Ni201(n=0.42), OFE Cu(n=0.44), PPS, 170재료마일스톤 |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **185 재료**, 31카테고리, H13/420SS/310SS/PSU/CuNi, 180재료마일스톤, OFE Cu(n=0.44최고) |
 
 ---
 
@@ -2054,6 +2054,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 872.08 kB (gzip 237 kB) · tsc: pass · ui: 10/10 |
 | **판정** | ✅ COMMIT |
 | **비고** | 유리섬유 단방향 복합재. CFRP 대비 경제적. 풍력 블레이드·보트·건축 소재. 누적: 320실험, 145재료, 31카테고리, 872kB. CFRP+GFRP로 복합재 시리즈 확립. Poly 19종 달성 |
+
+---
+
+### [EXP-360] AISI 310 Austenitic SS 재료 추가 + 누적 통계 갱신 — 185번째, 35번째 Fe
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 10:25:00 |
+| **Step** | - (재료 라이브러리 확장 + 누적 통계) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | AISI 310 Austenitic SS 추가: E=200GPa, σy=205MPa, UTS=515MPa, n=0.32, ρ=7900, t=0.3mm. 누적 통계 갱신 (185종, 360실험) |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 878.46 kB (gzip 239 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 내열 오스테나이트계 SS(25Cr-20Ni). 1100°C 내산화. 로·열처리 장비. Fe 35번째. **360실험·185재료 누적** |
 
 ---
 
