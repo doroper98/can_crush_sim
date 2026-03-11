@@ -2315,6 +2315,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.14,
     wallThickness: 0.3,
   }),
+  niobium_fs85: createMaterial({
+    name: 'Niobium FS-85 (Nb-28Ta-10W)',
+    youngsModulus: 135000,
+    poissonRatio: 0.35,
+    yieldStress: 340,
+    uts: 480,
+    density: 11300,
+    hardeningExponent: 0.14,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
