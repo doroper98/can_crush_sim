@@ -2248,7 +2248,7 @@ export default function App() {
           }}
         >
           <h2 style={{ margin: '0 0 4px', fontSize: 18, color: darkMode ? '#e2e8f0' : '#0f172a' }}>Can Crush Simulator</h2>
-          <div style={{ fontSize: 10, color: darkMode ? '#64748b' : '#94a3b8', marginBottom: 12 }}>v1.5 — React + Three.js + Mass-Spring FEM · {Object.keys(MATERIALS).length} Materials · 3 Charts · 15 Categories</div>
+          <div style={{ fontSize: 10, color: darkMode ? '#64748b' : '#94a3b8', marginBottom: 12 }}>v1.5 — React + Three.js + Mass-Spring FEM · {Object.keys(MATERIALS).length} Materials · 3 Charts · {new Set(Object.keys(MATERIALS).map(k => getCategory(k).label)).size} Categories</div>
           <p style={{ fontSize: 12, color: darkMode ? '#94a3b8' : '#475569', lineHeight: 1.6, margin: '0 0 12px' }}>
             Real-time elasto-plastic can crushing with Mass-Spring FEM, Ludwik-Hollomon hardening,
             Von Mises stress, SEA/CFE crashworthiness, stress-strain curves, searchable material table with category badges, and result comparison.
