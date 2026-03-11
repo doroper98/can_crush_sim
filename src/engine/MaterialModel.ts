@@ -205,6 +205,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.25,
     wallThickness: 1.0,
   }),
+  hastelloy_x: createMaterial({
+    name: 'Hastelloy X',
+    youngsModulus: 205000,
+    poissonRatio: 0.32,
+    yieldStress: 360,
+    uts: 785,
+    density: 8220,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
