@@ -21,6 +21,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'tin_sn') return { label: 'Sn', color: '#a3a3a3' }
   if (key === 'tungsten') return { label: 'W', color: '#78716c' }
   if (key === 'lead_pb') return { label: 'Pb', color: '#71717a' }
+  if (key.startsWith('zirconium_')) return { label: 'Zr', color: '#2dd4bf' }
   return { label: '?', color: '#94a3b8' }
 }
 
