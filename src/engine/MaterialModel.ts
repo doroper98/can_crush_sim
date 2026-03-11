@@ -425,6 +425,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.3,
   }),
+  manganese_mn: createMaterial({
+    name: 'Manganese (Mn)',
+    youngsModulus: 198000,
+    poissonRatio: 0.24,
+    yieldStress: 241,
+    uts: 380,
+    density: 7440,
+    hardeningExponent: 0.20,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
