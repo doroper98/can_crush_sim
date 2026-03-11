@@ -217,20 +217,20 @@ export default function LoadDisplacementChart({
       ctx.fillText(ptLabel, ptLabelX, ly - 4)
 
       // Legend (top-right)
-      const lgX = pad.left + plotW - 62, lgY = pad.top + 4
+      const lgX = pad.left + plotW - 80, lgY = pad.top + 4
       ctx.font = '7px sans-serif'
       ctx.textAlign = 'left'
-      // Peak marker
+      // Peak marker + value
       ctx.fillStyle = '#f59e0b'
       ctx.fillRect(lgX, lgY, 6, 6)
       ctx.fillStyle = labelColor
-      ctx.fillText('Peak', lgX + 8, lgY + 5)
-      // Mean line
+      ctx.fillText(`Peak ${data[peakIdx].load.toFixed(0)} N`, lgX + 8, lgY + 5)
+      // Mean line + value
       ctx.strokeStyle = '#10b981'
       ctx.setLineDash([3, 2])
       ctx.beginPath(); ctx.moveTo(lgX, lgY + 12); ctx.lineTo(lgX + 6, lgY + 12); ctx.stroke()
       ctx.setLineDash([])
-      ctx.fillText('Mean', lgX + 8, lgY + 15)
+      ctx.fillText(`Mean ${meanLoad.toFixed(0)} N`, lgX + 8, lgY + 15)
       // CFE value
       const cfe = data[peakIdx].load > 0 ? meanLoad / data[peakIdx].load : 0
       const cfeColor = cfe >= 0.7 ? '#10b981' : cfe >= 0.4 ? '#f59e0b' : '#ef4444'

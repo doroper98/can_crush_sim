@@ -1592,6 +1592,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-204] LoadDisplacementChart 레전드 Peak/Mean 수치 표시
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 21:05:00 |
+| **Step** | - (차트 정보 강화) |
+| **관련 FR** | FR-12 |
+| **관련 NF** | NF-06 |
+| **변경 내용** | (1) LoadDisplacementChart 레전드에 Peak 하중 수치(N) 표시. (2) Mean 하중 수치(N) 표시. (3) 레전드 폭 62→80px 확장으로 수치 공간 확보. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 853.75 kB (gzip 232.95 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 시뮬레이션 중 Peak/Mean 하중을 차트 내에서 바로 확인 가능. Crashworthiness 분석 효율 향상. |
+
+---
+
 ### [EXP-203] EnergyChart 수직 그리드 추가
 
 | 항목 | 값 |
