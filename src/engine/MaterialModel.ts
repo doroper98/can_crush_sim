@@ -525,6 +525,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.18,
     wallThickness: 0.3,
   }),
+  copper_c510: createMaterial({
+    name: 'Phosphor Bronze C510',
+    youngsModulus: 110000,
+    poissonRatio: 0.34,
+    yieldStress: 380,
+    uts: 540,
+    density: 8860,
+    hardeningExponent: 0.20,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
