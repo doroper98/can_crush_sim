@@ -102,7 +102,8 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | P2: CAD+강체 | ✅ 완료 | 26/03/11 | 26/03/11 | 6 | 6 | 0 | 100% |
 | P3: 시각화 | ✅ 완료 | 26/03/11 | 26/03/11 | 7 | 7 | 0 | 100% |
 | P4: UI/최적화 | ✅ 완료 | 26/03/11 | 26/03/11 | 4 | 4 | 0 | 100% |
-| P5: 추가개선 | ✅ 완료 | 26/03/11 | 진행중 | 419 | 419 | 0 | 100% |
+| P5: 추가개선 | ✅ 완료 | 26/03/11 | 26/03/12 | 419 | 419 | 0 | 100% |
+| P6: 버그수정/안정화 | ✅ 완료 | 26/03/11 | 26/03/11 | 8 | 8 | 0 | 100% |
 
 ---
 
@@ -112,15 +113,15 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 | 지표 | 값 |
 |------|-----|
-| 총 실험 수 | **446** |
-| 총 커밋 수 | 446 |
+| 총 실험 수 | **454** |
+| 총 커밋 수 | 447 |
 | 총 리셋 수 | 0 |
 | 누적 성공률 | 100% |
 | 평균 실험 소요시간 | ~5분 |
-| 현재 Phase | P5: 추가개선 (v2.1) |
-| 현재 Step | EXP-446 |
-| 마지막 push | 26/03/12 18:32 |
-| 마지막 활동 | 26/03/12 18:32 |
+| 현재 Phase | P6: 버그 수정 및 안정화 (v2.2) |
+| 현재 Step | BUG-008 해결 |
+| 마지막 push | 26/03/11 (cancrush/mar10) |
+| 마지막 활동 | 26/03/11 |
 
 ---
 
@@ -130,6 +131,14 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 | Bug ID | 발견 일시 | 관련 EXP | 관련 Step | 설명 | 상태 | 해결 일시 | 해결 EXP |
 |--------|-----------|----------|-----------|------|------|-----------|----------|
+| BUG-001 | 26/03/11 | EXP-447 | S5.1 | 카메라 프리셋 버튼이 ViewportToolbar와 겹침 (둘 다 top:8, left:8) | ✅ 해결 | 26/03/11 | EXP-447 |
+| BUG-002 | 26/03/11 | EXP-448 | S5.1 | KeyboardHelp 모달 단일 컬럼 → 화면 오버플로 | ✅ 해결 | 26/03/11 | EXP-448 |
+| BUG-003 | 26/03/11 | EXP-449 | S2.1 | OCCT CDN ES모듈을 script 태그로 로드 시 실패 | ✅ 해결 | 26/03/11 | EXP-449 |
+| BUG-004 | 26/03/11 | EXP-450 | S2.2 | BRep_Tool.Triangulation 인자 수 오류 (OCCT 7.7+ API 변경) | ✅ 해결 | 26/03/11 | EXP-450 |
+| BUG-005 | 26/03/11 | EXP-451 | S2.2 | STP 로드 성공이나 화면에 안 보임 (fitAll 미호출 + 바운딩박스 문제) | ✅ 해결 | 26/03/11 | EXP-451 |
+| BUG-006 | 26/03/11 | EXP-452 | S1.2 | FileDropZone 래퍼 삽입 후 캔버스 높이=0 (flex 레이아웃 깨짐) | ✅ 해결 | 26/03/11 | EXP-452 |
+| BUG-007 | 26/03/11 | EXP-453 | S2.2 | STP 메쉬 테셀레이션 깨짐 (face별 vertex offset 미적용) | ✅ 해결 | 26/03/11 | EXP-453 |
+| BUG-008 | 26/03/11 | EXP-454 | S1.7 | 디폴트 캔 시뮬레이션 시 메쉬 폭발 (스프링 overcorrection 발산) | ✅ 해결 | 26/03/11 | EXP-454 |
 
 ---
 
@@ -144,6 +153,11 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | 2 | 26/03/12 15:30 | S2.2 | OCCT.js 해결: CDN 동적 스크립트 로딩 + Function('m','return import(m)') 트릭으로 Vite 정적 분석 우회. npm fallback(dev) + CDN(prod) 이중 경로. |
 | 3 | 26/03/12 17:52 | S5.1 | 키보드 단축키 가드: 15곳에 산재된 instanceof 체크를 함수 시작부 1개 공통 가드로 통합하니 유지보수성 대폭 향상 + 빌드 1kB 감소. |
 | 4 | 26/03/12 17:38 | S4.1 | CSS transition은 항시 적용하면 리사이즈/스크롤 성능 저하. 토글 순간에만 400ms 활성화하는 패턴이 최적. |
+| 5 | 26/03/11 | S2.1 | CDN 패키지 모듈 포맷(ESM vs UMD) 확인 필수. ES모듈은 dynamic import()으로 로드, script 태그 불가. |
+| 6 | 26/03/11 | S2.2 | OCCT WASM 바인딩은 C++ API를 그대로 따름. 버전별 함수 시그니처(인자 수) 반드시 확인. |
+| 7 | 26/03/11 | S1.2 | Flex 레이아웃에서 자식을 래퍼로 감쌀 때, 래퍼가 flex 속성을 상속받아야 함. height:100%는 flex 컨테이너에서 무의미할 수 있음. |
+| 8 | 26/03/11 | S2.2 | OCCT face 테셀레이션 병합 시 반드시 vertex offset 누적 추적 + TopAbs_REVERSED face의 winding order 반전 필요. |
+| 9 | 26/03/11 | S1.7 | Mass-Spring 물리엔진: force-based spring stiffFactor가 1.0을 초과하면 발산. PBD(Position-Based Dynamics) 방식으로 compliance를 [0,1] 범위로 제한하면 안정적. 다중 iteration(5회) + 소량 correction이 단일 iteration + 대량 correction보다 훨씬 안정적. |
 
 ---
 
@@ -171,6 +185,142 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **비고** | {교훈, 발견, 다음 실험 힌트 등} |
 
 -->
+
+### [EXP-454] PBD 물리엔진으로 전면 재작성 — 메쉬 폭발 해결
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 |
+| **Step** | S1.7 |
+| **관련 FR** | FR-10 |
+| **관련 NF** | NF-01, NF-02 |
+| **변경 내용** | MassSpringSystem.step()을 Position-Based Dynamics(PBD)로 전면 재작성. 기존 force-based stiffFactor(무한대 가능) → PBD compliance 0.3(5회 iteration 분배). 소성변형은 첫 iteration에서만 계산. rest length 클램프 30~200%. 속도 클램프 1.0mm/substep. |
+| **테스트 항목** | (1) tsc --noEmit (2) 시뮬레이션 67% 압축까지 메쉬 안정성 확인 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · nodes: 693 · physics: ok (67% 압축 안정) · ui: 10/10 |
+| **판정** | ✅ COMMIT 697e8dd |
+| **비고** | BUG-008 해결. 핵심: stiffFactor>1 발산 → PBD compliance∈[0,1] 수렴 보장. 캔이 crumple 패턴을 보이며 정상 변형. |
+
+---
+
+### [EXP-453] STP 메쉬 테셀레이션 병합 — face offset + winding order 수정
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 |
+| **Step** | S2.2 |
+| **관련 FR** | FR-01 |
+| **관련 NF** | - |
+| **변경 내용** | occtLoader.ts extractGeometries()에서 face별 별도 geometry 생성 → 전체 face를 단일 BufferGeometry로 병합. vertexOffset 누적 추적. TopAbs_REVERSED face 감지 시 winding order(n1,n3,n2) 반전. |
+| **테스트 항목** | (1) Honda_Can.stp 로드 후 메쉬 정상 렌더링 확인 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · physics: n/a · ui: 10/10 |
+| **판정** | ✅ COMMIT 697e8dd |
+| **비고** | BUG-007 해결. OCCT face 병합 시 offset 미적용이 spiky mesh 원인. |
+
+---
+
+### [EXP-452] FileDropZone flex 레이아웃 수정 — 캔버스 높이=0 해결
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 |
+| **Step** | S1.2 |
+| **관련 FR** | FR-01 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | FileDropZone 래퍼 div: width/height:100% → flex:'1 1 70%', minWidth:0. 내부 viewport div: flex → width/height:100%. 래퍼가 flex 속성을 상속하여 부모 레이아웃 참여. |
+| **테스트 항목** | (1) 캔버스 크기 비영(non-zero) 확인 (2) Camera aspect != Infinity |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · container: 1113×700+ · fps: 60 · ui: 10/10 |
+| **판정** | ✅ COMMIT 697e8dd |
+| **비고** | BUG-006 해결. 래퍼 삽입 시 flex 속성 전달 필수. |
+
+---
+
+### [EXP-451] STP 임포트 후 fitAll + 기존 can 숨김 처리
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 |
+| **Step** | S2.2 |
+| **관련 FR** | FR-01 |
+| **관련 NF** | - |
+| **변경 내용** | CAD 임포트 시: (1) 파라메트릭 can/rigid body 숨김 (2) importGroup 생성 후 fitAll(importGroup) 호출 (3) CatiaControls.fitAll 시그니처를 Scene→Scene|Object3D로 확장. |
+| **테스트 항목** | (1) STP 임포트 후 모델 화면 중앙 배치 확인 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · ui: 10/10 |
+| **판정** | ✅ COMMIT 697e8dd |
+| **비고** | BUG-005 해결. fitAll 대상을 임포트 그룹으로 한정해야 기존 객체가 바운딩박스를 지배하지 않음. |
+
+---
+
+### [EXP-450] BRep_Tool.Triangulation 3번째 인자 추가 (OCCT 7.7+)
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 |
+| **Step** | S2.2 |
+| **관련 FR** | FR-01 |
+| **관련 NF** | - |
+| **변경 내용** | oc.BRep_Tool.Triangulation(face, location) → oc.BRep_Tool.Triangulation(face, location, 0). 3번째 인자 Poly_MeshPurpose_NONE=0 추가. |
+| **테스트 항목** | (1) STP 로드 시 런타임 에러 없음 확인 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · ui: 10/10 |
+| **판정** | ✅ COMMIT 697e8dd |
+| **비고** | BUG-004 해결. OCCT.js v2.0.0-beta는 OCCT 7.7+ 기반, API 시그니처 변경 확인 필수. |
+
+---
+
+### [EXP-449] OCCT CDN 로딩 ES모듈 방식으로 변경
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 |
+| **Step** | S2.1 |
+| **관련 FR** | FR-01 |
+| **관련 NF** | NF-04 |
+| **변경 내용** | occtLoader.ts 전면 재작성. script 태그 + window.opencascade 방식 → dynamic import() + locateFile WASM 콜백. initOCCT()에서 ES모듈 팩토리 함수 호출. |
+| **테스트 항목** | (1) OCCT 초기화 성공 콘솔 로그 확인 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · WASM: ~48MB CDN 로드 성공 · ui: 10/10 |
+| **판정** | ✅ COMMIT 697e8dd |
+| **비고** | BUG-003 해결. CDN JS가 ESM인 경우 import()만 가능. |
+
+---
+
+### [EXP-448] KeyboardHelp 3컬럼 그리드 레이아웃 재설계
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 |
+| **Step** | S5.1 |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | KeyboardHelp 모달: 단일 테이블 → 3컬럼 그리드(단축키) + 2컬럼 그리드(마우스). 모달 max-width 420→860px. 키 배지 스타일(monospace, 그라디언트). |
+| **테스트 항목** | (1) 모달 화면 내 완전 표시 확인 (오버플로 없음) |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · ui: 10/10 |
+| **판정** | ✅ COMMIT 697e8dd |
+| **비고** | BUG-002 해결. 다수 항목 모달은 그리드 레이아웃 필수. |
+
+---
+
+### [EXP-447] 중복 카메라 프리셋 버튼 제거
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 |
+| **Step** | S5.1 |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | App.tsx에서 EXP-435에 추가된 카메라 프리셋 버튼(T,F,R,I,⊞) 코드 블록 제거. ViewportToolbar(XY,YZ,XZ,ISO)와 기능 중복이었음. |
+| **테스트 항목** | (1) 좌상단 버튼 겹침 없음 확인 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok · fps: 60 · ui: 10/10 |
+| **판정** | ✅ COMMIT 697e8dd |
+| **비고** | BUG-001 해결. 신규 UI 추가 전 기존 컴포넌트 기능 확인 필수. |
+
+---
 
 ### [EXP-446] About 다이얼로그 v2.1 업데이트
 
