@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-360 기준, 26/03/12 10:25)
+### 누적 통계 (EXP-370 기준, 26/03/12 11:15)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **360** |
-| 성공 커밋 | 360 |
+| 총 실험 수 | **370** |
+| 성공 커밋 | 370 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 324건, EXP-028~360) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 334건, EXP-028~370) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 878 kB (gzip 239 kB) |
-| 재료 라이브러리 | **185종** (Al×19, Fe×35, Cu×24, Ti×11, Ni×24, Poly×23, Co×6, Mg×7, Zn×4, Sn×3, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×4, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
+| 빌드 크기 | 880 kB (gzip 239 kB) |
+| 재료 라이브러리 | **195종** (Al×20, Fe×36, Cu×25, Ti×12, Ni×26, Poly×24, Co×7, Mg×7, Zn×5, Sn×3, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×5, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
 | 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **185 재료**, 31카테고리, H13/420SS/310SS/PSU/CuNi, 180재료마일스톤, OFE Cu(n=0.44최고) |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **195 재료**, 31카테고리, Al5182(캔엔드합금), Elgiloy/PEI/PSU, 190마일스톤, 880kB빌드 |
 
 ---
 
@@ -2054,6 +2054,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 872.08 kB (gzip 237 kB) · tsc: pass · ui: 10/10 |
 | **판정** | ✅ COMMIT |
 | **비고** | 유리섬유 단방향 복합재. CFRP 대비 경제적. 풍력 블레이드·보트·건축 소재. 누적: 320실험, 145재료, 31카테고리, 872kB. CFRP+GFRP로 복합재 시리즈 확립. Poly 19종 달성 |
+
+---
+
+### [EXP-370] Inconel 617 재료 추가 + 누적 통계 갱신 — 195번째, 26번째 Ni
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 11:15:00 |
+| **Step** | - (재료 라이브러리 확장 + 누적 통계) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | Inconel 617 추가: E=211GPa, σy=295MPa, UTS=740MPa, n=0.28, ρ=8360, t=0.3mm. 누적 통계 갱신 (195종, 370실험) |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 880.05 kB (gzip 239 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 초고온 Ni 합금(Ni-22Cr-12Co-9Mo). 950°C 초크리프 저항. 차세대 초초임계 화력발전·가스터빈. **370실험·195재료·880kB 누적** |
 
 ---
 
