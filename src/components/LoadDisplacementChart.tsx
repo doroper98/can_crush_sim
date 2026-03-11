@@ -231,6 +231,11 @@ export default function LoadDisplacementChart({
       ctx.beginPath(); ctx.moveTo(lgX, lgY + 12); ctx.lineTo(lgX + 6, lgY + 12); ctx.stroke()
       ctx.setLineDash([])
       ctx.fillText('Mean', lgX + 8, lgY + 15)
+      // CFE value
+      const cfe = data[peakIdx].load > 0 ? meanLoad / data[peakIdx].load : 0
+      const cfeColor = cfe >= 0.7 ? '#10b981' : cfe >= 0.4 ? '#f59e0b' : '#ef4444'
+      ctx.fillStyle = cfeColor
+      ctx.fillText(`CFE: ${(cfe * 100).toFixed(0)}%`, lgX, lgY + 25)
     }
   }, [data, prevData, width, height, darkMode])
 
