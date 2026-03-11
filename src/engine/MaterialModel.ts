@@ -1265,6 +1265,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.08,
     wallThickness: 2.0,
   }),
+  iron_ductile_ggg50: createMaterial({
+    name: 'Ductile Iron GGG-50',
+    youngsModulus: 169000,
+    poissonRatio: 0.27,
+    yieldStress: 320,
+    uts: 500,
+    density: 7100,
+    hardeningExponent: 0.18,
+    wallThickness: 2.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */
