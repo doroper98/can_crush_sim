@@ -705,6 +705,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.06,
     wallThickness: 0.3,
   }),
+  pom: createMaterial({
+    name: 'POM (Delrin)',
+    youngsModulus: 3100,
+    poissonRatio: 0.35,
+    yieldStress: 65,
+    uts: 70,
+    density: 1410,
+    hardeningExponent: 0.15,
+    wallThickness: 1.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */
