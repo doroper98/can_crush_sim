@@ -1735,6 +1735,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.16,
     wallThickness: 0.3,
   }),
+  copper_ofe_c101: createMaterial({
+    name: 'OFE Copper C10100',
+    youngsModulus: 117000,
+    poissonRatio: 0.34,
+    yieldStress: 69,
+    uts: 220,
+    density: 8940,
+    hardeningExponent: 0.44,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
