@@ -3,6 +3,7 @@ import LoadDisplacementChart from './LoadDisplacementChart'
 import EnergyChart from './EnergyChart'
 import StressStrainChart from './StressStrainChart'
 import { MATERIALS, MATERIAL_KEYS } from '../engine/MaterialModel'
+import { getCategory } from './MaterialTable'
 
 export type RigidBodyShape = 'cylinder' | 'box' | 'sphere' | 'cone'
 export type ControlMode = 'displacement' | 'force'
@@ -561,15 +562,53 @@ export default function ControlPanel({
       <Section title={`Material (${MATERIAL_KEYS.length})`} defaultOpen={false} theme={theme}>
         {onMaterialKeyChange && (() => {
           const [matFilter, setMatFilter] = useState('')
+          const [catFilter, setCatFilter] = useState('')
           const lf = matFilter.toLowerCase()
-          const filteredKeys = lf
-            ? MATERIAL_KEYS.filter(k => {
-                const m = MATERIALS[k]
-                return m.name.toLowerCase().includes(lf) || k.toLowerCase().includes(lf)
-              })
-            : MATERIAL_KEYS
+          // Build category counts
+          const catCounts: Record<string, number> = {}
+          MATERIAL_KEYS.forEach(k => {
+            const cat = getCategory(k).label
+            catCounts[cat] = (catCounts[cat] || 0) + 1
+          })
+          const topCategories = Object.entries(catCounts).sort((a, b) => b[1] - a[1]).slice(0, 8)
+          const filteredKeys = MATERIAL_KEYS.filter(k => {
+            const m = MATERIALS[k]
+            const cat = getCategory(k)
+            if (catFilter && cat.label !== catFilter) return false
+            if (lf && !m.name.toLowerCase().includes(lf) && !k.toLowerCase().includes(lf)) return false
+            return true
+          })
           return (
             <>
+              {/* Category filter chips */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginBottom: 4 }}>
+                <button
+                  onClick={() => setCatFilter('')}
+                  style={{
+                    padding: '2px 6px', borderRadius: 6, border: 'none', fontSize: 9, fontWeight: 600,
+                    cursor: 'pointer', transition: 'all 0.15s',
+                    background: !catFilter ? '#3b82f6' : (theme.selectBg),
+                    color: !catFilter ? '#fff' : theme.textSec,
+                    boxShadow: !catFilter ? 'none' : theme.selectShadow,
+                  }}
+                >All</button>
+                {topCategories.map(([cat, count]) => {
+                  const catInfo = getCategory(MATERIAL_KEYS.find(k => getCategory(k).label === cat) || '')
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setCatFilter(catFilter === cat ? '' : cat)}
+                      style={{
+                        padding: '2px 6px', borderRadius: 6, border: 'none', fontSize: 9, fontWeight: 600,
+                        cursor: 'pointer', transition: 'all 0.15s',
+                        background: catFilter === cat ? catInfo.color : (theme.selectBg),
+                        color: catFilter === cat ? '#000' : theme.textSec,
+                        boxShadow: catFilter === cat ? 'none' : theme.selectShadow,
+                      }}
+                    >{cat}·{count}</button>
+                  )
+                })}
+              </div>
               <input
                 type="text"
                 placeholder="Search materials… (e.g. steel, titanium)"
@@ -589,11 +628,11 @@ export default function ControlPanel({
                   boxSizing: 'border-box',
                 }}
               />
-              {matFilter && <div style={{ fontSize: 9, color: theme.textSec, marginBottom: 2 }}>{filteredKeys.length} / {MATERIAL_KEYS.length} materials</div>}
+              {(matFilter || catFilter) && <div style={{ fontSize: 9, color: theme.textSec, marginBottom: 2 }}>{filteredKeys.length} / {MATERIAL_KEYS.length} materials{catFilter ? ` [${catFilter}]` : ''}</div>}
               <select
                 value={materialKey}
                 onChange={e => onMaterialKeyChange(e.target.value)}
-                size={matFilter ? Math.min(filteredKeys.length, 10) : 1}
+                size={(matFilter || catFilter) ? Math.min(filteredKeys.length, 10) : 1}
                 style={{
                   width: '100%',
                   padding: '6px 10px',
