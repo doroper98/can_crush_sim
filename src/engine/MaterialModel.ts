@@ -2125,6 +2125,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.08,
     wallThickness: 0.3,
   }),
+  steel_347: createMaterial({
+    name: 'AISI 347 (Nb-Stabilized SS)',
+    youngsModulus: 193000,
+    poissonRatio: 0.29,
+    yieldStress: 205,
+    uts: 515,
+    density: 7920,
+    hardeningExponent: 0.33,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
