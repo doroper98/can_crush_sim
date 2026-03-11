@@ -1592,6 +1592,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-274] Hastelloy C-276 재료 추가 — 99번째, 14번째 Ni
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 03:05:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | Hastelloy C-276 추가: E=205GPa, σy=365MPa, UTS=785MPa, n=0.32, ρ=8890. getCategory hastelloy_x → startsWith('hastelloy_') 프리픽스 전환 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 864.52 kB (gzip 235 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 최강 내식성 Ni 합금. 화학공장·폐기물처리·해양 환경. Hastelloy X(고온) vs C-276(내식). Ni 14종! **다음이 100번째 재료!** |
+
+---
+
 ### [EXP-273] Aluminum 8011-O (Foil) 재료 추가 — 98번째, 13번째 Al
 
 | 항목 | 값 |
