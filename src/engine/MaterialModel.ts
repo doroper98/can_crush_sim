@@ -445,6 +445,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.25,
     wallThickness: 0.3,
   }),
+  rhodium_rh: createMaterial({
+    name: 'Rhodium (Rh)',
+    youngsModulus: 275000,
+    poissonRatio: 0.26,
+    yieldStress: 70,
+    uts: 200,
+    density: 12410,
+    hardeningExponent: 0.40,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */

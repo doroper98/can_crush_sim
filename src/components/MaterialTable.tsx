@@ -34,6 +34,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'chromium_cr') return { label: 'Cr', color: '#dc2626' }
   if (key === 'manganese_mn') return { label: 'Mn', color: '#f472b6' }
   if (key === 'hafnium_hf') return { label: 'Hf', color: '#0ea5e9' }
+  if (key === 'rhodium_rh') return { label: 'Rh', color: '#e11d48' }
   return { label: '?', color: '#94a3b8' }
 }
 
