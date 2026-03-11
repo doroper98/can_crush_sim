@@ -9,6 +9,18 @@ interface MaterialTableProps {
   currentMaterial?: string
 }
 
+function getCategory(key: string): { label: string; color: string } {
+  if (key.startsWith('aluminum_')) return { label: 'Al', color: '#60a5fa' }
+  if (key.startsWith('steel_')) return { label: 'Fe', color: '#a78bfa' }
+  if (key.startsWith('copper_') || key === 'brass_c260') return { label: 'Cu', color: '#f97316' }
+  if (key.startsWith('titanium_')) return { label: 'Ti', color: '#14b8a6' }
+  if (key.startsWith('nickel_') || key === 'inconel_718' || key === 'hastelloy_x') return { label: 'Ni', color: '#e879f9' }
+  if (key === 'polycarbonate' || key === 'peek') return { label: 'Poly', color: '#facc15' }
+  if (key === 'zinc_zamak3') return { label: 'Zn', color: '#94a3b8' }
+  if (key === 'magnesium_az31b') return { label: 'Mg', color: '#4ade80' }
+  return { label: '?', color: '#94a3b8' }
+}
+
 const cols: { key: string; label: string; unit: string; fmt: (v: number) => string }[] = [
   { key: 'youngsModulus', label: 'E', unit: 'GPa', fmt: v => (v / 1000).toFixed(0) },
   { key: 'poissonRatio', label: 'ν', unit: '', fmt: v => v.toFixed(2) },
@@ -134,7 +146,7 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
                   style={{ background: isCurrent ? highlightBg : 'transparent', cursor: onSelect ? 'pointer' : 'default' }}
                 >
                   <td style={{ padding: '4px 8px', color: isCurrent ? '#3b82f6' : text, fontWeight: isCurrent ? 600 : 400, borderBottom: `1px solid ${borderColor}`, whiteSpace: 'nowrap' }}>
-                    {isCurrent ? '▸ ' : ''}{mat.name}
+                    {isCurrent ? '▸ ' : ''}<span style={{ display: 'inline-block', fontSize: 8, fontWeight: 700, color: '#fff', background: getCategory(key).color, borderRadius: 3, padding: '0 3px', marginRight: 4, lineHeight: '14px', verticalAlign: 'middle' }}>{getCategory(key).label}</span>{mat.name}
                   </td>
                   {cols.map(c => {
                     const val = c.key === 'K'
