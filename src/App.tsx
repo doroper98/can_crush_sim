@@ -2055,6 +2055,46 @@ export default function App() {
         )}
       </div>
       </FileDropZone>
+      {/* Camera view preset buttons */}
+      <div style={{
+        position: 'absolute', top: 8, left: 8, zIndex: 20,
+        display: 'flex', gap: 4,
+      }}>
+        {([
+          { label: 'T', title: 'Top View (XY)', view: 'top' as const },
+          { label: 'F', title: 'Front View (XZ)', view: 'front' as const },
+          { label: 'R', title: 'Right View (YZ)', view: 'right' as const },
+          { label: 'I', title: 'Isometric View', view: 'iso' as const },
+        ] as const).map(v => (
+          <button
+            key={v.view}
+            title={v.title}
+            onClick={() => controlsRef.current?.setView(v.view)}
+            style={{
+              width: 26, height: 26, border: 'none', borderRadius: 8, cursor: 'pointer',
+              fontSize: 11, fontWeight: 700, lineHeight: '26px',
+              color: darkMode ? '#94a3b8' : '#64748b',
+              background: darkMode ? '#1e293b' : '#f0f4f8',
+              boxShadow: darkMode
+                ? '2px 2px 5px rgba(0,0,0,0.4), -2px -2px 5px rgba(51,65,85,0.3)'
+                : '2px 2px 5px rgba(163,177,198,0.5), -2px -2px 5px rgba(255,255,255,0.7)',
+            }}
+          >{v.label}</button>
+        ))}
+        <button
+          title="Fit All (F)"
+          onClick={() => { const s = sceneRef.current; if (s && controlsRef.current) controlsRef.current.fitAll(s) }}
+          style={{
+            width: 26, height: 26, border: 'none', borderRadius: 8, cursor: 'pointer',
+            fontSize: 11, fontWeight: 700, lineHeight: '26px',
+            color: '#3b82f6',
+            background: darkMode ? '#1e293b' : '#f0f4f8',
+            boxShadow: darkMode
+              ? '2px 2px 5px rgba(0,0,0,0.4), -2px -2px 5px rgba(51,65,85,0.3)'
+              : '2px 2px 5px rgba(163,177,198,0.5), -2px -2px 5px rgba(255,255,255,0.7)',
+          }}
+        >⊞</button>
+      </div>
       {/* Panel toggle button */}
       <button
         onClick={() => setPanelVisible(prev => !prev)}

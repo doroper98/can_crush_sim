@@ -168,6 +168,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-435] 뷰포트 카메라 프리셋 버튼 (T/F/R/I/Fit All)
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 17:25:00 |
+| **Step** | S1.5 |
+| **관련 FR** | FR-02, FR-15 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | 뷰포트 좌상단에 5개 카메라 프리셋 버튼 추가: Top(T), Front(F), Right(R), Isometric(I), Fit All(⊞). 기존 Numpad 7/1/3/0/F 단축키의 마우스 클릭 대안. 뉴모피즘 스타일. CatiaControls.setView() 직접 호출. 다크모드 반응형. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (897.15 kB, gzip 243.17 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | Numpad 없는 노트북 사용자를 위한 필수 UX 개선. 버튼 크기 26px로 컴팩트하게 유지하여 뷰포트 방해 최소화. |
+
+---
+
 ### [EXP-434] localStorage 세션 자동 저장/복원
 
 | 항목 | 값 |
