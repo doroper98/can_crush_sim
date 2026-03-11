@@ -2185,6 +2185,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.10,
     wallThickness: 0.3,
   }),
+  titanium_10v2fe3al: createMaterial({
+    name: 'Ti-10V-2Fe-3Al (Beta Forging)',
+    youngsModulus: 107000,
+    poissonRatio: 0.33,
+    yieldStress: 1100,
+    uts: 1170,
+    density: 4650,
+    hardeningExponent: 0.05,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
