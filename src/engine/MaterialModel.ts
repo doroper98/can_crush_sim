@@ -1705,6 +1705,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.5,
   }),
+  nickel_201: createMaterial({
+    name: 'Nickel 201 (Low Carbon)',
+    youngsModulus: 207000,
+    poissonRatio: 0.31,
+    yieldStress: 105,
+    uts: 405,
+    density: 8890,
+    hardeningExponent: 0.42,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
