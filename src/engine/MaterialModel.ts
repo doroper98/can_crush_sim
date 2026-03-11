@@ -1245,6 +1245,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.10,
     wallThickness: 0.3,
   }),
+  inconel_600: createMaterial({
+    name: 'Inconel 600',
+    youngsModulus: 214000,
+    poissonRatio: 0.29,
+    yieldStress: 250,
+    uts: 620,
+    density: 8470,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
