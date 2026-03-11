@@ -475,6 +475,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  palladium_pd: createMaterial({
+    name: 'Palladium (Pd)',
+    youngsModulus: 121000,
+    poissonRatio: 0.39,
+    yieldStress: 40,
+    uts: 180,
+    density: 12020,
+    hardeningExponent: 0.42,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
