@@ -1589,7 +1589,12 @@ export default function App() {
     const bufLen = 80 + 4 + triCount * 50
     const buf = new ArrayBuffer(bufLen)
     const view = new DataView(buf)
-    // Header (80 bytes) — fill with zeros
+    // Header (80 bytes) — write material and geometry info
+    const mat = MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]
+    const headerStr = `CanCrush ${mat.name} D${(canRadiusRef.current * 2).toFixed(0)} H${canHeightRef.current.toFixed(0)} t${wallThicknessRef.current}`
+    const enc = new TextEncoder()
+    const hBytes = enc.encode(headerStr.slice(0, 79))
+    new Uint8Array(buf).set(hBytes, 0)
     // Triangle count
     view.setUint32(80, triCount, true)
     const indices = idx.array
@@ -1626,11 +1631,12 @@ export default function App() {
     const blob = new Blob([buf], { type: 'application/octet-stream' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
-    link.download = `cancrush_deformed_${Date.now()}.stl`
+    const matName = mat.name.replace(/[^a-zA-Z0-9]/g, '_')
+    link.download = `cancrush_${matName}_deformed_${Date.now()}.stl`
     link.href = url
     link.click()
     URL.revokeObjectURL(url)
-    showToast(`STL exported (${triCount} triangles)`)
+    showToast(`STL exported: ${mat.name} — ${triCount} triangles, ${(bufLen / 1024).toFixed(0)} KB`)
   }, [showToast])
 
   const handleExportCSV = useCallback(() => {
