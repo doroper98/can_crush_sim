@@ -2021,6 +2021,20 @@ export default function App() {
             <div>ε_p: {(resultSummary.maxPlastic * 100).toFixed(1)} %</div>
             <div style={{ fontSize: 9, color: '#64748b' }}>σ_f: {(MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]).flowStress(resultSummary.maxPlastic).toFixed(0)} MPa</div>
             <div>E: {resultSummary.energyAbsorbed.toFixed(2)} J</div>
+            {/* Compression progress bar */}
+            {(() => {
+              const maxDisp = canHeightParam * (maxCompression / 100)
+              const prog = maxDisp > 0 ? Math.min(simDisplacement / maxDisp, 1) : 0
+              const progPct = prog * 100
+              return (
+                <div style={{ margin: '3px 0', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <div style={{ flex: 1, height: 4, borderRadius: 2, background: 'rgba(100,116,139,0.3)' }}>
+                    <div style={{ width: `${progPct}%`, height: '100%', borderRadius: 2, background: prog >= 1 ? '#10b981' : '#3b82f6', transition: 'width 0.15s' }} />
+                  </div>
+                  <span style={{ fontSize: 8, color: '#64748b' }}>{progPct.toFixed(0)}%</span>
+                </div>
+              )
+            })()}
             <div style={{ borderTop: '1px solid rgba(148,163,184,0.3)', marginTop: 3, paddingTop: 3 }}>
               <div>F_pk: {resultSummary.peakForce.toFixed(0)} N  F̄: {resultSummary.meanForce.toFixed(0)} N</div>
               <div>SEA: {resultSummary.sea.toFixed(1)} J/kg</div>

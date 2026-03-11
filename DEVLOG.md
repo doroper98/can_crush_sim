@@ -168,6 +168,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-436] HUD 압축 진행률 바 추가
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 17:32:00 |
+| **Step** | S3.6 |
+| **관련 FR** | FR-13 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | HUD 오버레이에 compression progress bar 추가. simDisplacement / (canHeight × maxCompression%) 비율로 진행률 계산. 진행 중 파란색(#3b82f6), 100% 도달 시 녹색(#10b981). Energy 표시 아래, 힘/SEA/CFE 구분선 위에 배치. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (897.62 kB, gzip 243.23 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 기존 UTS utilization bar와 시각적 일관성 유지. 시뮬레이션이 어느 정도 진행됐는지 한눈에 파악 가능. |
+
+---
+
 ### [EXP-435] 뷰포트 카메라 프리셋 버튼 (T/F/R/I/Fit All)
 
 | 항목 | 값 |
