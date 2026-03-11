@@ -675,6 +675,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.14,
     wallThickness: 0.3,
   }),
+  nickel_invar36: createMaterial({
+    name: 'Invar 36 (Fe-36Ni)',
+    youngsModulus: 141000,
+    poissonRatio: 0.29,
+    yieldStress: 276,
+    uts: 483,
+    density: 8050,
+    hardeningExponent: 0.28,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
