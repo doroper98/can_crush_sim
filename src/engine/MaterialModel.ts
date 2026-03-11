@@ -1715,6 +1715,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.42,
     wallThickness: 0.3,
   }),
+  aluminum_4032: createMaterial({
+    name: 'Aluminum 4032-T6',
+    youngsModulus: 79000,
+    poissonRatio: 0.33,
+    yieldStress: 315,
+    uts: 380,
+    density: 2680,
+    hardeningExponent: 0.09,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
