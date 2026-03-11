@@ -155,6 +155,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.42,
     wallThickness: 0.3,
   }),
+  monel_400: createMaterial({
+    name: 'Monel 400',
+    youngsModulus: 179000,
+    poissonRatio: 0.32,
+    yieldStress: 240,
+    uts: 550,
+    density: 8800,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
   nickel_200: createMaterial({
     name: 'Nickel 200',
     youngsModulus: 207000,

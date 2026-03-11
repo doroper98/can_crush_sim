@@ -14,7 +14,7 @@ function getCategory(key: string): { label: string; color: string } {
   if (key.startsWith('steel_')) return { label: 'Fe', color: '#a78bfa' }
   if (key.startsWith('copper_') || key === 'brass_c260') return { label: 'Cu', color: '#f97316' }
   if (key.startsWith('titanium_')) return { label: 'Ti', color: '#14b8a6' }
-  if (key.startsWith('nickel_') || key === 'inconel_718' || key === 'hastelloy_x') return { label: 'Ni', color: '#e879f9' }
+  if (key.startsWith('nickel_') || key.startsWith('monel_') || key === 'inconel_718' || key === 'hastelloy_x') return { label: 'Ni', color: '#e879f9' }
   if (key === 'polycarbonate' || key === 'peek' || key.startsWith('nylon_')) return { label: 'Poly', color: '#facc15' }
   if (key === 'zinc_zamak3') return { label: 'Zn', color: '#94a3b8' }
   if (key === 'magnesium_az31b') return { label: 'Mg', color: '#4ade80' }
