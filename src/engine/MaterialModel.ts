@@ -2175,6 +2175,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.25,
     wallThickness: 0.3,
   }),
+  steel_6150: createMaterial({
+    name: 'AISI 6150 (Cr-V Spring)',
+    youngsModulus: 205000,
+    poissonRatio: 0.29,
+    yieldStress: 860,
+    uts: 1020,
+    density: 7850,
+    hardeningExponent: 0.10,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */

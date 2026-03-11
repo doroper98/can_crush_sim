@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-380 기준, 26/03/12 12:05)
+### 누적 통계 (EXP-390 기준, 26/03/12 13:00)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **380** |
-| 성공 커밋 | 380 |
+| 총 실험 수 | **390** |
+| 성공 커밋 | 390 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 344건, EXP-028~380) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 354건, EXP-028~390) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 882 kB (gzip 239 kB) |
-| 재료 라이브러리 | **205종** (Al×21, Fe×39, Cu×27, Ti×12, Ni×28, Poly×26, Co×7, Mg×7, Zn×5, Sn×3, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×5, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
+| 빌드 크기 | 883 kB (gzip 239 kB) |
+| 재료 라이브러리 | **215종** (Al×23, Fe×42, Cu×28, Ti×12, Ni×29, Poly×27, Co×7, Mg×8, Zn×5, Sn×4, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×5, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
 | 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **205 재료(200 마일스톤 돌파!)**, 31카테고리, Al3004(캔바디)+Al5182(캔엔드), ETFE/PEI/PSU, 882kB빌드 |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **215 재료(210 마일스톤 돌파!)**, 31카테고리, Al3004(캔바디)+Al5182(캔엔드)+Al8090(Al-Li), PAI/ETFE/PEI/PSU, 883kB빌드 |
 
 ---
 
@@ -2054,6 +2054,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 872.08 kB (gzip 237 kB) · tsc: pass · ui: 10/10 |
 | **판정** | ✅ COMMIT |
 | **비고** | 유리섬유 단방향 복합재. CFRP 대비 경제적. 풍력 블레이드·보트·건축 소재. 누적: 320실험, 145재료, 31카테고리, 872kB. CFRP+GFRP로 복합재 시리즈 확립. Poly 19종 달성 |
+
+---
+
+### [EXP-390] AISI 6150 (Cr-V Spring) 재료 추가 + 누적 통계 — 215번째, 42번째 Fe
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 13:00:00 |
+| **Step** | - (재료 라이브러리 확장 + 누적 통계) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | AISI 6150 추가: E=205GPa, σy=860MPa, UTS=1020MPa, n=0.10, ρ=7850, t=0.3mm + 누적 통계 업데이트(215종/390실험) |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 883.29 kB (gzip 239 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | Cr-V 스프링강(0.5C-1Cr-0.15V). 자동차 코일스프링·리프스프링. 높은 피로 수명. 누적 통계: 215종(Al×23, Fe×42, Cu×28, Ti×12, Ni×29, Poly×27, Co×7, Mg×8, Zn×5, Sn×4, W×2, Pb×2, Zr×3, Nb×5, Mo×2 + 16 singles), 883kB |
 
 ---
 
