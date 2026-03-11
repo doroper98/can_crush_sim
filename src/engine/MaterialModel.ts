@@ -1505,6 +1505,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.15,
     wallThickness: 0.3,
   }),
+  copper_muntz_c280: createMaterial({
+    name: 'Muntz Metal C28000',
+    youngsModulus: 100000,
+    poissonRatio: 0.34,
+    yieldStress: 145,
+    uts: 370,
+    density: 8390,
+    hardeningExponent: 0.40,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
