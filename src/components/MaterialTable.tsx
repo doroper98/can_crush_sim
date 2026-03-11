@@ -36,6 +36,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'hafnium_hf') return { label: 'Hf', color: '#0ea5e9' }
   if (key === 'rhodium_rh') return { label: 'Rh', color: '#e11d48' }
   if (key === 'iridium_ir') return { label: 'Ir', color: '#475569' }
+  if (key === 'osmium_os') return { label: 'Os', color: '#1e3a5f' }
   return { label: '?', color: '#94a3b8' }
 }
 

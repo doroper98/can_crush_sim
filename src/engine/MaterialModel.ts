@@ -465,6 +465,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  osmium_os: createMaterial({
+    name: 'Osmium (Os)',
+    youngsModulus: 560000,
+    poissonRatio: 0.25,
+    yieldStress: 100,
+    uts: 200,
+    density: 22590,
+    hardeningExponent: 0.30,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
