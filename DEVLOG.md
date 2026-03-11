@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-200 기준, 26/03/11 20:35) — 200실험 마일스톤!
+### 누적 통계 (EXP-210 기준, 26/03/11 21:35)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **200** 🎉 |
-| 성공 커밋 | 200 |
+| 총 실험 수 | **210** |
+| 성공 커밋 | 210 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 164건, EXP-028~200) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 174건, EXP-028~210) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 853 kB (gzip 233 kB) |
-| 재료 라이브러리 | 35종 (Al×5, Fe×5, Cu×2, Ti×2, Ni×4, Poly×4, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb) |
+| 빌드 크기 | 855 kB (gzip 233 kB) |
+| 재료 라이브러리 | 42종 (Al×5, Fe×5, Cu×2, Ti×2, Ni×4, Poly×4, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
-| 카테고리 | 18종 (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb) |
+| 카테고리 | 25종 (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5) | StressStrainChart 그리드+n값, 카테고리 뱃지, HUD flow stress/st/s/인덱스, MaterialTable 검색 필터+카테고리바+밀도미니바, 뷰포트 진행바, CFE 차트 표시, 35재료, 18카테고리 |
+| 신규 기능 (v1.5+) | 3차트 그리드 일관성, LoadDisp Peak/Mean 수치, 42재료, 25카테고리 |
 
 ---
 
@@ -1589,6 +1589,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 853.62 kB (gzip 232.92 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
 | **판정** | ✅ COMMIT (아래) |
 | **비고** | 바나듐 합금강의 핵심 원소. 공구강·스프링강. UTS/σy=1.94. 내화금속 4종(W/Ta/Mo/Nb+V). 20카테고리 달성! |
+
+---
+
+### [EXP-210] DEVLOG 누적 통계 업데이트
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 21:35:00 |
+| **Step** | - (유지보수) |
+| **관련 FR** | - |
+| **관련 NF** | - |
+| **변경 내용** | 누적 통계 EXP-200 → EXP-210 기준으로 갱신. 42 재료, 25 카테고리, 855 kB. |
+| **테스트 항목** | - |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 854.74 kB (gzip 233.23 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | EXP-203~209: 차트 개선 2건(그리드 일관성, Peak/Mean 수치) + 재료 5종 추가(Be, Cr, Mn, Hf, Rh). |
 
 ---
 
