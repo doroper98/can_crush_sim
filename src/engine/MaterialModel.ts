@@ -2405,6 +2405,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.16,
     wallThickness: 0.3,
   }),
+  tin_pewter: createMaterial({
+    name: 'Pewter (Sn-7.5Sb-2Cu)',
+    youngsModulus: 48000,
+    poissonRatio: 0.35,
+    yieldStress: 30,
+    uts: 55,
+    density: 7280,
+    hardeningExponent: 0.18,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
