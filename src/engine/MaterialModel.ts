@@ -1205,6 +1205,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.40,
     wallThickness: 0.3,
   }),
+  nickel_nitinol: createMaterial({
+    name: 'Nitinol (NiTi SMA)',
+    youngsModulus: 75000,
+    poissonRatio: 0.33,
+    yieldStress: 500,
+    uts: 900,
+    density: 6450,
+    hardeningExponent: 0.22,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
