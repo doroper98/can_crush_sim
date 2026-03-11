@@ -24,7 +24,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key.startsWith('zirconium_')) return { label: 'Zr', color: '#2dd4bf' }
   if (key === 'silver_ag') return { label: 'Ag', color: '#cbd5e1' }
   if (key === 'gold_au') return { label: 'Au', color: '#fbbf24' }
-  if (key === 'cobalt_chrome') return { label: 'Co', color: '#818cf8' }
+  if (key.startsWith('cobalt_')) return { label: 'Co', color: '#818cf8' }
   if (key === 'platinum_pt') return { label: 'Pt', color: '#d4d4d8' }
   if (key === 'tantalum_ta') return { label: 'Ta', color: '#6366f1' }
   if (key === 'niobium_nb') return { label: 'Nb', color: '#7c3aed' }

@@ -745,6 +745,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.07,
     wallThickness: 0.5,
   }),
+  cobalt_stellite6: createMaterial({
+    name: 'Stellite 6',
+    youngsModulus: 210000,
+    poissonRatio: 0.30,
+    yieldStress: 620,
+    uts: 900,
+    density: 8380,
+    hardeningExponent: 0.20,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
