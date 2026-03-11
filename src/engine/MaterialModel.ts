@@ -1495,6 +1495,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.28,
     wallThickness: 0.5,
   }),
+  steel_4130: createMaterial({
+    name: 'AISI 4130 Chromoly',
+    youngsModulus: 205000,
+    poissonRatio: 0.29,
+    yieldStress: 460,
+    uts: 560,
+    density: 7850,
+    hardeningExponent: 0.15,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
