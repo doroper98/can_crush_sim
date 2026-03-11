@@ -545,6 +545,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.08,
     wallThickness: 0.3,
   }),
+  uhmwpe: createMaterial({
+    name: 'UHMWPE',
+    youngsModulus: 700,
+    poissonRatio: 0.46,
+    yieldStress: 21,
+    uts: 48,
+    density: 930,
+    hardeningExponent: 0.35,
+    wallThickness: 2.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */
