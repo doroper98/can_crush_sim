@@ -825,6 +825,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.16,
     wallThickness: 0.3,
   }),
+  titanium_ti6al4v_sta: createMaterial({
+    name: 'Ti-6Al-4V STA',
+    youngsModulus: 114000,
+    poissonRatio: 0.34,
+    yieldStress: 1100,
+    uts: 1170,
+    density: 4430,
+    hardeningExponent: 0.05,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
