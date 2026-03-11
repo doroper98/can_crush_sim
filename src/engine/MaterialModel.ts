@@ -1085,6 +1085,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.3,
   }),
+  copper_c46400: createMaterial({
+    name: 'Naval Brass C46400',
+    youngsModulus: 100000,
+    poissonRatio: 0.34,
+    yieldStress: 170,
+    uts: 380,
+    density: 8410,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
