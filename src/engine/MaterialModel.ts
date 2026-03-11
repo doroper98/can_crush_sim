@@ -1835,6 +1835,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  steel_420: createMaterial({
+    name: 'AISI 420 Martensitic SS',
+    youngsModulus: 200000,
+    poissonRatio: 0.28,
+    yieldStress: 345,
+    uts: 655,
+    density: 7740,
+    hardeningExponent: 0.15,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
