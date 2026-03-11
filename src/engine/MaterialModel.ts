@@ -215,6 +215,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.25,
     wallThickness: 1.0,
   }),
+  nylon_pa6: createMaterial({
+    name: 'Nylon 6 (PA6)',
+    youngsModulus: 2700,
+    poissonRatio: 0.39,
+    yieldStress: 70,
+    uts: 85,
+    density: 1140,
+    hardeningExponent: 0.28,
+    wallThickness: 1.0,
+  }),
   aluminum_2024: createMaterial({
     name: 'Aluminum 2024-T3',
     youngsModulus: 73100,
