@@ -117,6 +117,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-426] 미사용 의존성 정리
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 16:20:00 |
+| **Step** | S4.8 |
+| **관련 FR** | - |
+| **관련 NF** | NF-04 |
+| **변경 내용** | package.json에서 미사용 의존성 3개 제거: zustand (상태관리 미사용, React refs 사용), tailwindcss (인라인 스타일 사용), opencascade.js (CDN 동적 로딩으로 대체). npm 패키지 91→88개. 빌드 시 tree-shaking으로 이미 제거되어 빌드 크기 변화 없음. |
+| **테스트 항목** | npm install, tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (892.86 kB, gzip 242.04 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 의존성 정리로 `npm install` 속도 향상, package-lock.json 축소. opencascade.js는 CDN 방식이므로 npm 설치 불필요. |
+
+---
+
 ### [EXP-425] Material 카테고리 필터 칩 추가
 
 | 항목 | 값 |
