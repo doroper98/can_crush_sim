@@ -385,6 +385,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.25,
     wallThickness: 1.0,
   }),
+  molybdenum_mo: createMaterial({
+    name: 'Molybdenum (Mo)',
+    youngsModulus: 329000,
+    poissonRatio: 0.31,
+    yieldStress: 550,
+    uts: 690,
+    density: 10220,
+    hardeningExponent: 0.12,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
