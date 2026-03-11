@@ -182,7 +182,18 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
             })}
           </tbody>
         </table>
-        <div style={{ marginTop: 14, textAlign: 'center', fontSize: 11, color: darkMode ? '#64748b' : '#94a3b8' }}>
+        {currentMaterial && MATERIALS[currentMaterial] && (() => {
+          const m = MATERIALS[currentMaterial]
+          const cat = getCategory(currentMaterial)
+          const ss = m.yieldStress / m.density * 1000
+          return (
+            <div style={{ marginTop: 12, padding: '8px 12px', borderRadius: 10, background: darkMode ? 'rgba(59,130,246,0.08)' : 'rgba(59,130,246,0.05)', fontSize: 10, color: textSec, lineHeight: 1.7 }}>
+              <span style={{ fontWeight: 600, color: text }}>{m.name}</span> <span style={{ fontSize: 8, color: cat.color, fontWeight: 700 }}>[{cat.label}]</span>
+              <span style={{ marginLeft: 8 }}>K={m.hardeningK().toFixed(0)} MPa · σy/ρ={ss.toFixed(0)} kNm/kg · UTS/σy={(m.uts / m.yieldStress).toFixed(2)}</span>
+            </div>
+          )
+        })()}
+        <div style={{ marginTop: 8, textAlign: 'center', fontSize: 11, color: darkMode ? '#64748b' : '#94a3b8' }}>
           Click header to sort · Click row to select · Press I or click outside to close
         </div>
       </div>
