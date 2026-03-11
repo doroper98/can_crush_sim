@@ -29,6 +29,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'tantalum_ta') return { label: 'Ta', color: '#6366f1' }
   if (key === 'niobium_nb') return { label: 'Nb', color: '#7c3aed' }
   if (key === 'molybdenum_mo') return { label: 'Mo', color: '#a1a1aa' }
+  if (key === 'vanadium_v') return { label: 'V', color: '#fb923c' }
   return { label: '?', color: '#94a3b8' }
 }
 

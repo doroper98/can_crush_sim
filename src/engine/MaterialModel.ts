@@ -395,6 +395,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.3,
   }),
+  vanadium_v: createMaterial({
+    name: 'Vanadium (V)',
+    youngsModulus: 128000,
+    poissonRatio: 0.37,
+    yieldStress: 180,
+    uts: 350,
+    density: 6100,
+    hardeningExponent: 0.30,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
