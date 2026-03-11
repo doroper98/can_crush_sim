@@ -885,6 +885,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.24,
     wallThickness: 0.3,
   }),
+  copper_be_c17200: createMaterial({
+    name: 'Cu-Be C17200',
+    youngsModulus: 131000,
+    poissonRatio: 0.30,
+    yieldStress: 1035,
+    uts: 1380,
+    density: 8250,
+    hardeningExponent: 0.08,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
