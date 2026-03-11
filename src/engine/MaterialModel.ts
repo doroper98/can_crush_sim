@@ -1455,6 +1455,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.20,
     wallThickness: 0.5,
   }),
+  cfrp_epoxy: createMaterial({
+    name: 'CFRP (Epoxy/Carbon UD)',
+    youngsModulus: 135000,
+    poissonRatio: 0.30,
+    yieldStress: 1500,
+    uts: 1500,
+    density: 1600,
+    hardeningExponent: 0.01,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
