@@ -1335,6 +1335,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.32,
     wallThickness: 0.3,
   }),
+  steel_430: createMaterial({
+    name: 'SS 430 Ferritic',
+    youngsModulus: 200000,
+    poissonRatio: 0.28,
+    yieldStress: 310,
+    uts: 515,
+    density: 7750,
+    hardeningExponent: 0.18,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
