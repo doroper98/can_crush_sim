@@ -2015,6 +2015,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.03,
     wallThickness: 0.5,
   }),
+  nickel_incoloy825: createMaterial({
+    name: 'Incoloy 825',
+    youngsModulus: 196000,
+    poissonRatio: 0.31,
+    yieldStress: 310,
+    uts: 690,
+    density: 8140,
+    hardeningExponent: 0.28,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
