@@ -2045,6 +2045,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.20,
     wallThickness: 0.3,
   }),
+  steel_8640: createMaterial({
+    name: 'AISI 8640 (Ni-Cr-Mo)',
+    youngsModulus: 205000,
+    poissonRatio: 0.29,
+    yieldStress: 560,
+    uts: 740,
+    density: 7850,
+    hardeningExponent: 0.13,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
