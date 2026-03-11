@@ -1856,6 +1856,15 @@ export default function App() {
             {measureDist !== null && !measureMode && ` | d=${measureDist.toFixed(1)}mm`}
           </span>
         </div>
+        {/* Viewport top progress bar */}
+        {simState !== 'idle' && canHeightParam > 0 && (() => {
+          const pct = Math.min(100, (simDisplacement / (canHeightParam * maxCompression / 100)) * 100)
+          return (
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'rgba(100,116,139,0.2)', zIndex: 20, pointerEvents: 'none' }}>
+              <div style={{ width: `${pct}%`, height: '100%', background: pct >= 100 ? '#10b981' : '#3b82f6', transition: 'width 0.1s' }} />
+            </div>
+          )
+        })()}
         {/* Simulation HUD overlay */}
         {showHUD && simState !== 'idle' && resultSummary && (
           <div style={{
