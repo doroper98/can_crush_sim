@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-300 기준, 26/03/12 05:20)
+### 누적 통계 (EXP-310 기준, 26/03/12 06:10)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **300** |
-| 성공 커밋 | 300 |
+| 총 실험 수 | **310** |
+| 성공 커밋 | 310 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 264건, EXP-028~300) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 274건, EXP-028~310) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 869 kB (gzip 236 kB) |
-| 재료 라이브러리 | **125종** (Al×15, Fe×21, Cu×13, Ti×8, Ni×17, Poly×15, Zn×2, Mg×3, Sn, W×2, Pb, Zr×3, Ag, Au, Co×3, Pt, Ta, Nb×2, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
+| 빌드 크기 | 870 kB (gzip 237 kB) |
+| 재료 라이브러리 | **135종** (Al×15, Fe×23, Cu×15, Ti×9, Ni×17, Poly×16, Co×5, Mg×4, Zn×2, Sn, W×2, Pb, Zr×3, Ag, Au, Pt, Ta, Nb×3, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
 | 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), UHMWPE(최저ρ), **125 재료**, 31카테고리, 주철 2종, Nitinol SMA |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), UHMWPE(최저ρ), **135 재료**, 31카테고리, 주철 2종, Nitinol SMA, PEEK CF30, 주철(Gray+Ductile) |
 
 ---
 
@@ -1889,6 +1889,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 870.26 kB (gzip 236 kB) · tsc: pass · ui: 10/10 |
 | **판정** | ✅ COMMIT |
 | **비고** | 로켓 노즐·고온 구조 소재. C-103에 이어 2번째 Nb 합금(3번째 Nb). 1370°C+ 사용온도. Nb 3종 달성 |
+
+---
+
+### [EXP-310] AISI 1020 Low Carbon Steel 재료 추가 + 누적 통계 갱신 — 135번째, 23번째 Fe
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 06:10:00 |
+| **Step** | - (재료 라이브러리 확장 + 누적 통계) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | AISI 1020 Low Carbon Steel 추가: E=205GPa, σy=350MPa, UTS=420MPa, n=0.22, ρ=7870. 누적 통계 EXP-300→310 갱신 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 870.42 kB (gzip 236 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 범용 저탄소강. 볼트·너트·파이프·구조 프레임. 누적: 310실험, 135재료, 31카테고리, 870kB. Fe 23종으로 최다 카테고리 |
 
 ---
 
