@@ -1285,6 +1285,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.07,
     wallThickness: 0.3,
   }),
+  pvdf: createMaterial({
+    name: 'PVDF (Polyvinylidene Fluoride)',
+    youngsModulus: 2100,
+    poissonRatio: 0.38,
+    yieldStress: 50,
+    uts: 52,
+    density: 1780,
+    hardeningExponent: 0.04,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
