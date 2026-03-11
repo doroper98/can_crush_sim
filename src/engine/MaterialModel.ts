@@ -2065,6 +2065,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.03,
     wallThickness: 0.1,
   }),
+  nickel_alloy42: createMaterial({
+    name: 'Alloy 42 (Ni42Fe)',
+    youngsModulus: 148000,
+    poissonRatio: 0.30,
+    yieldStress: 310,
+    uts: 520,
+    density: 8110,
+    hardeningExponent: 0.18,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
