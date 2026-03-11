@@ -1915,6 +1915,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.16,
     wallThickness: 0.3,
   }),
+  steel_a2: createMaterial({
+    name: 'AISI A2 Tool Steel',
+    youngsModulus: 207000,
+    poissonRatio: 0.29,
+    yieldStress: 1500,
+    uts: 1740,
+    density: 7860,
+    hardeningExponent: 0.05,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
