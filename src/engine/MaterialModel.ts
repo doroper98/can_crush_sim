@@ -865,6 +865,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.18,
     wallThickness: 0.3,
   }),
+  niobium_c103: createMaterial({
+    name: 'Niobium C-103',
+    youngsModulus: 90000,
+    poissonRatio: 0.38,
+    yieldStress: 270,
+    uts: 400,
+    density: 8850,
+    hardeningExponent: 0.20,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
