@@ -285,6 +285,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.10,
     wallThickness: 0.3,
   }),
+  lead_pb: createMaterial({
+    name: 'Lead (Pb)',
+    youngsModulus: 16000,
+    poissonRatio: 0.44,
+    yieldStress: 11,
+    uts: 17,
+    density: 11340,
+    hardeningExponent: 0.35,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */

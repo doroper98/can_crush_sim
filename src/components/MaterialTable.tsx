@@ -20,6 +20,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'magnesium_az31b') return { label: 'Mg', color: '#4ade80' }
   if (key === 'tin_sn') return { label: 'Sn', color: '#a3a3a3' }
   if (key === 'tungsten') return { label: 'W', color: '#78716c' }
+  if (key === 'lead_pb') return { label: 'Pb', color: '#71717a' }
   return { label: '?', color: '#94a3b8' }
 }
 
