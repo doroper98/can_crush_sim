@@ -2335,6 +2335,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.07,
     wallThickness: 0.3,
   }),
+  lcp: createMaterial({
+    name: 'LCP Vectra (Liquid Crystal)',
+    youngsModulus: 10000,
+    poissonRatio: 0.38,
+    yieldStress: 130,
+    uts: 185,
+    density: 1400,
+    hardeningExponent: 0.03,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
