@@ -1695,6 +1695,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.32,
     wallThickness: 0.3,
   }),
+  ldpe: createMaterial({
+    name: 'LDPE (Low Density PE)',
+    youngsModulus: 200,
+    poissonRatio: 0.45,
+    yieldStress: 10,
+    uts: 15,
+    density: 920,
+    hardeningExponent: 0.30,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
