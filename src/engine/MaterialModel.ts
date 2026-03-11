@@ -1005,6 +1005,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.15,
     wallThickness: 1.0,
   }),
+  aluminum_8011: createMaterial({
+    name: 'Aluminum 8011-O (Foil)',
+    youngsModulus: 69000,
+    poissonRatio: 0.33,
+    yieldStress: 40,
+    uts: 115,
+    density: 2710,
+    hardeningExponent: 0.38,
+    wallThickness: 0.015,
+  }),
 }
 
 /** Get material keys for UI dropdown */
