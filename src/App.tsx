@@ -8,7 +8,7 @@ import { MassSpringSystem } from './engine/MassSpringSystem'
 import ColorBar from './components/ColorBar'
 import FileDropZone from './components/FileDropZone'
 import { loadSTL } from './cad/stlLoader'
-import { loadSTEP } from './cad/occtLoader'
+import { loadSTEP, loadIGES } from './cad/occtLoader'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 import { applyVertexColors, type ColormapType } from './viewer/colormap'
 import { MATERIALS, DEFAULT_MATERIAL, MATERIAL_KEYS } from './engine/MaterialModel'
@@ -1437,8 +1437,22 @@ export default function App() {
           showToast(`STEP import failed: ${(e as Error).message}`)
           return
         }
+      } else if (ext === 'igs' || ext === 'iges') {
+        try {
+          showToast('Loading IGES file (initializing OCCT.js WASM)…')
+          geometries = await loadIGES(buffer)
+          if (geometries.length === 0) {
+            showToast('IGES file loaded but contains no valid geometry')
+            return
+          }
+          showToast(`IGES loaded: ${geometries.length} geometr${geometries.length === 1 ? 'y' : 'ies'} from ${fileName}`)
+        } catch (e) {
+          console.error('IGES loading failed:', e)
+          showToast(`IGES import failed: ${(e as Error).message}`)
+          return
+        }
       } else {
-        console.warn(`Unsupported file format: .${ext}`)
+        showToast(`Unsupported format: .${ext} — Use STL, STEP, or IGES files`)
         return
       }
 

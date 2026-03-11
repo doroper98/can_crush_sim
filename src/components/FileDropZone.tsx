@@ -69,7 +69,7 @@ export default function FileDropZone({ onFileLoaded, children }: FileDropZonePro
             padding: '12px 24px',
             borderRadius: 12,
           }}>
-            Drop STP / STL file here
+            Drop STL / STEP / IGES file here
           </span>
         </div>
       )}

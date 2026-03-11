@@ -117,6 +117,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-420] IGES 파일 임포트 지원 + 미지원 포맷 toast
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 15:40:00 |
+| **Step** | S2.2 |
+| **관련 FR** | FR-01 |
+| **관련 NF** | NF-04 |
+| **변경 내용** | IGES(.igs/.iges) 파일 임포트 지원 추가. `occtLoader.ts`에 `loadIGES()` 함수 추가, 기존 triangulation 코드를 `extractGeometries()` 헬퍼로 리팩토링하여 STEP/IGES 공유. `App.tsx`에 IGES 핸들러 추가 (toast 피드백/에러처리 포함). 미지원 포맷 드롭시 `showToast()` 피드백 (기존 `console.warn` 대체). `FileDropZone` 오버레이 텍스트 "STL / STEP / IGES" 업데이트. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (890.82 kB, gzip 241.40 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | GOAL.md 7절 IGES는 P1 우선순위. OCCT.js의 IGESControl_Reader 활용으로 추가 의존성 없이 지원. extractGeometries() 리팩토링으로 DRY 원칙 적용. |
+
+---
+
 ### [EXP-419] S2.2 STEP 파일 임포트 연동 완성
 
 | 항목 | 값 |

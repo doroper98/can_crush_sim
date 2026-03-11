@@ -47,26 +47,8 @@ export async function initOCCT(): Promise<any> {
   }
 }
 
-export async function loadSTEP(
-  fileBuffer: ArrayBuffer
-): Promise<THREE.BufferGeometry[]> {
-  const oc = await initOCCT()
-
-  // Write file to WASM filesystem
-  const fileName = '/input.step'
-  const fileData = new Uint8Array(fileBuffer)
-  oc.FS.writeFile(fileName, fileData)
-
-  // Read STEP file
-  const reader = new oc.STEPControl_Reader_1()
-  const readResult = reader.ReadFile(fileName)
-  if (readResult !== oc.IFSelect_ReturnStatus.IFSelect_RetDone) {
-    throw new Error('Failed to read STEP file')
-  }
-
-  reader.TransferRoots(new oc.Message_ProgressRange_1())
-  const shape = reader.OneShape()
-
+/** Extract triangulated geometry from an OCCT TopoDS_Shape */
+function extractGeometries(oc: any, shape: any): THREE.BufferGeometry[] {
   // Mesh the shape
   new oc.BRepMesh_IncrementalMesh_2(
     shape,
@@ -76,7 +58,6 @@ export async function loadSTEP(
     false
   )
 
-  // Extract triangulation
   const geometries: THREE.BufferGeometry[] = []
   const explorer = new oc.TopExp_Explorer_2(
     shape,
@@ -96,7 +77,6 @@ export async function loadSTEP(
       const vertices = new Float32Array(nbNodes * 3)
       const indices: number[] = []
 
-      // Extract vertices
       for (let i = 1; i <= nbNodes; i++) {
         const node = triangulation.get().Node(i)
         const transformed = node.Transformed(location.Transformation())
@@ -105,7 +85,6 @@ export async function loadSTEP(
         vertices[(i - 1) * 3 + 2] = transformed.Z()
       }
 
-      // Extract triangles
       for (let i = 1; i <= nbTriangles; i++) {
         const triangle = triangulation.get().Triangle(i)
         indices.push(triangle.Value(1) - 1)
@@ -123,8 +102,51 @@ export async function loadSTEP(
     explorer.Next()
   }
 
-  // Cleanup
-  oc.FS.unlink(fileName)
+  return geometries
+}
 
+export async function loadSTEP(
+  fileBuffer: ArrayBuffer
+): Promise<THREE.BufferGeometry[]> {
+  const oc = await initOCCT()
+
+  const fileName = '/input.step'
+  oc.FS.writeFile(fileName, new Uint8Array(fileBuffer))
+
+  const reader = new oc.STEPControl_Reader_1()
+  const readResult = reader.ReadFile(fileName)
+  if (readResult !== oc.IFSelect_ReturnStatus.IFSelect_RetDone) {
+    oc.FS.unlink(fileName)
+    throw new Error('Failed to read STEP file')
+  }
+
+  reader.TransferRoots(new oc.Message_ProgressRange_1())
+  const shape = reader.OneShape()
+  const geometries = extractGeometries(oc, shape)
+
+  oc.FS.unlink(fileName)
+  return geometries
+}
+
+export async function loadIGES(
+  fileBuffer: ArrayBuffer
+): Promise<THREE.BufferGeometry[]> {
+  const oc = await initOCCT()
+
+  const fileName = '/input.iges'
+  oc.FS.writeFile(fileName, new Uint8Array(fileBuffer))
+
+  const reader = new oc.IGESControl_Reader_1()
+  const readResult = reader.ReadFile(fileName)
+  if (readResult !== oc.IFSelect_ReturnStatus.IFSelect_RetDone) {
+    oc.FS.unlink(fileName)
+    throw new Error('Failed to read IGES file')
+  }
+
+  reader.TransferRoots(new oc.Message_ProgressRange_1())
+  const shape = reader.OneShape()
+  const geometries = extractGeometries(oc, shape)
+
+  oc.FS.unlink(fileName)
   return geometries
 }
