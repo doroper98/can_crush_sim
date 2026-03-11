@@ -2195,6 +2195,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.05,
     wallThickness: 0.3,
   }),
+  steel_904l: createMaterial({
+    name: 'AISI 904L (Super Austenitic)',
+    youngsModulus: 190000,
+    poissonRatio: 0.29,
+    yieldStress: 220,
+    uts: 490,
+    density: 7900,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
