@@ -925,6 +925,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.22,
     wallThickness: 0.3,
   }),
+  steel_a572: createMaterial({
+    name: 'HSLA A572 Gr.50',
+    youngsModulus: 200000,
+    poissonRatio: 0.30,
+    yieldStress: 345,
+    uts: 450,
+    density: 7850,
+    hardeningExponent: 0.20,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
