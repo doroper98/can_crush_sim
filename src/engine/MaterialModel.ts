@@ -1765,6 +1765,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.10,
     wallThickness: 0.3,
   }),
+  pps: createMaterial({
+    name: 'PPS (Polyphenylene Sulfide)',
+    youngsModulus: 3800,
+    poissonRatio: 0.38,
+    yieldStress: 85,
+    uts: 85,
+    density: 1350,
+    hardeningExponent: 0.02,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
