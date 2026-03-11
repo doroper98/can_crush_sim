@@ -1685,6 +1685,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  steel_ss321: createMaterial({
+    name: 'SS 321 (Ti-Stabilized)',
+    youngsModulus: 193000,
+    poissonRatio: 0.30,
+    yieldStress: 205,
+    uts: 515,
+    density: 7920,
+    hardeningExponent: 0.32,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
