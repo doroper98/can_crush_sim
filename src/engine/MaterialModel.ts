@@ -735,6 +735,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.3,
   }),
+  steel_17_4ph: createMaterial({
+    name: '17-4PH Stainless',
+    youngsModulus: 197000,
+    poissonRatio: 0.27,
+    yieldStress: 1170,
+    uts: 1310,
+    density: 7780,
+    hardeningExponent: 0.07,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
