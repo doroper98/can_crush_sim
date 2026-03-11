@@ -375,6 +375,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.50,
     wallThickness: 0.5,
   }),
+  abs: createMaterial({
+    name: 'ABS',
+    youngsModulus: 2300,
+    poissonRatio: 0.35,
+    yieldStress: 43,
+    uts: 50,
+    density: 1050,
+    hardeningExponent: 0.25,
+    wallThickness: 1.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */
