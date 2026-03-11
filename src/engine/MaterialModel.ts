@@ -435,6 +435,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.20,
     wallThickness: 0.3,
   }),
+  hafnium_hf: createMaterial({
+    name: 'Hafnium (Hf)',
+    youngsModulus: 78000,
+    poissonRatio: 0.37,
+    yieldStress: 120,
+    uts: 240,
+    density: 13310,
+    hardeningExponent: 0.25,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
