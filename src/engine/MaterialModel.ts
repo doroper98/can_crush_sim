@@ -1065,6 +1065,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.04,
     wallThickness: 0.3,
   }),
+  polyimide: createMaterial({
+    name: 'Polyimide (Kapton)',
+    youngsModulus: 3100,
+    poissonRatio: 0.34,
+    yieldStress: 72,
+    uts: 120,
+    density: 1420,
+    hardeningExponent: 0.25,
+    wallThickness: 0.05,
+  }),
 }
 
 /** Get material keys for UI dropdown */

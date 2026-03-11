@@ -1592,6 +1592,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-279] Polyimide (Kapton) 재료 추가 — 104번째, 13번째 Poly
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 03:30:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | Polyimide (Kapton) 추가: E=3.1GPa, σy=72MPa, UTS=120MPa, n=0.25, ρ=1420, t=0.05mm. getCategory에 `polyimide` 추가 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 865.34 kB (gzip 235 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | Kapton 필름! 우주·전자·반도체 필수 고온 폴리머. 400°C 연속 사용. t=0.05mm (50μm). Poly 13종 달성 |
+
+---
+
 ### [EXP-278] Ti-5Al-2.5Sn (Grade 6) 재료 추가 — 103번째, 7번째 Ti
 
 | 항목 | 값 |
