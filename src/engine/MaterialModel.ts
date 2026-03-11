@@ -875,6 +875,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.20,
     wallThickness: 0.3,
   }),
+  nickel_rene41: createMaterial({
+    name: 'René 41',
+    youngsModulus: 219000,
+    poissonRatio: 0.30,
+    yieldStress: 780,
+    uts: 1200,
+    density: 8250,
+    hardeningExponent: 0.24,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
