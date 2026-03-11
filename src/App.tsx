@@ -14,7 +14,7 @@ import { MATERIALS, DEFAULT_MATERIAL, MATERIAL_KEYS } from './engine/MaterialMod
 import { CanvasRecorder } from './viewer/recorder'
 import StatusBar from './components/StatusBar'
 import KeyboardHelp from './components/KeyboardHelp'
-import MaterialTable from './components/MaterialTable'
+import MaterialTable, { getCategory } from './components/MaterialTable'
 
 /** LOD: compute radial/height segments based on camera distance */
 function getLODSegments(cameraDistance: number): { radial: number; height: number } {
@@ -1882,7 +1882,10 @@ export default function App() {
             zIndex: 10,
             minWidth: 140,
           }}>
-            <div style={{ fontWeight: 600, color: '#93c5fd', marginBottom: 2 }}>{(MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]).name}</div>
+            <div style={{ fontWeight: 600, color: '#93c5fd', marginBottom: 2 }}>
+              <span style={{ display: 'inline-block', fontSize: 7, fontWeight: 700, color: '#fff', background: getCategory(materialKeyRef.current).color, borderRadius: 2, padding: '0 2px', marginRight: 4, lineHeight: '12px', verticalAlign: 'middle' }}>{getCategory(materialKeyRef.current).label}</span>
+              {(MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]).name}
+            </div>
             <div>t: {simTime.toFixed(3)} s</div>
             <div>d: {simDisplacement.toFixed(1)} mm</div>
             <div style={{ fontSize: 9, color: '#64748b' }}>v: {(compressionSpeedParam * timeScale).toFixed(1)} mm/s{wallElapsed > 0 ? `  ${(simSteps / wallElapsed).toFixed(0)} st/s` : ''}</div>

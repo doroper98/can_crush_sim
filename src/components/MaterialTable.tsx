@@ -9,7 +9,7 @@ interface MaterialTableProps {
   currentMaterial?: string
 }
 
-function getCategory(key: string): { label: string; color: string } {
+export function getCategory(key: string): { label: string; color: string } {
   if (key.startsWith('aluminum_')) return { label: 'Al', color: '#60a5fa' }
   if (key.startsWith('steel_')) return { label: 'Fe', color: '#a78bfa' }
   if (key.startsWith('copper_') || key === 'brass_c260') return { label: 'Cu', color: '#f97316' }
