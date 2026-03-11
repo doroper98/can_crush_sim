@@ -1445,6 +1445,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  tin_sn37pb: createMaterial({
+    name: 'Sn-37Pb Eutectic Solder',
+    youngsModulus: 30000,
+    poissonRatio: 0.36,
+    yieldStress: 27,
+    uts: 45,
+    density: 8500,
+    hardeningExponent: 0.20,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */

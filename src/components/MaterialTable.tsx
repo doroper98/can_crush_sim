@@ -18,7 +18,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'polycarbonate' || key.startsWith('peek') || key.startsWith('nylon_') || key === 'abs' || key === 'uhmwpe' || key === 'ptfe' || key === 'pom' || key.startsWith('pp') || key === 'hdpe' || key === 'pet' || key === 'polyimide' || key === 'epoxy' || key === 'pvdf') return { label: 'Poly', color: '#facc15' }
   if (key.startsWith('zinc_')) return { label: 'Zn', color: '#94a3b8' }
   if (key.startsWith('magnesium_')) return { label: 'Mg', color: '#4ade80' }
-  if (key === 'tin_sn') return { label: 'Sn', color: '#a3a3a3' }
+  if (key.startsWith('tin_')) return { label: 'Sn', color: '#a3a3a3' }
   if (key === 'tungsten' || key.startsWith('tungsten_')) return { label: 'W', color: '#78716c' }
   if (key === 'lead_pb') return { label: 'Pb', color: '#71717a' }
   if (key.startsWith('zirconium_')) return { label: 'Zr', color: '#2dd4bf' }

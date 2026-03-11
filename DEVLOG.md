@@ -1997,6 +1997,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-317] Sn-37Pb Eutectic Solder 재료 추가 — 142번째, 2번째 Sn
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 06:45:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | Sn-37Pb Eutectic Solder 추가: E=30GPa, σy=27MPa, UTS=45MPa, n=0.20, ρ=8500, t=0.5mm. getCategory tin → startsWith('tin_') 패턴 변경 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 871.55 kB (gzip 237 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 183°C 공정 납땜 합금. 전자 PCB 납땜 표준. σy=27MPa 금속 중 최저급 항복. 순Sn에 이어 2번째 Sn. getCategory startsWith 패턴 적용 |
+
+---
+
 ### [EXP-289] W-Ni-Fe 93% Heavy Alloy 재료 추가 — 114번째, 2번째 W
 
 | 항목 | 값 |
