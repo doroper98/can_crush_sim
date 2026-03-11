@@ -1145,6 +1145,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.18,
     wallThickness: 1.0,
   }),
+  copper_c71500: createMaterial({
+    name: 'Cupronickel C71500 (Cu-30Ni)',
+    youngsModulus: 150000,
+    poissonRatio: 0.34,
+    yieldStress: 170,
+    uts: 400,
+    density: 8940,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
