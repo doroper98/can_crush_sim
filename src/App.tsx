@@ -1885,6 +1885,7 @@ export default function App() {
             <div style={{ fontWeight: 600, color: '#93c5fd', marginBottom: 2 }}>
               <span style={{ display: 'inline-block', fontSize: 7, fontWeight: 700, color: '#fff', background: getCategory(materialKeyRef.current).color, borderRadius: 2, padding: '0 2px', marginRight: 4, lineHeight: '12px', verticalAlign: 'middle' }}>{getCategory(materialKeyRef.current).label}</span>
               {(MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]).name}
+              <span style={{ fontSize: 8, color: '#64748b', marginLeft: 4 }}>{MATERIAL_KEYS.indexOf(materialKeyRef.current) + 1}/{MATERIAL_KEYS.length}</span>
             </div>
             <div>t: {simTime.toFixed(3)} s</div>
             <div>d: {simDisplacement.toFixed(1)} mm</div>
