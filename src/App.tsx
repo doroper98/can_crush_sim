@@ -156,6 +156,7 @@ export default function App() {
   const measureLineRef = useRef<THREE.Line | null>(null)
   const measureLabelRef = useRef<THREE.Sprite | null>(null)
   const [measureDist, setMeasureDist] = useState<number | null>(null)
+  const [cadLoading, setCadLoading] = useState<string | null>(null) // null = not loading, string = status message
 
   useEffect(() => {
     const container = containerRef.current
@@ -1429,30 +1430,36 @@ export default function App() {
       let geometries: THREE.BufferGeometry[] = []
 
       if (ext === 'stl') {
-        showToast(`Loading STL: ${fileName}…`)
+        setCadLoading(`Loading STL: ${fileName}…`)
         geometries = [loadSTL(buffer)]
       } else if (ext === 'stp' || ext === 'step') {
         try {
-          showToast('Loading STEP file (initializing OCCT.js WASM)…')
+          setCadLoading(`Loading STEP: ${fileName}\nInitializing OCCT.js WASM engine…`)
+          await new Promise(r => setTimeout(r, 50)) // allow UI to paint
           geometries = await loadSTEP(buffer)
           if (geometries.length === 0) {
+            setCadLoading(null)
             showToast('STEP file loaded but contains no valid geometry')
             return
           }
         } catch (e) {
+          setCadLoading(null)
           console.error('STEP loading failed:', e)
           showToast(`STEP import failed: ${(e as Error).message}`)
           return
         }
       } else if (ext === 'igs' || ext === 'iges') {
         try {
-          showToast('Loading IGES file (initializing OCCT.js WASM)…')
+          setCadLoading(`Loading IGES: ${fileName}\nInitializing OCCT.js WASM engine…`)
+          await new Promise(r => setTimeout(r, 50))
           geometries = await loadIGES(buffer)
           if (geometries.length === 0) {
+            setCadLoading(null)
             showToast('IGES file loaded but contains no valid geometry')
             return
           }
         } catch (e) {
+          setCadLoading(null)
           console.error('IGES loading failed:', e)
           showToast(`IGES import failed: ${(e as Error).message}`)
           return
@@ -1491,8 +1498,10 @@ export default function App() {
         totalTris += (geom.index ? geom.index.count / 3 : (geom.attributes.position?.count ?? 0) / 3)
       }
 
+      setCadLoading(null)
       showToast(`${ext.toUpperCase()} loaded: ${fileName} — ${geometries.length} bod${geometries.length === 1 ? 'y' : 'ies'}, ${totalVerts.toLocaleString()} verts, ${Math.round(totalTris).toLocaleString()} tris`)
     } catch (e) {
+      setCadLoading(null)
       console.error(`Failed to load ${fileName}:`, e)
       showToast(`Failed to load ${fileName}: ${(e as Error).message}`)
     }
@@ -2141,6 +2150,31 @@ export default function App() {
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} darkMode={darkMode} />
     <MaterialTable visible={showMaterialTable} onClose={() => setShowMaterialTable(false)} onSelect={setMaterialKey} darkMode={darkMode} currentMaterial={materialKeyRef.current} />
+    {/* CAD loading overlay */}
+    {cadLoading && (
+      <div style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(15,23,42,0.75)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 2500,
+        backdropFilter: 'blur(4px)',
+      }}>
+        <div style={{
+          width: 48, height: 48, border: '4px solid rgba(59,130,246,0.3)',
+          borderTopColor: '#3b82f6', borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite',
+        }} />
+        <div style={{
+          marginTop: 16, color: '#e2e8f0', fontSize: 14, fontWeight: 600,
+          textAlign: 'center', whiteSpace: 'pre-line', lineHeight: 1.6,
+        }}>{cadLoading}</div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+      </div>
+    )}
     {/* Toast notifications */}
     <div style={{ position: 'fixed', bottom: 40, left: '50%', transform: 'translateX(-50%)', zIndex: 3000, display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
       {toasts.map(t => (

@@ -118,6 +118,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-433] CAD 임포트 로딩 오버레이 (스피너 + 상태 텍스트)
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 17:05:00 |
+| **Step** | S2.2 |
+| **관련 FR** | FR-01 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | STEP/IGES 파일 로딩 시 OCCT.js WASM 엔진 초기화에 수 초~수십 초 소요되므로 전체 화면 블러 오버레이 + CSS 스피너 + 상태 메시지 표시. cadLoading state 추가. STL/STEP/IGES 각각 맞춤 메시지. 로딩 완료/실패 시 자동 해제. setTimeout(50ms)으로 UI 페인트 보장. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (895.30 kB, gzip 242.77 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | STEP/IGES 첫 로드 시 ~30MB WASM 다운로드가 필요해 사용자가 앱이 멈춘 것으로 오인할 수 있었음. 이제 스피너+텍스트로 진행 상황 명확히 전달. backdrop-filter:blur(4px)로 뒷배경 희미하게 처리. |
+
+---
+
 ### [EXP-432] 전체 내보내기 단축키 X (CSV + STL + JSON 일괄)
 
 | 항목 | 값 |
