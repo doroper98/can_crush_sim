@@ -1465,6 +1465,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.01,
     wallThickness: 0.5,
   }),
+  tin_sac305: createMaterial({
+    name: 'SAC305 Lead-Free Solder',
+    youngsModulus: 45000,
+    poissonRatio: 0.36,
+    yieldStress: 35,
+    uts: 50,
+    density: 7380,
+    hardeningExponent: 0.15,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
