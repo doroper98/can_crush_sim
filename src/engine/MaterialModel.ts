@@ -635,6 +635,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.40,
     wallThickness: 0.1,
   }),
+  copper_c770: createMaterial({
+    name: 'Nickel Silver C770',
+    youngsModulus: 132000,
+    poissonRatio: 0.34,
+    yieldStress: 180,
+    uts: 430,
+    density: 8730,
+    hardeningExponent: 0.38,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
