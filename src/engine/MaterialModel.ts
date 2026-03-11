@@ -205,6 +205,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.25,
     wallThickness: 1.0,
   }),
+  aluminum_2024: createMaterial({
+    name: 'Aluminum 2024-T3',
+    youngsModulus: 73100,
+    poissonRatio: 0.33,
+    yieldStress: 345,
+    uts: 483,
+    density: 2780,
+    hardeningExponent: 0.17,
+    wallThickness: 0.3,
+  }),
   hastelloy_x: createMaterial({
     name: 'Hastelloy X',
     youngsModulus: 205000,
