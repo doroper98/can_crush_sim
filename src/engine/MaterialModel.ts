@@ -305,6 +305,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.25,
     wallThickness: 0.3,
   }),
+  silver_ag: createMaterial({
+    name: 'Silver (Ag)',
+    youngsModulus: 83000,
+    poissonRatio: 0.37,
+    yieldStress: 55,
+    uts: 170,
+    density: 10490,
+    hardeningExponent: 0.44,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
