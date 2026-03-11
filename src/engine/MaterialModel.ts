@@ -1605,6 +1605,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.08,
     wallThickness: 0.5,
   }),
+  steel_15_5ph: createMaterial({
+    name: 'SS 15-5PH (H900)',
+    youngsModulus: 200000,
+    poissonRatio: 0.29,
+    yieldStress: 1170,
+    uts: 1310,
+    density: 7800,
+    hardeningExponent: 0.06,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
