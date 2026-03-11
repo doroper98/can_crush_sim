@@ -2425,6 +2425,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.3,
   }),
+  aluminum_4043: createMaterial({
+    name: 'Aluminum 4043 (Si Filler Wire)',
+    youngsModulus: 69000,
+    poissonRatio: 0.33,
+    yieldStress: 70,
+    uts: 170,
+    density: 2690,
+    hardeningExponent: 0.22,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
