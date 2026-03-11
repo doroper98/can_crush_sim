@@ -1795,6 +1795,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.08,
     wallThickness: 0.3,
   }),
+  copper_admiralty_c443: createMaterial({
+    name: 'Admiralty Brass C44300',
+    youngsModulus: 100000,
+    poissonRatio: 0.34,
+    yieldStress: 150,
+    uts: 380,
+    density: 8530,
+    hardeningExponent: 0.38,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
