@@ -795,6 +795,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.10,
     wallThickness: 0.5,
   }),
+  pp: createMaterial({
+    name: 'Polypropylene (PP)',
+    youngsModulus: 1500,
+    poissonRatio: 0.42,
+    yieldStress: 35,
+    uts: 40,
+    density: 905,
+    hardeningExponent: 0.20,
+    wallThickness: 1.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
