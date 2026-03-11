@@ -505,6 +505,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.22,
     wallThickness: 1.0,
   }),
+  steel_ss316: createMaterial({
+    name: 'Stainless Steel 316',
+    youngsModulus: 193000,
+    poissonRatio: 0.30,
+    yieldStress: 205,
+    uts: 515,
+    density: 8000,
+    hardeningExponent: 0.45,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
