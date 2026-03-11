@@ -1638,16 +1638,30 @@ export default function App() {
       showToast('No simulation data to export')
       return
     }
-    const header = 'Displacement (mm),Load (N)\n'
-    const rows = chartData.map(d => `${d.displacement.toFixed(4)},${d.load.toFixed(4)}`).join('\n')
-    const blob = new Blob([header + rows], { type: 'text/csv' })
+    const mat = MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]
+    const metaLines = [
+      `# Can Crush Simulator v2.0 — ${mat.name}`,
+      `# Can: D=${(canRadiusRef.current * 2).toFixed(0)}mm H=${canHeightRef.current.toFixed(0)}mm t=${wallThicknessRef.current}mm`,
+      `# Material: E=${(mat.youngsModulus / 1000).toFixed(0)}GPa σy=${mat.yieldStress}MPa UTS=${mat.uts}MPa n=${mat.hardeningExponent} ρ=${mat.density}kg/m³`,
+    ].join('\n')
+    const header = 'Displacement_mm,Load_N,Energy_J'
+    let cumulativeEnergy = 0
+    const rows = chartData.map((d, i) => {
+      if (i > 0) {
+        const dd = d.displacement - chartData[i - 1].displacement
+        const avgF = (d.load + chartData[i - 1].load) / 2
+        cumulativeEnergy += avgF * dd * 0.001 // N·mm → J
+      }
+      return `${d.displacement.toFixed(4)},${d.load.toFixed(4)},${cumulativeEnergy.toFixed(6)}`
+    }).join('\n')
+    const blob = new Blob([metaLines + '\n' + header + '\n' + rows], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
-    link.download = `cancrush_load_disp_${Date.now()}.csv`
+    link.download = `cancrush_${mat.name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.csv`
     link.href = url
     link.click()
     URL.revokeObjectURL(url)
-    showToast(`CSV exported (${chartData.length} points)`)
+    showToast(`CSV exported (${chartData.length} points, ${cumulativeEnergy.toFixed(2)} J total)`)
   }, [showToast, chartData])
 
   const handleImportJSON = useCallback(() => {

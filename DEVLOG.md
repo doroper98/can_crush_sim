@@ -117,6 +117,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-428] CSV 내보내기 개선 (에너지 + 메타데이터)
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 16:30:00 |
+| **Step** | S3.5 |
+| **관련 FR** | FR-12 |
+| **관련 NF** | - |
+| **변경 내용** | CSV 내보내기 기능 대폭 개선: (1) Energy_J 열 추가 — 사다리꼴 적분으로 누적 에너지 계산. (2) 파일 상단에 재료명, 캔 치수, 물성값 메타데이터 헤더 (#주석). (3) 파일명에 재료명 반영 (`cancrush_AISI_1018_*.csv`). (4) toast에 총 에너지 표시. 기존 Displacement+Load에서 Displacement+Load+Energy 3열로 확장. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (893.63 kB, gzip 242.30 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 내보낸 CSV를 Excel/MATLAB/Python에서 바로 활용 가능. 메타데이터로 시뮬 조건 추적 용이. 에너지 열로 별도 Energy chart export 불필요. |
+
+---
+
 ### [EXP-427] Material 드롭다운 카테고리 뱃지 + 물성 tooltip
 
 | 항목 | 값 |
