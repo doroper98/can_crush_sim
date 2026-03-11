@@ -1135,6 +1135,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.08,
     wallThickness: 0.5,
   }),
+  epoxy: createMaterial({
+    name: 'Epoxy Resin (Thermoset)',
+    youngsModulus: 3500,
+    poissonRatio: 0.35,
+    yieldStress: 60,
+    uts: 85,
+    density: 1250,
+    hardeningExponent: 0.18,
+    wallThickness: 1.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */

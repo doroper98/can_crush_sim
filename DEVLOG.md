@@ -1592,6 +1592,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-286] Epoxy Resin 재료 추가 — 111번째, 14번째 Poly
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 04:05:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | Epoxy Resin (Thermoset) 추가: E=3.5GPa, σy=60MPa, UTS=85MPa, n=0.18, ρ=1250, t=1.0mm. CFRP/GFRP 매트릭스 소재 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 866.46 kB (gzip 236 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 복합재 매트릭스의 기본 소재. 열경화성(thermoset) 폴리머 첫 진입! PC·PEEK(열가소성) 대비 crosslink 경화. Poly 14종 달성 |
+
+---
+
 ### [EXP-285] SS 410 Martensitic 재료 추가 — 110번째 재료! 16번째 Fe
 
 | 항목 | 값 |
