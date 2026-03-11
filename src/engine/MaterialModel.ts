@@ -1615,6 +1615,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.06,
     wallThickness: 0.3,
   }),
+  cobalt_mp159: createMaterial({
+    name: 'MP159 (Co-Ni-Cr-Mo)',
+    youngsModulus: 234000,
+    poissonRatio: 0.30,
+    yieldStress: 1590,
+    uts: 1790,
+    density: 8350,
+    hardeningExponent: 0.05,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
