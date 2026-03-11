@@ -2145,6 +2145,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.08,
     wallThickness: 0.5,
   }),
+  nickel_nimonic263: createMaterial({
+    name: 'Nimonic 263 (Ni-Co-Cr)',
+    youngsModulus: 218000,
+    poissonRatio: 0.30,
+    yieldStress: 580,
+    uts: 970,
+    density: 8360,
+    hardeningExponent: 0.20,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
