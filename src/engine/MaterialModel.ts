@@ -835,6 +835,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.05,
     wallThickness: 0.3,
   }),
+  hdpe: createMaterial({
+    name: 'HDPE',
+    youngsModulus: 1100,
+    poissonRatio: 0.46,
+    yieldStress: 26,
+    uts: 37,
+    density: 960,
+    hardeningExponent: 0.25,
+    wallThickness: 1.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
