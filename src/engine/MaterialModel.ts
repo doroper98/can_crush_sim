@@ -715,6 +715,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.15,
     wallThickness: 1.0,
   }),
+  nickel_waspaloy: createMaterial({
+    name: 'Waspaloy',
+    youngsModulus: 213000,
+    poissonRatio: 0.29,
+    yieldStress: 795,
+    uts: 1275,
+    density: 8190,
+    hardeningExponent: 0.25,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
