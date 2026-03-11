@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-410 기준, 26/03/12 14:40)
+### 누적 통계 (EXP-418 기준, 26/03/12 15:20)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **410** |
-| 성공 커밋 | 410 |
+| 총 실험 수 | **418** |
+| 성공 커밋 | 418 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 374건, EXP-028~410) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 382건, EXP-028~418) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 887 kB (gzip 240 kB) |
-| 재료 라이브러리 | **235종** (Al×25, Fe×47, Cu×30, Ti×14, Ni×32, Poly×30, Co×8, Mg×9, Zn×5, Sn×4, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×6, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
+| 빌드 크기 | 888 kB (gzip 240 kB) |
+| 재료 라이브러리 | **243종** (Al×27, Fe×50, Cu×31, Ti×14, Ni×33, Poly×30, Co×8, Mg×10, Zn×5, Sn×5, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×6, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) — **물성 적재 완료** |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
 | 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **235 재료(230 마일스톤!)**, 31카테고리, Al7055(Al최고σy=620), MuMetal, LCP/PAI, SuperDuplex2507, Ti6242, **410실험·887kB·gzip240kB** |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **243 재료(물성완료!)**, 31카테고리, **Fe50(AISI1018)**, AerMet100(최고Fe σy=1720), **418실험·888kB·gzip240kB** |
 
 ---
 
@@ -116,6 +116,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **비고** | {교훈, 발견, 다음 실험 힌트 등} |
 
 -->
+
+### [EXP-418] AISI 1018 Low-Carbon Mild Steel 추가 (최종 물성 적재)
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 15:20:00 |
+| **Step** | S5.3 |
+| **관련 FR** | FR-06 |
+| **관련 NF** | NF-07 |
+| **변경 내용** | `steel_1018` (AISI 1018 Low-Carbon Mild) 추가: E=205GPa, σy=220MPa, UTS=400MPa, n=0.22, ρ=7870. **243번째 재료, Fe 50번째 마일스톤! 물성 라이브러리 적재 완료.** |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (887.95 kB, gzip 240.34 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | Fe 50번째(steel_ 기준) 마일스톤 달성. 총 243종 물성 라이브러리 구축 완료. 향후 개발은 기능 개선/버그 수정 등으로 전환. |
+
+---
 
 ### 예시 항목 (에이전트가 참고할 템플릿)
 
