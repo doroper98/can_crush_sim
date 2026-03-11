@@ -9,10 +9,11 @@ interface StatusBarProps {
   maxDisplacement?: number
   wallElapsed?: number
   displayInfo?: { mode: string; min: number; max: number } | null
+  materialName?: string
   darkMode?: boolean
 }
 
-export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTime = 0, displacement = 0, simSteps = 0, maxDisplacement = 0, wallElapsed = 0, displayInfo, darkMode = false }: StatusBarProps) {
+export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTime = 0, displacement = 0, simSteps = 0, maxDisplacement = 0, wallElapsed = 0, displayInfo, materialName, darkMode = false }: StatusBarProps) {
   const stateLabel = simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating' : 'Paused'
   const stateColor = simState === 'idle' ? '#64748b' : simState === 'running' ? '#10b981' : '#f59e0b'
   const stateIcon = simState === 'idle' ? '○' : simState === 'running' ? '▶' : '⏸'
@@ -73,6 +74,9 @@ export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTi
 
       {/* Node Count */}
       <span>Nodes: {nodeCount}</span>
+
+      {/* Material */}
+      {materialName && <span style={{ color: '#60a5fa' }}>{materialName}</span>}
 
       {/* FPS */}
       <span style={{ marginLeft: 'auto', color: fps >= 30 ? '#10b981' : '#ef4444' }}>

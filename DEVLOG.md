@@ -1066,6 +1066,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **판정** | ✅ COMMIT (아래) |
 | **비고** | 재료 선택 시 주요 파생 지표 즉시 확인. 테이블 행 클릭→footer 갱신. |
 
+### [EXP-170] StatusBar 재료명 표시
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 18:05:00 |
+| **Step** | - (StatusBar 확장) |
+| **관련 FR** | FR-12 |
+| **관련 NF** | NF-03 |
+| **변경 내용** | (1) StatusBar에 materialName prop 추가. (2) 파란색(#60a5fa)으로 현재 재료명 표시. (3) App.tsx에서 materialName 전달. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 847.11 kB (gzip 231.12 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | HUD 뿐 아니라 StatusBar에서도 현재 재료 확인 가능. idle 상태에서도 표시. |
+
 ---
 
 ### [EXP-115] About 모달 재료 수 동적 표시

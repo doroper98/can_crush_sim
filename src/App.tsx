@@ -2043,6 +2043,7 @@ export default function App() {
       } : null}
       maxDisplacement={canHeightParam * (maxCompression / 100)}
       wallElapsed={wallElapsed}
+      materialName={(MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]).name}
       darkMode={darkMode}
     />
     <KeyboardHelp visible={showHelp} onClose={() => setShowHelp(false)} darkMode={darkMode} />
