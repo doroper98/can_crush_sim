@@ -1952,6 +1952,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-314] Brass C36000 (Free-Cutting) 재료 추가 — 139번째, 16번째 Cu
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 06:30:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | Brass C36000 Free-Cutting 추가: E=97GPa, σy=310MPa, UTS=385MPa, n=0.10, ρ=8490. 쾌삭 황동 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 871.06 kB (gzip 236 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 세계 최다 사용 쾌삭 합금. Pb 3% 함유로 가공성 최고. 피팅·커넥터·밸브 소재. Naval/NickelSilver/AlBronze/SiBronze/TinBronze 이어 Cu 16종 |
+
+---
+
 ### [EXP-289] W-Ni-Fe 93% Heavy Alloy 재료 추가 — 114번째, 2번째 W
 
 | 항목 | 값 |

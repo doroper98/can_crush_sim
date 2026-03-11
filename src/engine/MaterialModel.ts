@@ -1415,6 +1415,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.10,
     wallThickness: 0.5,
   }),
+  copper_brass360: createMaterial({
+    name: 'Brass C36000 (Free-Cutting)',
+    youngsModulus: 97000,
+    poissonRatio: 0.34,
+    yieldStress: 310,
+    uts: 385,
+    density: 8490,
+    hardeningExponent: 0.10,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
