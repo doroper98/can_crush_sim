@@ -20,7 +20,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key.startsWith('magnesium_')) return { label: 'Mg', color: '#4ade80' }
   if (key.startsWith('tin_')) return { label: 'Sn', color: '#a3a3a3' }
   if (key === 'tungsten' || key.startsWith('tungsten_')) return { label: 'W', color: '#78716c' }
-  if (key === 'lead_pb') return { label: 'Pb', color: '#71717a' }
+  if (key.startsWith('lead_')) return { label: 'Pb', color: '#71717a' }
   if (key.startsWith('zirconium_')) return { label: 'Zr', color: '#2dd4bf' }
   if (key === 'silver_ag') return { label: 'Ag', color: '#cbd5e1' }
   if (key === 'gold_au') return { label: 'Au', color: '#fbbf24' }

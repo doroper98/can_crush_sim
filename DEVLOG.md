@@ -2057,6 +2057,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-321] Pb-6Sb (Battery Grid) 재료 추가 — 146번째, 2번째 Pb
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 07:05:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | Pb-6Sb Battery Grid 추가: E=18GPa, σy=20MPa, UTS=42MPa, n=0.28, ρ=11100, t=0.5mm. getCategory lead → startsWith('lead_') 패턴 변경 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 872.24 kB (gzip 237 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 납축전지 그리드 합금. E=18GPa 라이브러리 최저 탄성률! σy=20MPa 최저 항복. Sb 6%로 경도↑. 순Pb에 이어 2번째 Pb. getCategory startsWith 패턴 적용 |
+
+---
+
 ### [EXP-289] W-Ni-Fe 93% Heavy Alloy 재료 추가 — 114번째, 2번째 W
 
 | 항목 | 값 |

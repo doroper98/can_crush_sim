@@ -1485,6 +1485,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.01,
     wallThickness: 0.5,
   }),
+  lead_sb6: createMaterial({
+    name: 'Pb-6Sb (Battery Grid)',
+    youngsModulus: 18000,
+    poissonRatio: 0.44,
+    yieldStress: 20,
+    uts: 42,
+    density: 11100,
+    hardeningExponent: 0.28,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
