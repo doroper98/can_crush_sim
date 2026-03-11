@@ -2057,6 +2057,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-362] Polyetherimide (PEI / Ultem) 재료 추가 — 187번째, 24번째 Poly
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 10:35:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | Polyetherimide (PEI/Ultem) 추가: E=3.3GPa, σy=85MPa, UTS=85MPa, n=0.03, ρ=1270, t=0.5mm. getCategory에 `key === 'pei'` 추가 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 878.80 kB (gzip 239 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | GE Ultem 브랜드. 항공 인테리어·전자부품·의료기기. 높은 내열성(Tg=217°C)+난연(UL94 V-0). Poly 24번째 |
+
+---
+
 ### [EXP-361] Silicon Bronze C87300 재료 추가 — 186번째, 25번째 Cu
 
 | 항목 | 값 |

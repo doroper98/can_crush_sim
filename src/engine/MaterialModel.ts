@@ -1895,6 +1895,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  pei: createMaterial({
+    name: 'Polyetherimide (PEI / Ultem)',
+    youngsModulus: 3300,
+    poissonRatio: 0.36,
+    yieldStress: 85,
+    uts: 85,
+    density: 1270,
+    hardeningExponent: 0.03,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
