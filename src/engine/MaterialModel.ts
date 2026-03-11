@@ -2305,6 +2305,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.03,
     wallThickness: 0.5,
   }),
+  steel_superduplex2507: createMaterial({
+    name: 'Super Duplex 2507 (25Cr-7Ni)',
+    youngsModulus: 200000,
+    poissonRatio: 0.30,
+    yieldStress: 550,
+    uts: 800,
+    density: 7810,
+    hardeningExponent: 0.14,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
