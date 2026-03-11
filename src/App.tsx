@@ -701,6 +701,12 @@ export default function App() {
 
     // Keyboard shortcuts
     const onKeyDown = (e: KeyboardEvent) => {
+      // Global guard: skip all shortcuts when user is typing in form elements
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.target instanceof HTMLTextAreaElement) {
+        // Allow Escape to blur the input
+        if (e.key === 'Escape') (e.target as HTMLElement).blur()
+        return
+      }
       switch (e.key) {
         case 'p': case 'P':
           setIsPerspective(prev => !prev)
@@ -724,9 +730,7 @@ export default function App() {
           setShowLoadArrow(prev => !prev)
           break
         case 's': case 'S':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            screenshotRef.current()
-          }
+          screenshotRef.current()
           break
         case 'b': case 'B':
           bcPoints.visible = !bcPoints.visible
@@ -735,20 +739,14 @@ export default function App() {
           setShowHelp(prev => !prev)
           break
         case 'd': case 'D':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            setDarkMode(prev => !prev)
-          }
+          setDarkMode(prev => !prev)
           break
         case 'm': case 'M':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            setMeasureMode(prev => !prev)
-            measurePt1Ref.current = null
-          }
+          setMeasureMode(prev => !prev)
+          measurePt1Ref.current = null
           break
         case 'o': case 'O':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            setShowGhost(prev => !prev)
-          }
+          setShowGhost(prev => !prev)
           break
         case 'Escape':
           setContextMenu(null)
@@ -760,118 +758,97 @@ export default function App() {
           }
           break
         case ' ':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.target instanceof HTMLButtonElement)) {
-            e.preventDefault()
-            if (simRunningRef.current) {
-              simRunningRef.current = false
-              setSimState('paused')
-            } else {
-              if (simStepCountRef.current === 0) simWallStartRef.current = performance.now()
-              simRunningRef.current = true
-              setSimState('running')
-            }
+          e.preventDefault()
+          if (simRunningRef.current) {
+            simRunningRef.current = false
+            setSimState('paused')
+          } else {
+            if (simStepCountRef.current === 0) simWallStartRef.current = performance.now()
+            simRunningRef.current = true
+            setSimState('running')
           }
           break
         case 'n': case 'N':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            stepOnceRef.current = true
-            setSimState('paused')
-          }
+          stepOnceRef.current = true
+          setSimState('paused')
           break
         case 'v': case 'V':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            setDisplayMode(prev => {
-              const modes: Array<'none' | 'stress' | 'displacement' | 'plastic'> = ['none', 'stress', 'displacement', 'plastic']
-              const idx = modes.indexOf(prev)
-              return modes[(idx + 1) % modes.length]
-            })
-          }
+          setDisplayMode(prev => {
+            const modes: Array<'none' | 'stress' | 'displacement' | 'plastic'> = ['none', 'stress', 'displacement', 'plastic']
+            const idx = modes.indexOf(prev)
+            return modes[(idx + 1) % modes.length]
+          })
           break
         case 'c': case 'C':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            setResultSummary(rs => {
-              if (!rs) { showToastRef.current('No results to copy'); return rs }
-              const mat = MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]
-              const lines = [
-                `Can Crush Simulator — Results`,
-                `Material: ${mat.name}`,
-                `  E=${(mat.youngsModulus / 1000).toFixed(0)} GPa  σy=${mat.yieldStress.toFixed(0)} MPa  UTS=${mat.uts.toFixed(0)} MPa  n=${mat.hardeningExponent}  ρ=${mat.density} kg/m³`,
-                `Geometry: ⌀${(canRadiusRef.current * 2).toFixed(0)} × ${canHeightRef.current.toFixed(0)} mm  t=${wallThicknessRef.current} mm`,
-                `---`,
-                `t: ${simTimeRef.current.toFixed(3)} s`,
-                `d: ${(simTimeRef.current * compressionSpeedRef.current).toFixed(1)} mm`,
-                `σ_max: ${rs.maxStress.toFixed(1)} MPa`,
-                `ε_p_max: ${(rs.maxPlastic * 100).toFixed(2)} %`,
-                `Energy: ${rs.energyAbsorbed.toFixed(3)} J`,
-                `F_peak: ${rs.peakForce.toFixed(0)} N`,
-                `F_mean: ${rs.meanForce.toFixed(0)} N`,
-                `SEA: ${rs.sea.toFixed(1)} J/kg`,
-                `CFE: ${(rs.cfe * 100).toFixed(1)} %`,
-                `Mass: ${(rs.canMass * 1000).toFixed(2)} g`,
-                `Steps: ${simStepCountRef.current}`,
-              ]
-              navigator.clipboard.writeText(lines.join('\n')).then(() => {
-                showToastRef.current('Results copied to clipboard')
-              })
-              return rs
-            })
-          }
-          break
-        case 'e': case 'E':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            const cd = chartDataRef.current
-            if (cd.length === 0) { showToastRef.current('No data to export'); break }
+          setResultSummary(rs => {
+            if (!rs) { showToastRef.current('No results to copy'); return rs }
             const mat = MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]
-            const header = `# Can Crush Simulator — ${mat.name}\n# ⌀${(canRadiusRef.current * 2).toFixed(0)}×${canHeightRef.current.toFixed(0)}mm t=${wallThicknessRef.current}mm\ndisplacement_mm,load_N\n`
-            const rows = cd.map(p => `${p.displacement.toFixed(4)},${p.load.toFixed(4)}`).join('\n')
-            const blob = new Blob([header + rows], { type: 'text/csv' })
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url; a.download = `cancrush_${mat.name.replace(/\s+/g, '_')}_${Date.now()}.csv`
-            a.click(); URL.revokeObjectURL(url)
-            showToastRef.current(`CSV exported (${cd.length} points)`)
-          }
+            const lines = [
+              `Can Crush Simulator — Results`,
+              `Material: ${mat.name}`,
+              `  E=${(mat.youngsModulus / 1000).toFixed(0)} GPa  σy=${mat.yieldStress.toFixed(0)} MPa  UTS=${mat.uts.toFixed(0)} MPa  n=${mat.hardeningExponent}  ρ=${mat.density} kg/m³`,
+              `Geometry: ⌀${(canRadiusRef.current * 2).toFixed(0)} × ${canHeightRef.current.toFixed(0)} mm  t=${wallThicknessRef.current} mm`,
+              `---`,
+              `t: ${simTimeRef.current.toFixed(3)} s`,
+              `d: ${(simTimeRef.current * compressionSpeedRef.current).toFixed(1)} mm`,
+              `σ_max: ${rs.maxStress.toFixed(1)} MPa`,
+              `ε_p_max: ${(rs.maxPlastic * 100).toFixed(2)} %`,
+              `Energy: ${rs.energyAbsorbed.toFixed(3)} J`,
+              `F_peak: ${rs.peakForce.toFixed(0)} N`,
+              `F_mean: ${rs.meanForce.toFixed(0)} N`,
+              `SEA: ${rs.sea.toFixed(1)} J/kg`,
+              `CFE: ${(rs.cfe * 100).toFixed(1)} %`,
+              `Mass: ${(rs.canMass * 1000).toFixed(2)} g`,
+              `Steps: ${simStepCountRef.current}`,
+            ]
+            navigator.clipboard.writeText(lines.join('\n')).then(() => {
+              showToastRef.current('Results copied to clipboard')
+            })
+            return rs
+          })
           break
+        case 'e': case 'E': {
+          const cd = chartDataRef.current
+          if (cd.length === 0) { showToastRef.current('No data to export'); break }
+          const mat = MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]
+          const header = `# Can Crush Simulator — ${mat.name}\n# ⌀${(canRadiusRef.current * 2).toFixed(0)}×${canHeightRef.current.toFixed(0)}mm t=${wallThicknessRef.current}mm\ndisplacement_mm,load_N\n`
+          const rows = cd.map(p => `${p.displacement.toFixed(4)},${p.load.toFixed(4)}`).join('\n')
+          const blob = new Blob([header + rows], { type: 'text/csv' })
+          const url = URL.createObjectURL(blob)
+          const a = document.createElement('a')
+          a.href = url; a.download = `cancrush_${mat.name.replace(/\s+/g, '_')}_${Date.now()}.csv`
+          a.click(); URL.revokeObjectURL(url)
+          showToastRef.current(`CSV exported (${cd.length} points)`)
+          break
+        }
         case 'i': case 'I':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            setShowMaterialTable(prev => !prev)
-          }
+          setShowMaterialTable(prev => !prev)
           break
         case '[':
         case ']':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            setMaterialKey((prev: string) => {
-              const idx = MATERIAL_KEYS.indexOf(prev)
-              const next = e.key === ']'
-                ? (idx + 1) % MATERIAL_KEYS.length
-                : (idx - 1 + MATERIAL_KEYS.length) % MATERIAL_KEYS.length
-              const nextKey = MATERIAL_KEYS[next]
-              showToastRef.current(MATERIALS[nextKey].name)
-              return nextKey
-            })
-          }
+          setMaterialKey((prev: string) => {
+            const idx = MATERIAL_KEYS.indexOf(prev)
+            const next = e.key === ']'
+              ? (idx + 1) % MATERIAL_KEYS.length
+              : (idx - 1 + MATERIAL_KEYS.length) % MATERIAL_KEYS.length
+            const nextKey = MATERIAL_KEYS[next]
+            showToastRef.current(MATERIALS[nextKey].name)
+            return nextKey
+          })
           break
         case 'h': case 'H':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            setShowHUD(prev => !prev)
-          }
+          setShowHUD(prev => !prev)
           break
         case 'j': case 'J':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            handleExportJSON()
-          }
+          handleExportJSON()
           break
         case 'x': case 'X':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            handleExportCSV()
-            handleExportSTL()
-            handleExportJSON()
-          }
+          handleExportCSV()
+          handleExportSTL()
+          handleExportJSON()
           break
         case 'a': case 'A':
-          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            setShowAbout(prev => !prev)
-          }
+          setShowAbout(prev => !prev)
           break
       }
       if (e.key === 'Tab') {

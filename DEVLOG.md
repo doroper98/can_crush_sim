@@ -168,6 +168,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-439] 키보드 단축키 공통 가드 리팩터링
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 17:52:00 |
+| **Step** | S5.1 |
+| **관련 FR** | FR-15 |
+| **관련 NF** | NF-05, NF-07 |
+| **변경 내용** | 15개 키보드 단축키에 산재된 `instanceof HTMLInputElement || HTMLSelectElement` 가드를 함수 시작부 1개 공통 가드로 통합. HTMLTextAreaElement도 추가. Escape 키는 폼 요소에서도 blur 동작 허용. 중복 코드 제거로 빌드 크기 1kB 감소 (898→897kB). |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (897.52 kB, gzip 243.41 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 기존 guard가 15곳에 분산되어 있어 유지보수 어려웠음. 공통 가드로 통합하여 향후 단축키 추가 시 guard 누락 방지. textarea 가드 추가로 미래 텍스트 입력 필드 대응. |
+
+---
+
 ### [EXP-438] Idle 상태 시작 힌트 오버레이
 
 | 항목 | 값 |
