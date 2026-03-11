@@ -405,6 +405,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  beryllium_be: createMaterial({
+    name: 'Beryllium (Be)',
+    youngsModulus: 287000,
+    poissonRatio: 0.08,
+    yieldStress: 240,
+    uts: 370,
+    density: 1850,
+    hardeningExponent: 0.15,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
