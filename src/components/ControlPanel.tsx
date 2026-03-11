@@ -558,29 +558,62 @@ export default function ControlPanel({
         <StressStrainChart material={MATERIALS[materialKey]} currentPlasticStrain={resultSummary?.maxPlastic ?? 0} width={256} height={120} darkMode={darkMode} />
       </Section>
 
-      <Section title="Material" defaultOpen={false} theme={theme}>
-        {onMaterialKeyChange && (
-          <select
-            value={materialKey}
-            onChange={e => onMaterialKeyChange(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '6px 10px',
-              borderRadius: 8,
-              border: 'none',
-              background: theme.selectBg,
-              color: theme.text,
-              fontSize: 12,
-              fontWeight: 500,
-              marginBottom: 8,
-              boxShadow: theme.selectShadow,
-            }}
-          >
-            {MATERIAL_KEYS.map(k => (
-              <option key={k} value={k}>{MATERIALS[k].name}</option>
-            ))}
-          </select>
-        )}
+      <Section title={`Material (${MATERIAL_KEYS.length})`} defaultOpen={false} theme={theme}>
+        {onMaterialKeyChange && (() => {
+          const [matFilter, setMatFilter] = useState('')
+          const lf = matFilter.toLowerCase()
+          const filteredKeys = lf
+            ? MATERIAL_KEYS.filter(k => {
+                const m = MATERIALS[k]
+                return m.name.toLowerCase().includes(lf) || k.toLowerCase().includes(lf)
+              })
+            : MATERIAL_KEYS
+          return (
+            <>
+              <input
+                type="text"
+                placeholder="Search materials… (e.g. steel, titanium)"
+                value={matFilter}
+                onChange={e => setMatFilter(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '5px 8px',
+                  borderRadius: 8,
+                  border: 'none',
+                  background: theme.selectBg,
+                  color: theme.text,
+                  fontSize: 11,
+                  marginBottom: 4,
+                  boxShadow: theme.selectShadow,
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+              {matFilter && <div style={{ fontSize: 9, color: theme.textSec, marginBottom: 2 }}>{filteredKeys.length} / {MATERIAL_KEYS.length} materials</div>}
+              <select
+                value={materialKey}
+                onChange={e => onMaterialKeyChange(e.target.value)}
+                size={matFilter ? Math.min(filteredKeys.length, 10) : 1}
+                style={{
+                  width: '100%',
+                  padding: '6px 10px',
+                  borderRadius: 8,
+                  border: 'none',
+                  background: theme.selectBg,
+                  color: theme.text,
+                  fontSize: 12,
+                  fontWeight: 500,
+                  marginBottom: 8,
+                  boxShadow: theme.selectShadow,
+                }}
+              >
+                {filteredKeys.map(k => (
+                  <option key={k} value={k}>{MATERIALS[k].name}</option>
+                ))}
+              </select>
+            </>
+          )
+        })()}
         <Slider label="E (Young's)" value={matYoungsModulus} min={10000} max={300000} step={1000} unit="MPa" onChange={onMatYoungsModulusChange} theme={theme} />
         <Slider label="σ_y (Yield)" value={matYieldStress} min={10} max={1500} step={1} unit="MPa" onChange={onMatYieldStressChange} theme={theme} />
         <Slider label="σ_u (UTS)" value={matUTS} min={20} max={2000} step={1} unit="MPa" onChange={onMatUTSChange} theme={theme} />
