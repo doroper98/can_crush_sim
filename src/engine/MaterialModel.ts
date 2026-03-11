@@ -2375,6 +2375,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  steel_303: createMaterial({
+    name: 'AISI 303 (Free-Machining SS)',
+    youngsModulus: 193000,
+    poissonRatio: 0.29,
+    yieldStress: 240,
+    uts: 590,
+    density: 8030,
+    hardeningExponent: 0.30,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */

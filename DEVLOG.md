@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-400 기준, 26/03/12 13:50) — **400번째 실험 마일스톤!**
+### 누적 통계 (EXP-410 기준, 26/03/12 14:40)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **400** |
-| 성공 커밋 | 400 |
+| 총 실험 수 | **410** |
+| 성공 커밋 | 410 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 364건, EXP-028~400) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 374건, EXP-028~410) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 885 kB (gzip 240 kB) |
-| 재료 라이브러리 | **225종** (Al×24, Fe×44, Cu×29, Ti×13, Ni×31, Poly×28, Co×8, Mg×9, Zn×5, Sn×4, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×5, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
+| 빌드 크기 | 887 kB (gzip 240 kB) |
+| 재료 라이브러리 | **235종** (Al×25, Fe×47, Cu×30, Ti×14, Ni×32, Poly×30, Co×8, Mg×9, Zn×5, Sn×4, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×6, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
 | 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **225 재료(220 마일스톤!)**, 31카테고리, Al3004(캔바디)+Al5182(캔엔드)+Al8090(Al-Li), PAI/ETFE/PEI/PSU, Inconel725, Stellite12, **400번째 실험 마일스톤!**, 885kB빌드 |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **235 재료(230 마일스톤!)**, 31카테고리, Al7055(Al최고σy=620), MuMetal, LCP/PAI, SuperDuplex2507, Ti6242, **410실험·887kB·gzip240kB** |
 
 ---
 
@@ -2054,6 +2054,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 872.08 kB (gzip 237 kB) · tsc: pass · ui: 10/10 |
 | **판정** | ✅ COMMIT |
 | **비고** | 유리섬유 단방향 복합재. CFRP 대비 경제적. 풍력 블레이드·보트·건축 소재. 누적: 320실험, 145재료, 31카테고리, 872kB. CFRP+GFRP로 복합재 시리즈 확립. Poly 19종 달성 |
+
+---
+
+### [EXP-410] AISI 303 (Free-Machining SS) 재료 추가 + 누적 통계 — 235번째, 47번째 Fe
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 14:40:00 |
+| **Step** | - (재료 라이브러리 확장 + 누적 통계) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | AISI 303 추가: E=193GPa, σy=240MPa, UTS=590MPa, n=0.30, ρ=8030, t=0.3mm + 누적 통계 업데이트(235종/410실험) |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 886.62 kB (gzip 240 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 쾌삭 오스테나이트(304+S/Se 첨가→자동선반 가공 최적). CNC 자동화부품·나사·볼트. 누적: 235종, Al×25, Fe×47, Cu×30, Ti×14, Ni×32, Poly×30, Co×8, 887kB |
 
 ---
 
