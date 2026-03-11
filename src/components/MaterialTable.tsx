@@ -58,6 +58,7 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
     : '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)'
 
   const allEntries = Object.entries(MATERIALS)
+  const maxDensity = Math.max(...allEntries.map(([, m]) => m.density))
   const entries = filter
     ? allEntries.filter(([key, mat]) => {
         const q = filter.toLowerCase()
@@ -194,7 +195,8 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
                       if (val >= 800) { cellColor = '#ef4444'; cellWeight = 600 }
                     }
                     return (
-                      <td key={c.key} style={{ padding: '4px 6px', textAlign: 'right', color: cellColor, borderBottom: `1px solid ${borderColor}`, fontFamily: 'monospace', fontWeight: cellWeight }}>
+                      <td key={c.key} style={{ padding: '4px 6px', textAlign: 'right', color: cellColor, borderBottom: `1px solid ${borderColor}`, fontFamily: 'monospace', fontWeight: cellWeight, position: c.key === 'density' ? 'relative' as const : undefined }}>
+                        {c.key === 'density' && <span style={{ position: 'absolute', left: 0, bottom: 0, height: 2, width: `${(val / maxDensity) * 100}%`, background: cellColor, opacity: 0.3, borderRadius: 1 }} />}
                         {c.fmt(val)}
                       </td>
                     )
