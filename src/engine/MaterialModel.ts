@@ -1125,6 +1125,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.3,
   }),
+  steel_ss410: createMaterial({
+    name: 'SS 410 Martensitic',
+    youngsModulus: 200000,
+    poissonRatio: 0.28,
+    yieldStress: 1100,
+    uts: 1310,
+    density: 7750,
+    hardeningExponent: 0.08,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
