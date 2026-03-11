@@ -38,6 +38,7 @@ const cols: { key: string; label: string; unit: string; fmt: (v: number) => stri
 export default function MaterialTable({ visible, onClose, onSelect, darkMode = false, currentMaterial }: MaterialTableProps) {
   const [sortKey, setSortKey] = useState<string | null>(null)
   const [sortAsc, setSortAsc] = useState(true)
+  const [filter, setFilter] = useState('')
 
   if (!visible) return null
 
@@ -51,7 +52,13 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
     ? '12px 12px 24px rgba(0,0,0,0.5), -12px -12px 24px rgba(51,65,85,0.4)'
     : '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)'
 
-  const entries = Object.entries(MATERIALS)
+  const allEntries = Object.entries(MATERIALS)
+  const entries = filter
+    ? allEntries.filter(([key, mat]) => {
+        const q = filter.toLowerCase()
+        return mat.name.toLowerCase().includes(q) || key.toLowerCase().includes(q) || getCategory(key).label.toLowerCase().includes(q)
+      })
+    : allEntries
 
   // Sort entries
   const sorted = sortKey
@@ -121,9 +128,27 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
           boxShadow: shadow,
         }}
       >
-        <h3 style={{ margin: '0 0 16px', fontSize: 15, color: text }}>
-          Material Library ({entries.length} materials)
-        </h3>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '0 0 12px' }}>
+          <h3 style={{ margin: 0, fontSize: 15, color: text }}>
+            Material Library ({entries.length}{filter ? `/${allEntries.length}` : ''} materials)
+          </h3>
+          <input
+            type="text"
+            placeholder="Filter…"
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
+            style={{
+              width: 140,
+              padding: '4px 8px',
+              fontSize: 11,
+              borderRadius: 8,
+              border: `1px solid ${borderColor}`,
+              background: darkMode ? '#0f172a' : '#fff',
+              color: text,
+              outline: 'none',
+            }}
+          />
+        </div>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
           <thead>
             <tr>
