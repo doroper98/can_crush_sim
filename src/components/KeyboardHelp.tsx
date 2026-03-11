@@ -42,6 +42,10 @@ const mouseControls = [
   { input: 'Ctrl + MMB', desc: 'Pan (카메라 이동)' },
   { input: '스크롤 휠', desc: 'Zoom' },
   { input: '좌클릭', desc: '객체 선택' },
+  { input: '더블클릭', desc: '카메라 센터링 (클릭 지점)' },
+  { input: '우클릭', desc: '컨텍스트 메뉴' },
+  { input: '1-finger', desc: 'Orbit (터치)' },
+  { input: '2-finger', desc: 'Pan + Pinch Zoom (터치)' },
 ]
 
 export default function KeyboardHelp({ visible, onClose, darkMode = false }: KeyboardHelpProps) {
