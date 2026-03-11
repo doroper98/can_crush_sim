@@ -725,6 +725,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.25,
     wallThickness: 0.3,
   }),
+  copper_tungsten: createMaterial({
+    name: 'Cu-W 80/20',
+    youngsModulus: 290000,
+    poissonRatio: 0.30,
+    yieldStress: 550,
+    uts: 700,
+    density: 15600,
+    hardeningExponent: 0.12,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
