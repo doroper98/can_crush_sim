@@ -785,6 +785,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.20,
     wallThickness: 0.3,
   }),
+  steel_9310: createMaterial({
+    name: 'AISI 9310 Steel',
+    youngsModulus: 207000,
+    poissonRatio: 0.29,
+    yieldStress: 890,
+    uts: 1060,
+    density: 7850,
+    hardeningExponent: 0.10,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
