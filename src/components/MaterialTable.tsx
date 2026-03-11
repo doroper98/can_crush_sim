@@ -18,6 +18,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'polycarbonate' || key === 'peek' || key.startsWith('nylon_')) return { label: 'Poly', color: '#facc15' }
   if (key === 'zinc_zamak3') return { label: 'Zn', color: '#94a3b8' }
   if (key === 'magnesium_az31b') return { label: 'Mg', color: '#4ade80' }
+  if (key === 'tungsten') return { label: 'W', color: '#78716c' }
   return { label: '?', color: '#94a3b8' }
 }
 
