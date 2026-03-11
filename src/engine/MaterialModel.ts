@@ -1475,6 +1475,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.15,
     wallThickness: 0.5,
   }),
+  gfrp_epoxy: createMaterial({
+    name: 'GFRP (Epoxy/E-Glass UD)',
+    youngsModulus: 45000,
+    poissonRatio: 0.28,
+    yieldStress: 800,
+    uts: 800,
+    density: 2100,
+    hardeningExponent: 0.01,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */

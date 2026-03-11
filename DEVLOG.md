@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-310 기준, 26/03/12 06:10)
+### 누적 통계 (EXP-320 기준, 26/03/12 07:00)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **310** |
-| 성공 커밋 | 310 |
+| 총 실험 수 | **320** |
+| 성공 커밋 | 320 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 274건, EXP-028~310) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 284건, EXP-028~320) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 870 kB (gzip 237 kB) |
-| 재료 라이브러리 | **135종** (Al×15, Fe×23, Cu×15, Ti×9, Ni×17, Poly×16, Co×5, Mg×4, Zn×2, Sn, W×2, Pb, Zr×3, Ag, Au, Pt, Ta, Nb×3, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
+| 빌드 크기 | 872 kB (gzip 237 kB) |
+| 재료 라이브러리 | **145종** (Al×15, Fe×23, Cu×17, Ti×9, Ni×19, Poly×19, Co×5, Mg×4, Zn×3, Sn×3, W×2, Pb, Zr×3, Ag, Au, Pt, Ta, Nb×3, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
 | 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), UHMWPE(최저ρ), **135 재료**, 31카테고리, 주철 2종, Nitinol SMA, PEEK CF30, 주철(Gray+Ductile) |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **145 재료**, 31카테고리, CFRP/GFRP 복합재, 주철(Gray+Ductile), Nitinol SMA |
 
 ---
 
@@ -2039,6 +2039,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 871.90 kB (gzip 237 kB) · tsc: pass · ui: 10/10 |
 | **판정** | ✅ COMMIT |
 | **비고** | RoHS 대응 무연 납땜. 217°C 융점. Sn-37Pb 대비 강도↑ 밀도↓. Sn 3종 달성 |
+
+---
+
+### [EXP-320] GFRP (Epoxy/E-Glass UD) 재료 추가 + 누적 통계 갱신 — 145번째, 19번째 Poly
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 07:00:00 |
+| **Step** | - (재료 라이브러리 확장 + 누적 통계) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | GFRP (Epoxy/E-Glass UD) 추가: E=45GPa, σy=800MPa, UTS=800MPa, n=0.01, ρ=2100, t=0.5mm. getCategory에 gfrp 추가. 누적 통계 EXP-310→320 갱신 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 872.08 kB (gzip 237 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 유리섬유 단방향 복합재. CFRP 대비 경제적. 풍력 블레이드·보트·건축 소재. 누적: 320실험, 145재료, 31카테고리, 872kB. CFRP+GFRP로 복합재 시리즈 확립. Poly 19종 달성 |
 
 ---
 
