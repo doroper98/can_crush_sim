@@ -1075,6 +1075,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.25,
     wallThickness: 0.05,
   }),
+  nickel_mp35n: createMaterial({
+    name: 'MP35N (Ni-Co Superalloy)',
+    youngsModulus: 228000,
+    poissonRatio: 0.30,
+    yieldStress: 1380,
+    uts: 1790,
+    density: 8430,
+    hardeningExponent: 0.12,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
