@@ -2275,6 +2275,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.3,
   }),
+  magnesium_ze41a: createMaterial({
+    name: 'Magnesium ZE41A-T5 (Zr-RE)',
+    youngsModulus: 45000,
+    poissonRatio: 0.35,
+    yieldStress: 140,
+    uts: 205,
+    density: 1840,
+    hardeningExponent: 0.14,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
