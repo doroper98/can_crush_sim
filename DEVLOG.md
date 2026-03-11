@@ -168,6 +168,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-434] localStorage 세션 자동 저장/복원
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 17:15:00 |
+| **Step** | S5.4 |
+| **관련 FR** | FR-05, FR-06 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | 페이지 새로고침 시 마지막 파라미터 자동 복원. cancrush_session 키에 16개 파라미터(캔 형상 3개, 하중 조건 3개, 강체 3개, 재료 5개, 최대압축 1개) 저장. useState 초기값을 localStorage에서 로드. useEffect로 파라미터 변경 시 즉시 저장. 별도 implicit any 타입 에러 수정(setMaterialKey callback). |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (895.98 kB, gzip 242.96 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 사용자가 재료/형상을 세팅한 뒤 새로고침해도 설정 유지. 프리셋 시스템과 별개로 작동하는 "마지막 세션" 복원. quota 초과 시 silent fail. |
+
+---
+
 ### [EXP-433] CAD 임포트 로딩 오버레이 (스피너 + 상태 텍스트)
 
 | 항목 | 값 |

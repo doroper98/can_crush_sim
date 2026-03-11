@@ -24,6 +24,16 @@ function getLODSegments(cameraDistance: number): { radial: number; height: numbe
   return { radial: 32, height: 20 } // full detail
 }
 
+// Session persistence helpers
+const SESSION_KEY = 'cancrush_session'
+function loadSession(): Record<string, any> {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY) || '{}') } catch { return {} }
+}
+function saveSession(data: Record<string, any>) {
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify(data)) } catch { /* quota exceeded */ }
+}
+const _ss = loadSession()
+
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
   const sceneRef = useRef<THREE.Scene | null>(null)
@@ -72,15 +82,15 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('cancrush_darkMode') === '1')
   const [presetName, setPresetName] = useState('')
   const [simState, setSimState] = useState<'idle' | 'running' | 'paused'>('idle')
-  const [canDiameter, setCanDiameter] = useState(66)
-  const [canHeightParam, setCanHeightParam] = useState(120)
-  const [wallThickness, setWallThickness] = useState(0.3)
-  const [maxForce, setMaxForce] = useState(500)
-  const [controlMode, setControlMode] = useState<'displacement' | 'force'>('displacement')
-  const [compressionSpeedParam, setCompressionSpeedParam] = useState(10)
-  const [rigidShape, setRigidShape] = useState<RigidBodyShape>('cylinder')
-  const [rigidRadius, setRigidRadius] = useState(40)
-  const [rigidHeight, setRigidHeight] = useState(20)
+  const [canDiameter, setCanDiameter] = useState(_ss.canDiameter ?? 66)
+  const [canHeightParam, setCanHeightParam] = useState(_ss.canHeight ?? 120)
+  const [wallThickness, setWallThickness] = useState(_ss.wallThickness ?? 0.3)
+  const [maxForce, setMaxForce] = useState(_ss.maxForce ?? 500)
+  const [controlMode, setControlMode] = useState<'displacement' | 'force'>(_ss.controlMode ?? 'displacement')
+  const [compressionSpeedParam, setCompressionSpeedParam] = useState(_ss.compressionSpeed ?? 10)
+  const [rigidShape, setRigidShape] = useState<RigidBodyShape>(_ss.rigidShape ?? 'cylinder')
+  const [rigidRadius, setRigidRadius] = useState(_ss.rigidRadius ?? 40)
+  const [rigidHeight, setRigidHeight] = useState(_ss.rigidHeight ?? 20)
   const [rigidPosX, setRigidPosX] = useState(0)
   const [rigidPosY, setRigidPosY] = useState(145) // canHeight + rigidHeight/2 + 5
   const [rigidPosZ, setRigidPosZ] = useState(0)
@@ -103,11 +113,11 @@ export default function App() {
   const [timeScale, setTimeScale] = useState(1.0)
   const timeScaleRef = useRef(1.0)
   const stepOnceRef = useRef(false)
-  const [materialKey, setMaterialKey] = useState('aluminum_6061')
-  const [matYoungsModulus, setMatYoungsModulus] = useState(69000)
-  const [matYieldStress, setMatYieldStress] = useState(276)
-  const [matUTS, setMatUTS] = useState(310)
-  const [matHardeningN, setMatHardeningN] = useState(0.2)
+  const [materialKey, setMaterialKey] = useState(_ss.materialKey ?? 'aluminum_6061')
+  const [matYoungsModulus, setMatYoungsModulus] = useState(_ss.matE ?? 69000)
+  const [matYieldStress, setMatYieldStress] = useState(_ss.matSy ?? 276)
+  const [matUTS, setMatUTS] = useState(_ss.matUTS ?? 310)
+  const [matHardeningN, setMatHardeningN] = useState(_ss.matN ?? 0.2)
   const recorderRef = useRef(new CanvasRecorder())
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
   const [isRecording, setIsRecording] = useState(false)
@@ -146,7 +156,7 @@ export default function App() {
   const autoStopStressRef = useRef(true)
   const [autoStopMultiplier, setAutoStopMultiplier] = useState(1.2)
   const autoStopMultiplierRef = useRef(1.2)
-  const [maxCompression, setMaxCompression] = useState(67)
+  const [maxCompression, setMaxCompression] = useState(_ss.maxCompression ?? 67)
   const [measureMode, setMeasureMode] = useState(false)
   const measureModeRef = useRef(false)
   const [contextMenu, setContextMenu] = useState<{
@@ -157,6 +167,19 @@ export default function App() {
   const measureLabelRef = useRef<THREE.Sprite | null>(null)
   const [measureDist, setMeasureDist] = useState<number | null>(null)
   const [cadLoading, setCadLoading] = useState<string | null>(null) // null = not loading, string = status message
+
+  // Auto-save session parameters to localStorage
+  useEffect(() => {
+    saveSession({
+      canDiameter, canHeight: canHeightParam, wallThickness, maxForce,
+      controlMode, compressionSpeed: compressionSpeedParam,
+      rigidShape, rigidRadius, rigidHeight,
+      materialKey, matE: matYoungsModulus, matSy: matYieldStress,
+      matUTS, matN: matHardeningN, maxCompression,
+    })
+  }, [canDiameter, canHeightParam, wallThickness, maxForce, controlMode,
+    compressionSpeedParam, rigidShape, rigidRadius, rigidHeight,
+    materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN, maxCompression])
 
   useEffect(() => {
     const container = containerRef.current
@@ -816,7 +839,7 @@ export default function App() {
         case '[':
         case ']':
           if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
-            setMaterialKey(prev => {
+            setMaterialKey((prev: string) => {
               const idx = MATERIAL_KEYS.indexOf(prev)
               const next = e.key === ']'
                 ? (idx + 1) % MATERIAL_KEYS.length
