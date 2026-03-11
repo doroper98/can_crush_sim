@@ -1592,6 +1592,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-222] Ti-6Al-4V ELI (Grade 23) 재료 추가 — 51번째, 3번째 Ti
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 22:35:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-10 |
+| **관련 NF** | - |
+| **변경 내용** | (1) Ti-6Al-4V ELI (Grade 23): E=114 GPa, σy=795 MPa, UTS=860 MPa, n=0.08, ρ=4430 kg/m³, ν=0.34, t=0.3mm. (2) 51번째 재료. (3) Ti 카테고리 3번째 (Gr2/Ti-6Al-4V/Gr23 ELI). |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 856.46 kB (gzip 233.66 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 의료 임플란트 등급. Ti-6Al-4V 대비 ELI(Extra Low Interstitial) 사양, σy -85MPa. 생체적합성 최우수. |
+
+---
+
 ### [EXP-221] StressStrainChart 경화계수 K 표시
 
 | 항목 | 값 |
