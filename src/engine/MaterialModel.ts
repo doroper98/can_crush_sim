@@ -2075,6 +2075,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.18,
     wallThickness: 0.3,
   }),
+  etfe: createMaterial({
+    name: 'ETFE (Tefzel)',
+    youngsModulus: 1700,
+    poissonRatio: 0.40,
+    yieldStress: 45,
+    uts: 48,
+    density: 1700,
+    hardeningExponent: 0.05,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
