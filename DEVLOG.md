@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-220 기준, 26/03/11 22:25) — 50재료 마일스톤!
+### 누적 통계 (EXP-230 기준, 26/03/11 23:15)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **220** |
-| 성공 커밋 | 220 |
+| 총 실험 수 | **230** |
+| 성공 커밋 | 230 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 184건, EXP-028~220) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 194건, EXP-028~230) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 856 kB (gzip 234 kB) |
-| 재료 라이브러리 | **50종** (Al×6, Fe×6, Cu×3, Ti×2, Ni×4, Poly×5, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru) |
+| 빌드 크기 | 858 kB (gzip 234 kB) |
+| 재료 라이브러리 | **58종** (Al×6, Fe×8, Cu×4, Ti×3, Ni×5, Poly×6, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
-| 카테고리 | 29종 (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru) |
+| 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | 3차트 그리드 일관성, LoadDisp Peak/Mean 수치, About 카테고리 동적화, 백금족 6종 완성, **50재료**, 29카테고리 |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging(최고σy), UHMWPE(최저ρ), 58재료, 31카테고리 |
 
 ---
 
@@ -1589,6 +1589,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 853.62 kB (gzip 232.92 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
 | **판정** | ✅ COMMIT (아래) |
 | **비고** | 바나듐 합금강의 핵심 원소. 공구강·스프링강. UTS/σy=1.94. 내화금속 4종(W/Ta/Mo/Nb+V). 20카테고리 달성! |
+
+---
+
+### [EXP-230] DEVLOG 누적 통계 업데이트
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 23:15:00 |
+| **Step** | - (유지보수) |
+| **관련 FR** | - |
+| **관련 NF** | - |
+| **변경 내용** | 누적 통계 EXP-220 → EXP-230 기준으로 갱신. 58 재료, 31 카테고리, 858 kB. |
+| **테스트 항목** | - |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 857.63 kB (gzip 233.93 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | EXP-221~229: K값 차트표시, Ti Gr23 ELI, UHMWPE, Maraging300, C655, Inconel625, Duplex2205, Re, DU. 재료 50→58, 카테고리 29→31. |
 
 ---
 
