@@ -605,6 +605,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.25,
     wallThickness: 0.3,
   }),
+  uranium_du: createMaterial({
+    name: 'Depleted Uranium',
+    youngsModulus: 208000,
+    poissonRatio: 0.23,
+    yieldStress: 210,
+    uts: 460,
+    density: 19100,
+    hardeningExponent: 0.30,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
