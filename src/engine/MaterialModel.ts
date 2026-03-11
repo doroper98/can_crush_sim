@@ -2005,6 +2005,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.06,
     wallThickness: 0.3,
   }),
+  nylon_pa46: createMaterial({
+    name: 'Nylon PA46 (Stanyl)',
+    youngsModulus: 3300,
+    poissonRatio: 0.40,
+    yieldStress: 100,
+    uts: 100,
+    density: 1180,
+    hardeningExponent: 0.03,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
