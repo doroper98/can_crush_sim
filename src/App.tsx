@@ -1555,7 +1555,17 @@ export default function App() {
         materialKey, matYoungsModulus, matYieldStress, matUTS, matHardeningN,
         maxCompression, autoStopStress, autoStopMultiplier,
       },
-      material: { name: (MATERIALS[materialKey] ?? MATERIALS['aluminum_6061']).name, key: materialKey },
+      material: (() => {
+        const m = MATERIALS[materialKey] ?? MATERIALS['aluminum_6061']
+        return {
+          key: materialKey, name: m.name,
+          youngsModulus: m.youngsModulus, poissonRatio: m.poissonRatio,
+          yieldStress: m.yieldStress, uts: m.uts,
+          hardeningExponent: m.hardeningExponent, hardeningK: m.hardeningK(),
+          density: m.density, wallThickness: m.wallThickness,
+          flowStress_0: m.flowStress(0), flowStress_0p3: m.flowStress(0.3),
+        }
+      })(),
       display: { displayMode, colormapType, deformScale, clipEnabled, clipY, darkMode },
       results: resultSummary,
       loadDisplacementCurve: chartData,
@@ -1563,11 +1573,12 @@ export default function App() {
     const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
-    link.download = `cancrush_${Date.now()}.json`
+    const matName = (MATERIALS[materialKey] ?? MATERIALS['aluminum_6061']).name.replace(/[^a-zA-Z0-9]/g, '_')
+    link.download = `cancrush_${matName}_${Date.now()}.json`
     link.href = url
     link.click()
     URL.revokeObjectURL(url)
-    showToast('JSON exported')
+    showToast(`JSON exported: ${chartData.length} data points, ${(blob.size / 1024).toFixed(0)} KB`)
   }, [showToast, canDiameter, canHeightParam, wallThickness, maxForce, compressionSpeedParam, controlMode,
       rigidShape, rigidRadius, rigidHeight, rigidPosX, rigidPosY, rigidPosZ,
       rigidRotX, rigidRotY, rigidRotZ, materialKey, matYoungsModulus, matYieldStress,

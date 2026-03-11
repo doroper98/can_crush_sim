@@ -118,6 +118,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-431] JSON 내보내기 개선 (물성 상세 + flowStress + 파일명)
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 16:45:00 |
+| **Step** | S3.8 |
+| **관련 FR** | FR-13 |
+| **관련 NF** | - |
+| **변경 내용** | JSON 내보내기의 material 섹션을 전체 물성 상세로 확장: E, ν, σy, UTS, n, hardeningK, density, wallThickness, flowStress(0), flowStress(0.3). 파일명에 재료명 반영. toast에 데이터 포인트 수와 파일 사이즈 표시. 기존 name/key만 있던 material 정보가 완전한 재현 가능 데이터로 업그레이드. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (894.34 kB, gzip 242.54 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 내보낸 JSON으로 시뮬레이션 완전 재현 가능: 형상+물성+하중조건+결과 모두 포함. 별도 시뮬 데이터베이스 없이 파일 공유만으로 결과 전달 가능. |
+
+---
+
 ### [EXP-430] 누적 통계 업데이트 (430실험 마일스톤)
 
 | 항목 | 값 |
