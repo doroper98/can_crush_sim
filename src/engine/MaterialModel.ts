@@ -1035,6 +1035,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.05,
     wallThickness: 0.5,
   }),
+  copper_c11000: createMaterial({
+    name: 'Cu C11000 (ETP Copper)',
+    youngsModulus: 117000,
+    poissonRatio: 0.34,
+    yieldStress: 69,
+    uts: 220,
+    density: 8940,
+    hardeningExponent: 0.44,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
