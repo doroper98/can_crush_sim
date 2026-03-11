@@ -59,12 +59,14 @@ export default function StressStrainChart({
     }
     maxStress = Math.ceil(maxStress / 100) * 100 || 100
 
-    // Grid
+    // Grid (horizontal + vertical)
     ctx.strokeStyle = gridColor
     ctx.lineWidth = 0.5
     for (let i = 0; i <= 4; i++) {
       const y = pad.top + (plotH / 4) * i
       ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + plotW, y); ctx.stroke()
+      const x = pad.left + (plotW / 4) * i
+      ctx.beginPath(); ctx.moveTo(x, pad.top); ctx.lineTo(x, pad.top + plotH); ctx.stroke()
     }
 
     // Axes
@@ -134,6 +136,8 @@ export default function StressStrainChart({
     ctx.beginPath(); ctx.moveTo(lgX, lgY + 12); ctx.lineTo(lgX + 8, lgY + 12); ctx.stroke()
     ctx.setLineDash([])
     ctx.fillText(`UTS ${material.uts.toFixed(0)}`, lgX + 10, lgY + 14)
+    ctx.fillStyle = darkMode ? '#a855f7' : '#9333ea'
+    ctx.fillText(`n=${material.hardeningExponent.toFixed(2)}`, lgX + 10, lgY + 23)
 
     // Area fill
     ctx.fillStyle = darkMode ? 'rgba(168,85,247,0.12)' : 'rgba(168,85,247,0.08)'
