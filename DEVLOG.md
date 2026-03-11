@@ -931,6 +931,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **판정** | ✅ COMMIT (아래) |
 | **비고** | σ_f는 Ludwik-Hollomon σ_f = σy + K·ε_p^n. 변형 진행에 따른 경화 정도 실시간 확인. |
 
+### [EXP-161] StressStrainChart 컴포넌트 추가
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 17:20:00 |
+| **Step** | - (차트 신규) |
+| **관련 FR** | FR-09 |
+| **관련 NF** | NF-03 |
+| **변경 내용** | (1) StressStrainChart 신규 컴포넌트: 재료 flowStress 곡선 0~50% strain. (2) 보라색(#a855f7) 테마. (3) yield stress 점선 기준선. (4) 현재 plastic strain에 amber 마커. (5) ControlPanel에 Stress-Strain Curve 섹션 추가. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 844.93 kB (gzip 230.43 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 3번째 canvas 차트. 재료 변경 시 즉시 곡선 갱신. Ludwik-Hollomon 모델 시각화. |
+
 ---
 
 ### [EXP-115] About 모달 재료 수 동적 표시

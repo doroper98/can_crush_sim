@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import LoadDisplacementChart from './LoadDisplacementChart'
 import EnergyChart from './EnergyChart'
+import StressStrainChart from './StressStrainChart'
 import { MATERIALS, MATERIAL_KEYS } from '../engine/MaterialModel'
 
 export type RigidBodyShape = 'cylinder' | 'box' | 'sphere' | 'cone'
@@ -551,6 +552,10 @@ export default function ControlPanel({
 
       <Section title="Energy-Displacement" defaultOpen={false} theme={theme}>
         <EnergyChart data={chartData} prevData={prevChartData} width={256} height={120} darkMode={darkMode} />
+      </Section>
+
+      <Section title="Stress-Strain Curve" defaultOpen={false} theme={theme}>
+        <StressStrainChart material={MATERIALS[materialKey]} currentPlasticStrain={resultSummary?.maxPlastic ?? 0} width={256} height={120} darkMode={darkMode} />
       </Section>
 
       <Section title="Material" defaultOpen={false} theme={theme}>
