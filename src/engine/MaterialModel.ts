@@ -415,6 +415,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.15,
     wallThickness: 0.3,
   }),
+  chromium_cr: createMaterial({
+    name: 'Chromium (Cr)',
+    youngsModulus: 279000,
+    poissonRatio: 0.21,
+    yieldStress: 370,
+    uts: 450,
+    density: 7190,
+    hardeningExponent: 0.12,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */

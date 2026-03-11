@@ -31,6 +31,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'molybdenum_mo') return { label: 'Mo', color: '#a1a1aa' }
   if (key === 'vanadium_v') return { label: 'V', color: '#fb923c' }
   if (key === 'beryllium_be') return { label: 'Be', color: '#a3e635' }
+  if (key === 'chromium_cr') return { label: 'Cr', color: '#dc2626' }
   return { label: '?', color: '#94a3b8' }
 }
 
