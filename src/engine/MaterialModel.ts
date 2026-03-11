@@ -455,6 +455,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.40,
     wallThickness: 0.3,
   }),
+  iridium_ir: createMaterial({
+    name: 'Iridium (Ir)',
+    youngsModulus: 528000,
+    poissonRatio: 0.26,
+    yieldStress: 120,
+    uts: 240,
+    density: 22560,
+    hardeningExponent: 0.30,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
