@@ -915,6 +915,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.18,
     wallThickness: 0.3,
   }),
+  nickel_nimonic90: createMaterial({
+    name: 'Nimonic 90',
+    youngsModulus: 213000,
+    poissonRatio: 0.30,
+    yieldStress: 735,
+    uts: 1145,
+    density: 8180,
+    hardeningExponent: 0.22,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
