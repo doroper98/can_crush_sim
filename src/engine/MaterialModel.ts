@@ -935,6 +935,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.20,
     wallThickness: 0.5,
   }),
+  pet: createMaterial({
+    name: 'PET (Polyethylene Terephthalate)',
+    youngsModulus: 2800,
+    poissonRatio: 0.40,
+    yieldStress: 55,
+    uts: 80,
+    density: 1380,
+    hardeningExponent: 0.20,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */

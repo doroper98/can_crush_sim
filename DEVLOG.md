@@ -1592,6 +1592,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-266] PET 재료 추가 — 91번째, 11번째 Poly
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 02:25:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | PET (Polyethylene Terephthalate) 추가: E=2.8GPa, σy=55MPa, UTS=80MPa, n=0.20, ρ=1380, t=0.3mm. getCategory에 `pet` 추가 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 863.25 kB (gzip 235 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 탄산음료 페트병 소재! Can Crush Sim에 딱 맞는 재료. PC·PEEK 사이의 범용 엔지니어링 플라스틱. Poly 11종 달성 |
+
+---
+
 ### [EXP-265] HSLA A572 Gr.50 재료 추가 — 90번째 재료! 12번째 Fe
 
 | 항목 | 값 |
