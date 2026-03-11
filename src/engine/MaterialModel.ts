@@ -1785,6 +1785,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.07,
     wallThickness: 0.3,
   }),
+  steel_m2: createMaterial({
+    name: 'AISI M2 (HSS)',
+    youngsModulus: 210000,
+    poissonRatio: 0.29,
+    yieldStress: 1000,
+    uts: 1200,
+    density: 8160,
+    hardeningExponent: 0.08,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
