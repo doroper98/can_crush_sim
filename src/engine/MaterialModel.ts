@@ -1555,6 +1555,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.3,
   }),
+  copper_tellurium_c145: createMaterial({
+    name: 'Tellurium Copper C14500',
+    youngsModulus: 117000,
+    poissonRatio: 0.34,
+    yieldStress: 290,
+    uts: 340,
+    density: 8940,
+    hardeningExponent: 0.08,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
