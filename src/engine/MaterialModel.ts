@@ -2295,6 +2295,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.22,
     wallThickness: 0.3,
   }),
+  peek_gf30: createMaterial({
+    name: 'PEEK GF30 (30% Glass Filled)',
+    youngsModulus: 10000,
+    poissonRatio: 0.38,
+    yieldStress: 145,
+    uts: 160,
+    density: 1510,
+    hardeningExponent: 0.03,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
