@@ -2245,6 +2245,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.3,
   }),
+  hastelloy_g30: createMaterial({
+    name: 'Hastelloy G-30 (Ni-Cr-Fe-Mo)',
+    youngsModulus: 199000,
+    poissonRatio: 0.30,
+    yieldStress: 310,
+    uts: 690,
+    density: 8220,
+    hardeningExponent: 0.28,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
