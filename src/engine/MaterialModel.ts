@@ -265,6 +265,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.35,
     wallThickness: 0.3,
   }),
+  tin_sn: createMaterial({
+    name: 'Tin (Sn)',
+    youngsModulus: 50000,
+    poissonRatio: 0.36,
+    yieldStress: 14,
+    uts: 22,
+    density: 7310,
+    hardeningExponent: 0.30,
+    wallThickness: 0.3,
+  }),
   tungsten: createMaterial({
     name: 'Tungsten (W)',
     youngsModulus: 411000,
