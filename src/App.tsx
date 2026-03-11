@@ -2241,8 +2241,9 @@ export default function App() {
           </p>
           <div style={{ fontSize: 11, color: darkMode ? '#94a3b8' : '#64748b', lineHeight: 1.8 }}>
             <div><strong>Space</strong> Play/Pause · <strong>N</strong> Step · <strong>V</strong> Display · <strong>H</strong> HUD</div>
-            <div><strong>C</strong> Copy · <strong>E</strong> CSV · <strong>I</strong> Materials · <strong>[ ]</strong> Cycle</div>
-            <div><strong>S</strong> Screenshot · <strong>D</strong> Dark · <strong>M</strong> Measure · <strong>?</strong> Help</div>
+            <div><strong>C</strong> Copy · <strong>E</strong> CSV · <strong>J</strong> JSON · <strong>I</strong> Materials</div>
+            <div><strong>[ ]</strong> Cycle · <strong>A</strong> About · <strong>S</strong> Screenshot · <strong>D</strong> Dark</div>
+            <div><strong>M</strong> Measure · <strong>?</strong> Help · <strong>Tab</strong> Panel</div>
           </div>
           <button
             onClick={() => { setShowAbout(false); localStorage.setItem('cancrush_visited', '1') }}
