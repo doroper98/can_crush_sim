@@ -1405,6 +1405,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.10,
     wallThickness: 1.0,
   }),
+  zinc_za12: createMaterial({
+    name: 'ZA-12 (Zn-Al Die Cast)',
+    youngsModulus: 82700,
+    poissonRatio: 0.31,
+    yieldStress: 310,
+    uts: 400,
+    density: 6030,
+    hardeningExponent: 0.10,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
