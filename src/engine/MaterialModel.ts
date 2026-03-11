@@ -2445,6 +2445,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.5,
   }),
+  steel_aermet100: createMaterial({
+    name: 'AerMet 100 (Ultra-High Gear)',
+    youngsModulus: 197000,
+    poissonRatio: 0.30,
+    yieldStress: 1720,
+    uts: 1960,
+    density: 7890,
+    hardeningExponent: 0.06,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
