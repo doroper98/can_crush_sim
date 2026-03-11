@@ -2355,6 +2355,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.33,
     wallThickness: 0.3,
   }),
+  aluminum_7055: createMaterial({
+    name: 'Aluminum 7055-T77 (Ultra-High)',
+    youngsModulus: 72000,
+    poissonRatio: 0.33,
+    yieldStress: 620,
+    uts: 655,
+    density: 2850,
+    hardeningExponent: 0.04,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
