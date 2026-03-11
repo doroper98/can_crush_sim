@@ -2155,6 +2155,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.20,
     wallThickness: 0.3,
   }),
+  pai: createMaterial({
+    name: 'PAI Torlon (Polyamide-imide)',
+    youngsModulus: 4500,
+    poissonRatio: 0.38,
+    yieldStress: 120,
+    uts: 125,
+    density: 1420,
+    hardeningExponent: 0.03,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */

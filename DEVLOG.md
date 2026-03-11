@@ -2057,6 +2057,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-388] PAI Torlon (Polyamide-imide) 재료 추가 — 213번째, 27번째 Poly
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 12:50:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | PAI Torlon 추가: E=4.5GPa, σy=120MPa, UTS=125MPa, n=0.03, ρ=1420, t=0.5mm. getCategory에 `pai` 추가 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 882.97 kB (gzip 239 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | Solvay Torlon. 열가소성 수지 중 최고 강도·강성. σy=120MPa(Poly 중 최고급). 내열 260°C. 항공 브래킷·반도체 웨이퍼 캐리어. Poly 27번째 |
+
+---
+
 ### [EXP-387] Nimonic 263 (Ni-Co-Cr) 재료 추가 — 212번째, 29번째 Ni
 
 | 항목 | 값 |
