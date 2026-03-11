@@ -2036,8 +2036,14 @@ export default function App() {
             })()}
             <div style={{ borderTop: '1px solid rgba(148,163,184,0.3)', marginTop: 3, paddingTop: 3 }}>
               <div>F_pk: {resultSummary.peakForce.toFixed(0)} N  F̄: {resultSummary.meanForce.toFixed(0)} N</div>
-              <div>SEA: {resultSummary.sea.toFixed(1)} J/kg</div>
-              <div>CFE: <span style={{ color: resultSummary.cfe >= 0.7 ? '#10b981' : resultSummary.cfe >= 0.4 ? '#f59e0b' : '#ef4444' }}>{(resultSummary.cfe * 100).toFixed(1)}%</span></div>
+              <div>SEA: {resultSummary.sea.toFixed(1)} J/kg{prevResultSummary && (() => {
+                const d = resultSummary.sea - prevResultSummary.sea
+                return d !== 0 ? <span style={{ fontSize: 8, color: d > 0 ? '#10b981' : '#ef4444', marginLeft: 3 }}>{d > 0 ? '▲' : '▼'}{Math.abs(d).toFixed(1)}</span> : null
+              })()}</div>
+              <div>CFE: <span style={{ color: resultSummary.cfe >= 0.7 ? '#10b981' : resultSummary.cfe >= 0.4 ? '#f59e0b' : '#ef4444' }}>{(resultSummary.cfe * 100).toFixed(1)}%</span>{prevResultSummary && (() => {
+                const d = (resultSummary.cfe - prevResultSummary.cfe) * 100
+                return d !== 0 ? <span style={{ fontSize: 8, color: d > 0 ? '#10b981' : '#ef4444', marginLeft: 3 }}>{d > 0 ? '▲' : '▼'}{Math.abs(d).toFixed(1)}%</span> : null
+              })()}</div>
               <div style={{ fontSize: 9, color: '#64748b' }}>m: {(resultSummary.canMass * 1000).toFixed(2)} g</div>
             </div>
           </div>
