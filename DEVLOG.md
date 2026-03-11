@@ -168,6 +168,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-444] 더블클릭 카메라 센터링
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 18:20:00 |
+| **Step** | S1.3 |
+| **관련 FR** | FR-02 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | 3D 뷰포트에서 캔 또는 강체 메시를 더블클릭하면 해당 지점으로 카메라 타겟(orbit center)을 이동. Raycaster로 교차점 계산 후 CatiaControls.setTarget() 호출. toast로 센터링 좌표 피드백. cleanup에 dblclick 리스너 해제 추가. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (901.02 kB, gzip 243.98 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | CATIA V5의 더블클릭 센터링과 유사한 동작. 특정 변형 부위를 상세히 관찰할 때 유용. |
+
+---
+
 ### [EXP-443] HUD 결과 비교 델타 표시 (SEA/CFE)
 
 | 항목 | 값 |

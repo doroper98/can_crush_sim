@@ -1022,6 +1022,21 @@ export default function App() {
     }
     container.addEventListener('contextmenu', onContextMenu)
 
+    // Double-click: center camera on clicked point
+    const onDblClick = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect()
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+      raycaster.setFromCamera(mouse, camera)
+      const hits = raycaster.intersectObjects([canMesh, rigidMesh], false)
+      if (hits.length > 0) {
+        const pt = hits[0].point
+        controls.setTarget(pt.x, pt.y, pt.z)
+        showToastRef.current(`Camera centered at (${pt.x.toFixed(1)}, ${pt.y.toFixed(1)}, ${pt.z.toFixed(1)})`)
+      }
+    }
+    container.addEventListener('dblclick', onDblClick)
+
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', onResize)
@@ -1029,6 +1044,7 @@ export default function App() {
       container.removeEventListener('mousemove', onMouseMove)
       container.removeEventListener('click', onClickSelect)
       container.removeEventListener('contextmenu', onContextMenu)
+      container.removeEventListener('dblclick', onDblClick)
       transformControls.detach()
       transformControls.dispose()
       controls.dispose()
