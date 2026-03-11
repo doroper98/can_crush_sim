@@ -685,6 +685,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.28,
     wallThickness: 0.3,
   }),
+  nickel_kovar: createMaterial({
+    name: 'Kovar (Fe-29Ni-17Co)',
+    youngsModulus: 138000,
+    poissonRatio: 0.32,
+    yieldStress: 345,
+    uts: 517,
+    density: 8360,
+    hardeningExponent: 0.22,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
