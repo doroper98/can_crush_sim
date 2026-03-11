@@ -695,6 +695,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.22,
     wallThickness: 0.3,
   }),
+  titanium_beta21s: createMaterial({
+    name: 'Ti Beta-21S',
+    youngsModulus: 105000,
+    poissonRatio: 0.33,
+    yieldStress: 1000,
+    uts: 1100,
+    density: 4940,
+    hardeningExponent: 0.06,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
