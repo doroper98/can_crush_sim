@@ -1592,6 +1592,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-203] EnergyChart 수직 그리드 추가
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/11 21:00:00 |
+| **Step** | - (차트 일관성) |
+| **관련 FR** | FR-12 |
+| **관련 NF** | NF-06 |
+| **변경 내용** | (1) EnergyChart에 수직 그리드 라인 4개 추가. (2) StressStrainChart, LoadDisplacementChart와 동일한 그리드 패턴으로 시각적 일관성 확보. (3) 3개 차트 모두 4×4 그리드 완성. |
+| **테스트 항목** | (1) npm run build 성공 (2) 타입 체크 통과 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 853.71 kB (gzip 232.95 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT (아래) |
+| **비고** | 3개 차트 그리드 일관성 완성. Load-Displacement(이전), Stress-Strain(EXP-186), Energy(EXP-203). |
+
+---
+
 ### [EXP-115] About 모달 재료 수 동적 표시
 
 | 항목 | 값 |

@@ -77,12 +77,14 @@ export default function EnergyChart({
     maxDisp = Math.ceil(maxDisp / 10) * 10 || 10
     maxEnergy = Math.ceil(maxEnergy * 10) / 10 || 0.1
 
-    // Grid
+    // Grid (horizontal + vertical)
     ctx.strokeStyle = gridColor
     ctx.lineWidth = 0.5
     for (let i = 0; i <= 4; i++) {
       const y = pad.top + (plotH / 4) * i
       ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + plotW, y); ctx.stroke()
+      const x = pad.left + (plotW / 4) * i
+      ctx.beginPath(); ctx.moveTo(x, pad.top); ctx.lineTo(x, pad.top + plotH); ctx.stroke()
     }
 
     // Axes
