@@ -1755,6 +1755,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.18,
     wallThickness: 0.5,
   }),
+  niobium_c752: createMaterial({
+    name: 'Nb C-752 (Nb-10W-2.5Zr)',
+    youngsModulus: 115000,
+    poissonRatio: 0.38,
+    yieldStress: 530,
+    uts: 620,
+    density: 9180,
+    hardeningExponent: 0.10,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
