@@ -655,6 +655,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.22,
     wallThickness: 0.5,
   }),
+  zirconium_zr704: createMaterial({
+    name: 'Zirconium Zr704',
+    youngsModulus: 99000,
+    poissonRatio: 0.34,
+    yieldStress: 380,
+    uts: 510,
+    density: 6640,
+    hardeningExponent: 0.18,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
