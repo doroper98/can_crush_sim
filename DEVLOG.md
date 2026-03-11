@@ -168,6 +168,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-441] 터치 제스처 지원 (모바일/태블릿)
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 18:02:00 |
+| **Step** | S1.3 |
+| **관련 FR** | FR-02, FR-15 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | CatiaControls에 터치 이벤트 핸들러 3개 추가: touchstart/touchmove/touchend. 1-finger drag = orbit, 2-finger drag = pan, pinch = zoom. touchStartDist 상태로 핀치 거리 추적. dispose()에 touch 리스너 해제 추가. passive: false로 스크롤 방지. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (899.68 kB, gzip 243.76 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 데스크톱 마우스 컨트롤과 동일한 orbit/pan/zoom을 터치로 제공. iPad/태블릿에서 시뮬레이터 사용 가능. |
+
+---
+
 ### [EXP-440] 누적 통계 업데이트 (440실험 마일스톤)
 
 | 항목 | 값 |

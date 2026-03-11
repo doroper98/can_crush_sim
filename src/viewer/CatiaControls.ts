@@ -18,6 +18,11 @@ export class CatiaControls {
   private isRotating = false
   private isPanning = false
 
+  // Touch state
+  private touchStartPos = new THREE.Vector2()
+  private touchStartPos2 = new THREE.Vector2()
+  private touchStartDist = 0
+
   private rotateSpeed = 1.0
   private panSpeed = 1.0
   private zoomSpeed = 1.0
@@ -40,6 +45,9 @@ export class CatiaControls {
     this.onMouseUp = this.onMouseUp.bind(this)
     this.onWheel = this.onWheel.bind(this)
     this.onContextMenu = this.onContextMenu.bind(this)
+    this.onTouchStart = this.onTouchStart.bind(this)
+    this.onTouchMove = this.onTouchMove.bind(this)
+    this.onTouchEnd = this.onTouchEnd.bind(this)
 
     domElement.addEventListener('mousedown', this.onMouseDown)
     domElement.addEventListener('mousemove', this.onMouseMove)
@@ -47,6 +55,9 @@ export class CatiaControls {
     domElement.addEventListener('mouseleave', this.onMouseUp)
     domElement.addEventListener('wheel', this.onWheel, { passive: false })
     domElement.addEventListener('contextmenu', this.onContextMenu)
+    domElement.addEventListener('touchstart', this.onTouchStart, { passive: false })
+    domElement.addEventListener('touchmove', this.onTouchMove, { passive: false })
+    domElement.addEventListener('touchend', this.onTouchEnd)
   }
 
   private onContextMenu(e: Event) {
@@ -117,6 +128,68 @@ export class CatiaControls {
     this.spherical.radius *= factor
     this.spherical.radius = Math.max(1, Math.min(10000, this.spherical.radius))
     this.updateCamera()
+  }
+
+  // Touch handlers: 1-finger = orbit, 2-finger = pan + pinch-zoom
+  private onTouchStart(e: TouchEvent) {
+    if (!this.enabled) return
+    e.preventDefault()
+    if (e.touches.length === 1) {
+      this.isRotating = true
+      this.isPanning = false
+      this.touchStartPos.set(e.touches[0].clientX, e.touches[0].clientY)
+    } else if (e.touches.length === 2) {
+      this.isRotating = false
+      this.isPanning = true
+      const t0 = e.touches[0], t1 = e.touches[1]
+      this.touchStartPos.set((t0.clientX + t1.clientX) / 2, (t0.clientY + t1.clientY) / 2)
+      this.touchStartDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY)
+    }
+  }
+
+  private onTouchMove(e: TouchEvent) {
+    if (!this.enabled) return
+    e.preventDefault()
+    if (e.touches.length === 1 && this.isRotating) {
+      const dx = e.touches[0].clientX - this.touchStartPos.x
+      const dy = e.touches[0].clientY - this.touchStartPos.y
+      this.spherical.theta -= dx * this.rotateSpeed * 0.005
+      this.spherical.phi -= dy * this.rotateSpeed * 0.005
+      this.spherical.phi = Math.max(0.01, Math.min(Math.PI - 0.01, this.spherical.phi))
+      this.touchStartPos.set(e.touches[0].clientX, e.touches[0].clientY)
+      this.updateCamera()
+    } else if (e.touches.length === 2) {
+      const t0 = e.touches[0], t1 = e.touches[1]
+      const midX = (t0.clientX + t1.clientX) / 2
+      const midY = (t0.clientY + t1.clientY) / 2
+      // Pan
+      const dx = midX - this.touchStartPos.x
+      const dy = midY - this.touchStartPos.y
+      const panOffset = new THREE.Vector3()
+      const distance = this.spherical.radius
+      const camRight = new THREE.Vector3()
+      const camUp = new THREE.Vector3()
+      this.camera.matrix.extractBasis(camRight, camUp, new THREE.Vector3())
+      panOffset.addScaledVector(camRight, -dx * this.panSpeed * distance * 0.001)
+      panOffset.addScaledVector(camUp, dy * this.panSpeed * distance * 0.001)
+      this.target.add(panOffset)
+      this.touchStartPos.set(midX, midY)
+      // Pinch zoom
+      const dist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY)
+      if (this.touchStartDist > 0) {
+        const factor = this.touchStartDist / dist
+        this.spherical.radius *= factor
+        this.spherical.radius = Math.max(1, Math.min(10000, this.spherical.radius))
+      }
+      this.touchStartDist = dist
+      this.updateCamera()
+    }
+  }
+
+  private onTouchEnd(_e: TouchEvent) {
+    this.isRotating = false
+    this.isPanning = false
+    this.touchStartDist = 0
   }
 
   private updateCamera() {
@@ -191,5 +264,8 @@ export class CatiaControls {
     this.domElement.removeEventListener('mouseleave', this.onMouseUp)
     this.domElement.removeEventListener('wheel', this.onWheel)
     this.domElement.removeEventListener('contextmenu', this.onContextMenu)
+    this.domElement.removeEventListener('touchstart', this.onTouchStart)
+    this.domElement.removeEventListener('touchmove', this.onTouchMove)
+    this.domElement.removeEventListener('touchend', this.onTouchEnd)
   }
 }
