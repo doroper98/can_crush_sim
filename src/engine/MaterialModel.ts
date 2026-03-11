@@ -1805,6 +1805,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.38,
     wallThickness: 0.3,
   }),
+  steel_h13: createMaterial({
+    name: 'AISI H13 Hot Work Tool Steel',
+    youngsModulus: 210000,
+    poissonRatio: 0.29,
+    yieldStress: 1380,
+    uts: 1620,
+    density: 7800,
+    hardeningExponent: 0.06,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
