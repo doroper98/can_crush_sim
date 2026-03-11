@@ -167,6 +167,7 @@ export default function App() {
   const measureLabelRef = useRef<THREE.Sprite | null>(null)
   const [measureDist, setMeasureDist] = useState<number | null>(null)
   const [cadLoading, setCadLoading] = useState<string | null>(null) // null = not loading, string = status message
+  const [themeTransition, setThemeTransition] = useState(false)
 
   // Auto-save session parameters to localStorage
   useEffect(() => {
@@ -1077,6 +1078,9 @@ export default function App() {
       }
     }
     localStorage.setItem('cancrush_darkMode', darkMode ? '1' : '0')
+    setThemeTransition(true)
+    const timer = setTimeout(() => setThemeTransition(false), 400)
+    return () => clearTimeout(timer)
   }, [darkMode])
 
   // Ghost (original shape) overlay
@@ -1786,11 +1790,14 @@ export default function App() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+    <div className={themeTransition ? 'cc-theme-transition' : ''} style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh', overflow: 'hidden' }}>
     <style>{`
       @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(12px); }
         to { opacity: 1; transform: translateY(0); }
+      }
+      .cc-theme-transition, .cc-theme-transition * {
+        transition: background-color 0.3s ease, color 0.15s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
       }
     `}</style>
     <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
