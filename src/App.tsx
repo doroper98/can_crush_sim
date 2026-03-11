@@ -1876,7 +1876,7 @@ export default function App() {
             <div style={{ fontWeight: 600, color: '#93c5fd', marginBottom: 2 }}>{(MATERIALS[materialKeyRef.current] ?? MATERIALS[DEFAULT_MATERIAL]).name}</div>
             <div>t: {simTime.toFixed(3)} s</div>
             <div>d: {simDisplacement.toFixed(1)} mm</div>
-            <div style={{ fontSize: 9, color: '#64748b' }}>v: {(compressionSpeedParam * timeScale).toFixed(1)} mm/s</div>
+            <div style={{ fontSize: 9, color: '#64748b' }}>v: {(compressionSpeedParam * timeScale).toFixed(1)} mm/s{wallElapsed > 0 ? `  ${(simSteps / wallElapsed).toFixed(0)} st/s` : ''}</div>
             {chartData.length > 0 && <div>F: {chartData[chartData.length - 1].load.toFixed(0)} N</div>}
             <div>σ_max: <span style={{ color: resultSummary.maxStress > matUTS ? '#ef4444' : '#10b981' }}>{resultSummary.maxStress.toFixed(0)}</span> MPa</div>
             {/* UTS utilization bar */}
