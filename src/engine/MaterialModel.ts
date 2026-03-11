@@ -1225,6 +1225,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.04,
     wallThickness: 0.3,
   }),
+  peek_cf30: createMaterial({
+    name: 'PEEK CF30 (30% Carbon)',
+    youngsModulus: 22000,
+    poissonRatio: 0.38,
+    yieldStress: 212,
+    uts: 212,
+    density: 1410,
+    hardeningExponent: 0.02,
+    wallThickness: 1.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */

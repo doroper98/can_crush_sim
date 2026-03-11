@@ -1667,6 +1667,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 ---
 
+### [EXP-295] PEEK CF30 재료 추가 — 120번째, 15번째 Poly
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 04:55:00 |
+| **Step** | - (재료 라이브러리 확장) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | PEEK CF30 (30% Carbon Fiber) 추가: E=22GPa, σy=212MPa, UTS=212MPa, n=0.02, ρ=1410, t=1.0mm. getCategory peek → startsWith('peek') 패턴 변경 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 867.96 kB (gzip 236 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 탄소섬유 30% 강화 PEEK. 순수 PEEK(E=3.6GPa) 대비 강성 6배↑. 항공·의료 임플란트·반도체 장비. 120종 마일스톤! Poly 15종 달성. getCategory startsWith 패턴 적용 |
+
+---
+
 ### [EXP-289] W-Ni-Fe 93% Heavy Alloy 재료 추가 — 114번째, 2번째 W
 
 | 항목 | 값 |
