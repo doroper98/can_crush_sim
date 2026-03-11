@@ -1395,6 +1395,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  pp_gf30: createMaterial({
+    name: 'PP GF30 (30% Glass Fiber)',
+    youngsModulus: 6500,
+    poissonRatio: 0.38,
+    yieldStress: 80,
+    uts: 100,
+    density: 1130,
+    hardeningExponent: 0.10,
+    wallThickness: 1.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */
