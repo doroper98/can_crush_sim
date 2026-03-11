@@ -15,7 +15,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key.startsWith('copper_') || key === 'brass_c260') return { label: 'Cu', color: '#f97316' }
   if (key.startsWith('titanium_')) return { label: 'Ti', color: '#14b8a6' }
   if (key.startsWith('nickel_') || key.startsWith('monel_') || key.startsWith('inconel_') || key.startsWith('hastelloy_')) return { label: 'Ni', color: '#e879f9' }
-  if (key === 'polycarbonate' || key.startsWith('peek') || key.startsWith('nylon_') || key === 'abs' || key === 'uhmwpe' || key === 'ptfe' || key === 'pom' || key.startsWith('pp') || key === 'hdpe' || key === 'ldpe' || key === 'pet' || key === 'polyimide' || key === 'epoxy' || key === 'pvdf' || key.startsWith('cfrp') || key.startsWith('gfrp')) return { label: 'Poly', color: '#facc15' }
+  if (key === 'polycarbonate' || key.startsWith('peek') || key.startsWith('nylon_') || key === 'abs' || key === 'uhmwpe' || key === 'ptfe' || key === 'pom' || key.startsWith('pp') || key === 'hdpe' || key === 'ldpe' || key === 'pet' || key === 'polyimide' || key === 'epoxy' || key === 'pvdf' || key.startsWith('cfrp') || key.startsWith('gfrp') || key === 'psu') return { label: 'Poly', color: '#facc15' }
   if (key.startsWith('zinc_')) return { label: 'Zn', color: '#94a3b8' }
   if (key.startsWith('magnesium_')) return { label: 'Mg', color: '#4ade80' }
   if (key.startsWith('tin_')) return { label: 'Sn', color: '#a3a3a3' }

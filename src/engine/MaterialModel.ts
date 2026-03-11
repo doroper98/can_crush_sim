@@ -1865,6 +1865,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.35,
     wallThickness: 0.3,
   }),
+  psu: createMaterial({
+    name: 'Polysulfone (PSU)',
+    youngsModulus: 2500,
+    poissonRatio: 0.37,
+    yieldStress: 70,
+    uts: 73,
+    density: 1240,
+    hardeningExponent: 0.04,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
