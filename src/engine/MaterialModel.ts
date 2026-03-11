@@ -1845,6 +1845,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.15,
     wallThickness: 0.3,
   }),
+  magnesium_hk31a: createMaterial({
+    name: 'Magnesium HK31A-H24',
+    youngsModulus: 45000,
+    poissonRatio: 0.35,
+    yieldStress: 200,
+    uts: 255,
+    density: 1790,
+    hardeningExponent: 0.10,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
