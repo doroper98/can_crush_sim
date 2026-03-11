@@ -1965,6 +1965,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.04,
     wallThickness: 0.25,
   }),
+  cobalt_elgiloy: createMaterial({
+    name: 'Elgiloy (Co-40Ni-20Cr)',
+    youngsModulus: 190000,
+    poissonRatio: 0.30,
+    yieldStress: 1500,
+    uts: 1790,
+    density: 8300,
+    hardeningExponent: 0.06,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
