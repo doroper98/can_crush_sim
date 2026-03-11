@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-290 기준, 26/03/12 04:30)
+### 누적 통계 (EXP-300 기준, 26/03/12 05:20)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **290** |
-| 성공 커밋 | 290 |
+| 총 실험 수 | **300** |
+| 성공 커밋 | 300 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 254건, EXP-028~290) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 264건, EXP-028~300) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 867 kB (gzip 236 kB) |
-| 재료 라이브러리 | **115종** (Al×14, Fe×17, Cu×11, Ti×8, Ni×15, Poly×14, Zn×2, Mg×3, Sn, W×2, Pb, Zr×3, Ag, Au, Co×3, Pt, Ta, Nb×2, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
+| 빌드 크기 | 869 kB (gzip 236 kB) |
+| 재료 라이브러리 | **125종** (Al×15, Fe×21, Cu×13, Ti×8, Ni×17, Poly×15, Zn×2, Mg×3, Sn, W×2, Pb, Zr×3, Ag, Au, Co×3, Pt, Ta, Nb×2, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
 | 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), UHMWPE(최저ρ), **115 재료**, 31카테고리 |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), UHMWPE(최저ρ), **125 재료**, 31카테고리, 주철 2종, Nitinol SMA |
 
 ---
 
@@ -1739,6 +1739,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 868.62 kB (gzip 236 kB) · tsc: pass · ui: 10/10 |
 | **판정** | ✅ COMMIT |
 | **비고** | 구상 흑연 주철. 편상 주철 대비 연성·인성↑↑. 수도관·자동차 부품·크랭크 소재. Fe 20종 달성 |
+
+---
+
+### [EXP-300] AISI 9260 Spring Steel 재료 추가 + 누적 통계 갱신 — 125번째, 21번째 Fe — 300실험 마일스톤!
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 05:20:00 |
+| **Step** | - (재료 라이브러리 확장 + 누적 통계) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | AISI 9260 Spring Steel 추가: E=200GPa, σy=1210MPa, UTS=1350MPa, n=0.07, ρ=7850. 누적 통계 EXP-290→300 갱신 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 868.78 kB (gzip 236 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 300실험 마일스톤! Si-Mn 스프링강. 자동차 판스프링·코일스프링 소재. 1095 스프링강에 이어 2번째 스프링강. 누적: 300실험, 125재료, 31카테고리, 869kB. Fe 21종 달성 |
 
 ---
 
