@@ -115,6 +115,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.54,
     wallThickness: 0.3,
   }),
+  titanium_grade2: createMaterial({
+    name: 'Titanium Grade 2 (CP)',
+    youngsModulus: 103000,
+    poissonRatio: 0.34,
+    yieldStress: 275,
+    uts: 345,
+    density: 4510,
+    hardeningExponent: 0.18,
+    wallThickness: 0.3,
+  }),
   titanium_ti6al4v: createMaterial({
     name: 'Titanium Ti-6Al-4V',
     youngsModulus: 114000,
