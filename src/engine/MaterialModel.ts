@@ -2215,6 +2215,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  nylon_pa11: createMaterial({
+    name: 'Nylon PA11 (Rilsan Bio)',
+    youngsModulus: 1400,
+    poissonRatio: 0.40,
+    yieldStress: 40,
+    uts: 55,
+    density: 1040,
+    hardeningExponent: 0.10,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
