@@ -1905,6 +1905,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.03,
     wallThickness: 0.5,
   }),
+  titanium_grade7: createMaterial({
+    name: 'Ti Grade 7 (Ti-0.15Pd)',
+    youngsModulus: 105000,
+    poissonRatio: 0.34,
+    yieldStress: 275,
+    uts: 345,
+    density: 4510,
+    hardeningExponent: 0.16,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
