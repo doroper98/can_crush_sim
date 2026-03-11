@@ -2435,6 +2435,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.22,
     wallThickness: 0.3,
   }),
+  magnesium_elektron21: createMaterial({
+    name: 'Elektron 21 (Mg-Nd-Gd-Zr)',
+    youngsModulus: 45000,
+    poissonRatio: 0.35,
+    yieldStress: 195,
+    uts: 280,
+    density: 1820,
+    hardeningExponent: 0.12,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
