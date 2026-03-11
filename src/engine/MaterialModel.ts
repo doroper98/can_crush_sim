@@ -1255,6 +1255,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.35,
     wallThickness: 0.3,
   }),
+  iron_gray_fc250: createMaterial({
+    name: 'Gray Cast Iron FC250',
+    youngsModulus: 110000,
+    poissonRatio: 0.26,
+    yieldStress: 170,
+    uts: 250,
+    density: 7200,
+    hardeningExponent: 0.08,
+    wallThickness: 2.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */

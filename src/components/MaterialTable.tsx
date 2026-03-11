@@ -11,7 +11,7 @@ interface MaterialTableProps {
 
 export function getCategory(key: string): { label: string; color: string } {
   if (key.startsWith('aluminum_')) return { label: 'Al', color: '#60a5fa' }
-  if (key.startsWith('steel_')) return { label: 'Fe', color: '#a78bfa' }
+  if (key.startsWith('steel_') || key.startsWith('iron_')) return { label: 'Fe', color: '#a78bfa' }
   if (key.startsWith('copper_') || key === 'brass_c260') return { label: 'Cu', color: '#f97316' }
   if (key.startsWith('titanium_')) return { label: 'Ti', color: '#14b8a6' }
   if (key.startsWith('nickel_') || key.startsWith('monel_') || key.startsWith('inconel_') || key.startsWith('hastelloy_')) return { label: 'Ni', color: '#e879f9' }
