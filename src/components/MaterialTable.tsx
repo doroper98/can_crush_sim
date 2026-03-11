@@ -25,6 +25,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'silver_ag') return { label: 'Ag', color: '#cbd5e1' }
   if (key === 'gold_au') return { label: 'Au', color: '#fbbf24' }
   if (key === 'cobalt_chrome') return { label: 'Co', color: '#818cf8' }
+  if (key === 'platinum_pt') return { label: 'Pt', color: '#d4d4d8' }
   return { label: '?', color: '#94a3b8' }
 }
 

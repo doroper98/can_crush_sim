@@ -335,6 +335,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.18,
     wallThickness: 0.3,
   }),
+  platinum_pt: createMaterial({
+    name: 'Platinum (Pt)',
+    youngsModulus: 168000,
+    poissonRatio: 0.38,
+    yieldStress: 50,
+    uts: 140,
+    density: 21450,
+    hardeningExponent: 0.40,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
