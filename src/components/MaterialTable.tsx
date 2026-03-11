@@ -24,6 +24,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key.startsWith('zirconium_')) return { label: 'Zr', color: '#2dd4bf' }
   if (key === 'silver_ag') return { label: 'Ag', color: '#cbd5e1' }
   if (key === 'gold_au') return { label: 'Au', color: '#fbbf24' }
+  if (key === 'cobalt_chrome') return { label: 'Co', color: '#818cf8' }
   return { label: '?', color: '#94a3b8' }
 }
 

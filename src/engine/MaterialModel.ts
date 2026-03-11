@@ -325,6 +325,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.45,
     wallThickness: 0.3,
   }),
+  cobalt_chrome: createMaterial({
+    name: 'CoCr F75',
+    youngsModulus: 210000,
+    poissonRatio: 0.30,
+    yieldStress: 450,
+    uts: 655,
+    density: 8300,
+    hardeningExponent: 0.18,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
