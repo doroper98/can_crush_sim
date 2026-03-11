@@ -2285,6 +2285,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.14,
     wallThickness: 0.5,
   }),
+  copper_gunmetal_c907: createMaterial({
+    name: 'Gun Metal C90700 (88Cu-10Sn)',
+    youngsModulus: 103000,
+    poissonRatio: 0.34,
+    yieldStress: 150,
+    uts: 310,
+    density: 8770,
+    hardeningExponent: 0.22,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
