@@ -645,6 +645,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.38,
     wallThickness: 0.3,
   }),
+  steel_a36: createMaterial({
+    name: 'ASTM A36 Steel',
+    youngsModulus: 200000,
+    poissonRatio: 0.26,
+    yieldStress: 250,
+    uts: 400,
+    density: 7850,
+    hardeningExponent: 0.22,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
