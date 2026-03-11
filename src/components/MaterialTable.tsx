@@ -39,6 +39,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'osmium_os') return { label: 'Os', color: '#1e3a5f' }
   if (key === 'palladium_pd') return { label: 'Pd', color: '#d6d3d1' }
   if (key === 'ruthenium_ru') return { label: 'Ru', color: '#0891b2' }
+  if (key === 'rhenium_re') return { label: 'Re', color: '#9f1239' }
   return { label: '?', color: '#94a3b8' }
 }
 
