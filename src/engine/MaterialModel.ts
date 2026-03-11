@@ -615,6 +615,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  ptfe: createMaterial({
+    name: 'PTFE (Teflon)',
+    youngsModulus: 500,
+    poissonRatio: 0.46,
+    yieldStress: 10,
+    uts: 27,
+    density: 2200,
+    hardeningExponent: 0.40,
+    wallThickness: 2.0,
+  }),
 }
 
 /** Get material keys for UI dropdown */
