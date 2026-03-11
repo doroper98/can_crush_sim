@@ -975,6 +975,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.15,
     wallThickness: 0.3,
   }),
+  cobalt_l605: createMaterial({
+    name: 'L-605 (Haynes 25)',
+    youngsModulus: 225000,
+    poissonRatio: 0.30,
+    yieldStress: 460,
+    uts: 1005,
+    density: 9130,
+    hardeningExponent: 0.32,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
