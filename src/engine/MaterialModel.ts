@@ -95,6 +95,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.12,
     wallThickness: 0.5,
   }),
+  steel_1095: createMaterial({
+    name: 'Spring Steel (AISI 1095)',
+    youngsModulus: 205000,
+    poissonRatio: 0.29,
+    yieldStress: 525,
+    uts: 965,
+    density: 7850,
+    hardeningExponent: 0.14,
+    wallThickness: 0.5,
+  }),
   steel_ss304: createMaterial({
     name: 'Stainless Steel 304',
     youngsModulus: 193000,
