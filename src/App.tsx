@@ -836,6 +836,13 @@ export default function App() {
             handleExportJSON()
           }
           break
+        case 'x': case 'X':
+          if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+            handleExportCSV()
+            handleExportSTL()
+            handleExportJSON()
+          }
+          break
         case 'a': case 'A':
           if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
             setShowAbout(prev => !prev)

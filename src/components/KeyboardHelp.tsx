@@ -23,6 +23,7 @@ const shortcuts = [
   { key: 'C', desc: '결과 클립보드 복사' },
   { key: 'E', desc: '차트 데이터 CSV 내보내기' },
   { key: 'J', desc: 'JSON 전체 내보내기' },
+  { key: 'X', desc: '전체 내보내기 (CSV + STL + JSON)' },
   { key: 'I', desc: '재료 비교 테이블' },
   { key: '[ / ]', desc: '재료 이전/다음 순환' },
   { key: 'H', desc: 'HUD 오버레이 토글' },

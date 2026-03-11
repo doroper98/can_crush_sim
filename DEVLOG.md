@@ -118,6 +118,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-432] 전체 내보내기 단축키 X (CSV + STL + JSON 일괄)
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 16:55:00 |
+| **Step** | S3.8 |
+| **관련 FR** | FR-13 |
+| **관련 NF** | - |
+| **변경 내용** | 키보드 단축키 'X' 추가: CSV + STL + JSON을 한 번에 모두 내보내는 Export-All 기능. App.tsx 키보드 핸들러에 case 'x'/'X' 추가하여 handleExportCSV, handleExportSTL, handleExportJSON을 순차 호출. KeyboardHelp.tsx에 '전체 내보내기 (CSV + STL + JSON)' 항목 추가. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (894.51 kB, gzip 242.60 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 한 키로 3개 포맷 동시 내보내기 — 시뮬레이션 결과를 다양한 형식으로 한꺼번에 백업/공유 가능. toast 3개 연속 표시로 각 포맷별 성공 확인. |
+
+---
+
 ### [EXP-431] JSON 내보내기 개선 (물성 상세 + flowStress + 파일명)
 
 | 항목 | 값 |
