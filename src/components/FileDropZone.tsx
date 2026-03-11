@@ -45,7 +45,7 @@ export default function FileDropZone({ onFileLoaded, children }: FileDropZonePro
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      style={{ width: '100%', height: '100%', position: 'relative' }}
+      style={{ flex: '1 1 70%', minWidth: 0, position: 'relative' }}
     >
       {children}
       {isDragging && (

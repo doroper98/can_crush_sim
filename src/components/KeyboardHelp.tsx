@@ -23,14 +23,14 @@ const shortcuts = [
   { key: 'C', desc: '결과 클립보드 복사' },
   { key: 'E', desc: '차트 데이터 CSV 내보내기' },
   { key: 'J', desc: 'JSON 전체 내보내기' },
-  { key: 'X', desc: '전체 내보내기 (CSV + STL + JSON)' },
+  { key: 'X', desc: '전체 내보내기 (CSV+STL+JSON)' },
   { key: 'I', desc: '재료 비교 테이블' },
   { key: '[ / ]', desc: '재료 이전/다음 순환' },
   { key: 'H', desc: 'HUD 오버레이 토글' },
   { key: 'A', desc: 'About 모달 토글' },
   { key: 'Tab', desc: '컨트롤 패널 접힘/펼침' },
-  { key: 'Space', desc: '시뮬레이션 Play/Pause 토글' },
-  { key: 'Esc', desc: '모달/메뉴 닫기, 측정 취소' },
+  { key: 'Space', desc: '시뮬레이션 Play/Pause' },
+  { key: 'Esc', desc: '모달/메뉴 닫기' },
   { key: 'Num 7', desc: 'Top View (XY)' },
   { key: 'Num 3', desc: 'Right View (YZ)' },
   { key: 'Num 1', desc: 'Front View (XZ)' },
@@ -42,11 +42,20 @@ const mouseControls = [
   { input: 'Ctrl + MMB', desc: 'Pan (카메라 이동)' },
   { input: '스크롤 휠', desc: 'Zoom' },
   { input: '좌클릭', desc: '객체 선택' },
-  { input: '더블클릭', desc: '카메라 센터링 (클릭 지점)' },
+  { input: '더블클릭', desc: '카메라 센터링' },
   { input: '우클릭', desc: '컨텍스트 메뉴' },
   { input: '1-finger', desc: 'Orbit (터치)' },
-  { input: '2-finger', desc: 'Pan + Pinch Zoom (터치)' },
+  { input: '2-finger', desc: 'Pan + Pinch Zoom' },
 ]
+
+function splitColumns<T>(arr: T[], cols: number): T[][] {
+  const perCol = Math.ceil(arr.length / cols)
+  const result: T[][] = []
+  for (let i = 0; i < cols; i++) {
+    result.push(arr.slice(i * perCol, (i + 1) * perCol))
+  }
+  return result
+}
 
 export default function KeyboardHelp({ visible, onClose, darkMode = false }: KeyboardHelpProps) {
   if (!visible) return null
@@ -55,9 +64,13 @@ export default function KeyboardHelp({ visible, onClose, darkMode = false }: Key
   const text = darkMode ? '#e2e8f0' : '#0f172a'
   const textSec = darkMode ? '#94a3b8' : '#475569'
   const mouseLabelColor = darkMode ? '#94a3b8' : '#64748b'
+  const dividerColor = darkMode ? '#334155' : '#d0d5dd'
   const shadow = darkMode
     ? '12px 12px 24px rgba(0,0,0,0.5), -12px -12px 24px rgba(51,65,85,0.4)'
     : '12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8)'
+
+  const keyCols = splitColumns(shortcuts, 3)
+  const mouseCols = splitColumns(mouseControls, 2)
 
   return (
     <div
@@ -78,34 +91,79 @@ export default function KeyboardHelp({ visible, onClose, darkMode = false }: Key
           background: bg,
           borderRadius: 20,
           padding: '24px 32px',
-          maxWidth: 420,
+          maxWidth: 860,
+          width: '90vw',
+          maxHeight: '85vh',
+          overflowY: 'auto',
           boxShadow: shadow,
         }}
       >
-        <h3 style={{ margin: '0 0 16px', fontSize: 15, color: text }}>Keyboard Shortcuts</h3>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
-          <tbody>
-            {shortcuts.map(s => (
-              <tr key={s.key}>
-                <td style={{ padding: '3px 8px 3px 0', fontWeight: 600, color: '#3b82f6', whiteSpace: 'nowrap' }}>{s.key}</td>
-                <td style={{ padding: '3px 0', color: textSec }}>{s.desc}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <h4 style={{ margin: '14px 0 8px', fontSize: 13, color: text }}>Mouse Controls</h4>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
-          <tbody>
-            {mouseControls.map(m => (
-              <tr key={m.input}>
-                <td style={{ padding: '3px 8px 3px 0', fontWeight: 600, color: mouseLabelColor, whiteSpace: 'nowrap' }}>{m.input}</td>
-                <td style={{ padding: '3px 0', color: textSec }}>{m.desc}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {/* Title */}
+        <h3 style={{ margin: '0 0 16px', fontSize: 15, color: text, textAlign: 'center' }}>
+          ⌨️ Keyboard Shortcuts
+        </h3>
+
+        {/* 3-column keyboard shortcuts */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+          {keyCols.map((col, ci) => (
+            <table key={ci} style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+              <tbody>
+                {col.map(s => (
+                  <tr key={s.key}>
+                    <td style={{
+                      padding: '3px 8px 3px 0', fontWeight: 700, whiteSpace: 'nowrap',
+                      color: '#3b82f6', width: 52, fontSize: 11,
+                    }}>
+                      <span style={{
+                        display: 'inline-block',
+                        background: darkMode ? '#334155' : '#e2e8f0',
+                        borderRadius: 4, padding: '1px 6px',
+                        fontFamily: 'monospace',
+                      }}>{s.key}</span>
+                    </td>
+                    <td style={{ padding: '3px 0', color: textSec, fontSize: 11 }}>{s.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ))}
+        </div>
+
+        {/* Divider */}
+        <div style={{ height: 1, background: dividerColor, margin: '14px 0' }} />
+
+        {/* Mouse / Touch controls — 2 columns */}
+        <h4 style={{ margin: '0 0 8px', fontSize: 13, color: text, textAlign: 'center' }}>
+          🖱️ Mouse / Touch Controls
+        </h4>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          {mouseCols.map((col, ci) => (
+            <table key={ci} style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+              <tbody>
+                {col.map(m => (
+                  <tr key={m.input}>
+                    <td style={{
+                      padding: '3px 8px 3px 0', fontWeight: 600, whiteSpace: 'nowrap',
+                      color: mouseLabelColor, fontSize: 11,
+                    }}>
+                      <span style={{
+                        display: 'inline-block',
+                        background: darkMode ? '#334155' : '#e2e8f0',
+                        borderRadius: 4, padding: '1px 6px',
+                        fontFamily: 'monospace',
+                      }}>{m.input}</span>
+                    </td>
+                    <td style={{ padding: '3px 0', color: textSec, fontSize: 11 }}>{m.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ))}
+        </div>
+
+        {/* Footer */}
         <div style={{ marginTop: 14, textAlign: 'center', fontSize: 11, color: darkMode ? '#64748b' : '#94a3b8' }}>
-          Press ? or click outside to close
+          Press <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>?</span> or click outside to close
         </div>
       </div>
     </div>

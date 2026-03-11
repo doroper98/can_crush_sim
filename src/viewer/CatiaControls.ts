@@ -229,10 +229,10 @@ export class CatiaControls {
     this.updateCamera()
   }
 
-  /** Fit camera to show all objects in the scene */
-  fitAll(scene: THREE.Scene) {
+  /** Fit camera to show all objects in the scene (or a specific object) */
+  fitAll(target: THREE.Scene | THREE.Object3D) {
     const box = new THREE.Box3()
-    scene.traverse((obj) => {
+    target.traverse((obj) => {
       if (obj instanceof THREE.Mesh || obj instanceof THREE.LineSegments) {
         box.expandByObject(obj)
       }

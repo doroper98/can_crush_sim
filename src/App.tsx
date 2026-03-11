@@ -200,8 +200,10 @@ export default function App() {
     camera.lookAt(0, 0, 0)
     cameraRef.current = camera
 
+    const cw = container.clientWidth
+    const ch = container.clientHeight
     const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true })
-    renderer.setSize(container.clientWidth, container.clientHeight)
+    renderer.setSize(cw, ch)
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.localClippingEnabled = true
     renderer.shadowMap.enabled = true
@@ -1489,33 +1491,50 @@ export default function App() {
         return
       }
 
-      // Remove previously imported meshes before adding new ones
+      // Remove previously imported meshes/groups before adding new ones
       const toRemove = scene.children.filter(c => c.name.startsWith('imported_'))
       toRemove.forEach(c => {
         scene.remove(c)
-        if (c instanceof THREE.Mesh) {
-          c.geometry.dispose()
-          if (c.material instanceof THREE.Material) c.material.dispose()
-        }
+        c.traverse((child: THREE.Object3D) => {
+          if (child instanceof THREE.Mesh) {
+            child.geometry.dispose()
+            if (child.material instanceof THREE.Material) child.material.dispose()
+          }
+        })
       })
 
       const importMat = new THREE.MeshStandardMaterial({
         color: 0x88aacc,
-        metalness: 0.4,
-        roughness: 0.5,
+        metalness: 0.3,
+        roughness: 0.6,
         side: THREE.DoubleSide,
       })
 
       let totalVerts = 0
       let totalTris = 0
+      const importGroup = new THREE.Group()
+      importGroup.name = 'imported_group'
       for (const geom of geometries) {
         const mesh = new THREE.Mesh(geom, importMat)
         mesh.name = `imported_${fileName}`
         mesh.castShadow = true
         mesh.receiveShadow = true
-        scene.add(mesh)
+        importGroup.add(mesh)
         totalVerts += (geom.attributes.position?.count ?? 0)
         totalTris += (geom.index ? geom.index.count / 3 : (geom.attributes.position?.count ?? 0) / 3)
+      }
+
+      // Hide parametric can and rigid body so imported model is clearly visible
+      if (canMeshRef.current) canMeshRef.current.visible = false
+      if (rigidBodyRef.current) rigidBodyRef.current.visible = false
+
+      scene.add(importGroup)
+      importGroup.updateMatrixWorld(true)
+
+      // Fit camera to the imported model
+      if (controlsRef.current) {
+        controlsRef.current.setView('iso')
+        controlsRef.current.fitAll(importGroup)
       }
 
       setCadLoading(null)
@@ -1526,6 +1545,8 @@ export default function App() {
       showToast(`Failed to load ${fileName}: ${(e as Error).message}`)
     }
   }, [showToast])
+
+
 
   const handleSavePreset = useCallback((name: string) => {
     const preset = {
@@ -1798,7 +1819,7 @@ export default function App() {
       <FileDropZone onFileLoaded={handleFileLoaded}>
       <div
         ref={containerRef}
-        style={{ flex: '1 1 70%', position: 'relative', minWidth: 0 }}
+        style={{ width: '100%', height: '100%', position: 'relative', minWidth: 0 }}
       >
         <ViewportToolbar
           onViewChange={handleViewChange}
@@ -2090,46 +2111,7 @@ export default function App() {
         )}
       </div>
       </FileDropZone>
-      {/* Camera view preset buttons */}
-      <div style={{
-        position: 'absolute', top: 8, left: 8, zIndex: 20,
-        display: 'flex', gap: 4,
-      }}>
-        {([
-          { label: 'T', title: 'Top View (XY)', view: 'top' as const },
-          { label: 'F', title: 'Front View (XZ)', view: 'front' as const },
-          { label: 'R', title: 'Right View (YZ)', view: 'right' as const },
-          { label: 'I', title: 'Isometric View', view: 'iso' as const },
-        ] as const).map(v => (
-          <button
-            key={v.view}
-            title={v.title}
-            onClick={() => controlsRef.current?.setView(v.view)}
-            style={{
-              width: 26, height: 26, border: 'none', borderRadius: 8, cursor: 'pointer',
-              fontSize: 11, fontWeight: 700, lineHeight: '26px',
-              color: darkMode ? '#94a3b8' : '#64748b',
-              background: darkMode ? '#1e293b' : '#f0f4f8',
-              boxShadow: darkMode
-                ? '2px 2px 5px rgba(0,0,0,0.4), -2px -2px 5px rgba(51,65,85,0.3)'
-                : '2px 2px 5px rgba(163,177,198,0.5), -2px -2px 5px rgba(255,255,255,0.7)',
-            }}
-          >{v.label}</button>
-        ))}
-        <button
-          title="Fit All (F)"
-          onClick={() => { const s = sceneRef.current; if (s && controlsRef.current) controlsRef.current.fitAll(s) }}
-          style={{
-            width: 26, height: 26, border: 'none', borderRadius: 8, cursor: 'pointer',
-            fontSize: 11, fontWeight: 700, lineHeight: '26px',
-            color: '#3b82f6',
-            background: darkMode ? '#1e293b' : '#f0f4f8',
-            boxShadow: darkMode
-              ? '2px 2px 5px rgba(0,0,0,0.4), -2px -2px 5px rgba(51,65,85,0.3)'
-              : '2px 2px 5px rgba(163,177,198,0.5), -2px -2px 5px rgba(255,255,255,0.7)',
-          }}
-        >⊞</button>
-      </div>
+      {/* Camera preset buttons removed — ViewportToolbar already provides XY/YZ/XZ/ISO/Fit */}
       {/* Panel toggle button */}
       <button
         onClick={() => setPanelVisible(prev => !prev)}

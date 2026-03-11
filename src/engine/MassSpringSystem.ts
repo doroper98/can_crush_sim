@@ -158,9 +158,14 @@ export class MassSpringSystem {
 
   step() {
     const subDt = this.dt / this.subSteps
+    // PBD compliance: fraction of constraint error corrected per iteration (0–1)
+    const constraintIters = 5
+    const compliance = 0.3 / constraintIters
+    // Max velocity clamp (mm per substep) — safety net
+    const maxVel = 1.0
 
     for (let sub = 0; sub < this.subSteps; sub++) {
-      // Verlet integration
+      // === 1. PREDICT: Verlet integration (inertia + gravity) ===
       for (let i = 0; i < this.nodeCount; i++) {
         if (this.fixed[i]) continue
 
@@ -168,81 +173,91 @@ export class MassSpringSystem {
         for (let d = 0; d < 3; d++) {
           const cur = this.positions[idx + d]
           const prev = this.prevPositions[idx + d]
-          const acc = d === 1 ? this.gravity * this.mass : 0 // gravity on Y
+          const acc = d === 1 ? this.gravity : 0
 
-          const newPos = cur + (cur - prev) * this.damping + acc * subDt * subDt
+          let vel = (cur - prev) * this.damping
+          // Clamp velocity
+          if (vel > maxVel) vel = maxVel
+          else if (vel < -maxVel) vel = -maxVel
+
           this.prevPositions[idx + d] = cur
-          this.positions[idx + d] = newPos
+          this.positions[idx + d] = cur + vel + acc * subDt * subDt
         }
       }
 
-      // Spring constraints with elasto-plastic model
-      for (const spring of this.springs) {
-        const { i: a, j: b } = spring
-        const ai = a * 3, bi = b * 3
+      // === 2. SOLVE CONSTRAINTS: PBD distance constraints with plasticity ===
+      for (let iter = 0; iter < constraintIters; iter++) {
+        for (const spring of this.springs) {
+          const { i: a, j: b } = spring
+          const ai = a * 3, bi = b * 3
 
-        let dx = this.positions[bi] - this.positions[ai]
-        let dy = this.positions[bi + 1] - this.positions[ai + 1]
-        let dz = this.positions[bi + 2] - this.positions[ai + 2]
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
+          const dx = this.positions[bi] - this.positions[ai]
+          const dy = this.positions[bi + 1] - this.positions[ai + 1]
+          const dz = this.positions[bi + 2] - this.positions[ai + 2]
+          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
 
-        if (dist < 1e-10) continue
+          if (dist < 1e-10) continue
 
-        // Compute strain relative to current rest length (accounts for plastic deformation)
-        const strain = (dist - spring.currentRestLength) / spring.restLength
-        const absStrain = Math.abs(strain)
+          // --- Plasticity (only on first iteration to avoid repeated accumulation) ---
+          if (iter === 0) {
+            const strain = (dist - spring.currentRestLength) / spring.restLength
+            const absStrain = Math.abs(strain)
+            const E = this.materialModel?.youngsModulus ?? 69000
+            const yieldStrain = this.yieldStress / E
 
-        // Compute yield strain: ε_y = σ_y / E (for spring-based approximation)
-        const yieldStrain = this.yieldStress / 69000  // ~0.004
+            if (absStrain > yieldStrain) {
+              const plasticIncrement = (absStrain - yieldStrain) * 0.01
+              spring.plasticStrain += plasticIncrement
 
-        // Elasto-plastic: if strain exceeds yield, accumulate plastic strain
-        if (absStrain > yieldStrain) {
-          const plasticIncrement = (absStrain - yieldStrain) * 0.1  // partial plasticity per step
-          spring.plasticStrain += plasticIncrement
+              // Ludwik-Hollomon: current yield = σ_y + K·ε_p^n
+              const currentYieldStrain = yieldStrain +
+                (this.hardeningK / E) * Math.pow(spring.plasticStrain, this.hardeningExponent)
 
-          // Update rest length: permanent deformation
-          // Ludwik-Hollomon: current yield = σ_y + K·ε_p^n
-          const currentYieldStrain = yieldStrain +
-            (this.hardeningK / 69000) * Math.pow(spring.plasticStrain, this.hardeningExponent)
+              if (absStrain > currentYieldStrain) {
+                const excessStrain = absStrain - currentYieldStrain
+                const restDelta = Math.sign(strain) * excessStrain * spring.restLength * 0.005
+                spring.currentRestLength += restDelta
+                // Clamp: never below 30% or above 200% of original
+                spring.currentRestLength = Math.max(
+                  spring.restLength * 0.3,
+                  Math.min(spring.restLength * 2.0, spring.currentRestLength)
+                )
+              }
+            }
+          }
 
-          // Only update rest length if strain exceeds hardened yield
-          if (absStrain > currentYieldStrain) {
-            const excessStrain = absStrain - currentYieldStrain
-            spring.currentRestLength += Math.sign(strain) * excessStrain * spring.restLength * 0.05
+          // --- PBD distance constraint ---
+          const diff = dist - spring.currentRestLength
+          // Normalized correction: (error / dist) * compliance
+          const corr = (diff / dist) * compliance
+
+          const cx = dx * corr
+          const cy = dy * corr
+          const cz = dz * corr
+
+          const fixA = this.fixed[a]
+          const fixB = this.fixed[b]
+
+          if (!fixA && !fixB) {
+            this.positions[ai] += cx
+            this.positions[ai + 1] += cy
+            this.positions[ai + 2] += cz
+            this.positions[bi] -= cx
+            this.positions[bi + 1] -= cy
+            this.positions[bi + 2] -= cz
+          } else if (!fixA) {
+            this.positions[ai] += cx * 2
+            this.positions[ai + 1] += cy * 2
+            this.positions[ai + 2] += cz * 2
+          } else if (!fixB) {
+            this.positions[bi] -= cx * 2
+            this.positions[bi + 1] -= cy * 2
+            this.positions[bi + 2] -= cz * 2
           }
         }
-
-        // Elastic correction (toward current rest length)
-        const elasticDiff = (dist - spring.currentRestLength) / dist
-        const stiffFactor = this.stiffness * subDt * subDt / this.mass * 0.5
-        const correction = Math.min(Math.max(elasticDiff * stiffFactor, -0.1), 0.1)
-
-        dx *= correction
-        dy *= correction
-        dz *= correction
-
-        const fixA = this.fixed[a]
-        const fixB = this.fixed[b]
-
-        if (!fixA && !fixB) {
-          this.positions[ai] += dx
-          this.positions[ai + 1] += dy
-          this.positions[ai + 2] += dz
-          this.positions[bi] -= dx
-          this.positions[bi + 1] -= dy
-          this.positions[bi + 2] -= dz
-        } else if (!fixA) {
-          this.positions[ai] += dx * 2
-          this.positions[ai + 1] += dy * 2
-          this.positions[ai + 2] += dz * 2
-        } else if (!fixB) {
-          this.positions[bi] -= dx * 2
-          this.positions[bi + 1] -= dy * 2
-          this.positions[bi + 2] -= dz * 2
-        }
       }
 
-      // Floor constraint
+      // === 3. FLOOR CONSTRAINT ===
       for (let i = 0; i < this.nodeCount; i++) {
         if (this.positions[i * 3 + 1] < this.floorY) {
           this.positions[i * 3 + 1] = this.floorY
