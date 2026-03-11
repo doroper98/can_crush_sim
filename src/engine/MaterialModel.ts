@@ -2115,6 +2115,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.15,
     wallThickness: 0.5,
   }),
+  aluminum_8090: createMaterial({
+    name: 'Aluminum 8090 (Al-Li Aerospace)',
+    youngsModulus: 77000,
+    poissonRatio: 0.33,
+    yieldStress: 370,
+    uts: 450,
+    density: 2540,
+    hardeningExponent: 0.08,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
