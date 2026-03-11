@@ -2055,6 +2055,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.13,
     wallThickness: 0.3,
   }),
+  aluminum_3004: createMaterial({
+    name: 'Aluminum 3004-H19 (Can Body)',
+    youngsModulus: 69000,
+    poissonRatio: 0.33,
+    yieldStress: 285,
+    uts: 295,
+    density: 2720,
+    hardeningExponent: 0.03,
+    wallThickness: 0.1,
+  }),
 }
 
 /** Get material keys for UI dropdown */
