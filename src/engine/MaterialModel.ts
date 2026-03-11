@@ -585,6 +585,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  steel_duplex2205: createMaterial({
+    name: 'Duplex SS 2205',
+    youngsModulus: 200000,
+    poissonRatio: 0.30,
+    yieldStress: 450,
+    uts: 620,
+    density: 7800,
+    hardeningExponent: 0.20,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
