@@ -855,6 +855,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.10,
     wallThickness: 0.3,
   }),
+  monel_k500: createMaterial({
+    name: 'Monel K-500',
+    youngsModulus: 179000,
+    poissonRatio: 0.32,
+    yieldStress: 790,
+    uts: 1100,
+    density: 8440,
+    hardeningExponent: 0.18,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
