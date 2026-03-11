@@ -168,6 +168,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-446] About 다이얼로그 v2.1 업데이트
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 18:32:00 |
+| **Step** | S5.1 |
+| **관련 FR** | - |
+| **관련 NF** | NF-05 |
+| **변경 내용** | About 다이얼로그 버전 v2.0→v2.1 업그레이드. 설명문에 touch gestures, session persistence, batch export 추가. 단축키 목록에 X(Export All) 추가 및 재배치. 하단에 double-click/touch 힌트 라인 추가. JSON export version 2.0→2.1. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (901.48 kB, gzip 244.20 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | v2.0→v2.1: EXP-432~445에서 추가된 기능들을 About에 반영. 사용자가 새 기능을 인지할 수 있도록. |
+
+---
+
 ### [EXP-445] KeyboardHelp 마우스/터치 컨트롤 업데이트
 
 | 항목 | 값 |

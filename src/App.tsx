@@ -1580,7 +1580,7 @@ export default function App() {
 
   const handleExportJSON = useCallback(() => {
     const snapshot = {
-      version: '2.0',
+      version: '2.1',
       timestamp: new Date().toISOString(),
       parameters: {
         canDiameter, canHeight: canHeightParam, wallThickness, maxForce,
@@ -2476,17 +2476,18 @@ export default function App() {
           }}
         >
           <h2 style={{ margin: '0 0 4px', fontSize: 18, color: darkMode ? '#e2e8f0' : '#0f172a' }}>Can Crush Simulator</h2>
-          <div style={{ fontSize: 10, color: darkMode ? '#64748b' : '#94a3b8', marginBottom: 12 }}>v2.0 — React + Three.js + Mass-Spring FEM · {Object.keys(MATERIALS).length} Materials · 3 Charts · {new Set(Object.keys(MATERIALS).map(k => getCategory(k).label)).size} Categories</div>
+          <div style={{ fontSize: 10, color: darkMode ? '#64748b' : '#94a3b8', marginBottom: 12 }}>v2.1 — React + Three.js + Mass-Spring FEM · {Object.keys(MATERIALS).length} Materials · 3 Charts · {new Set(Object.keys(MATERIALS).map(k => getCategory(k).label)).size} Categories</div>
           <p style={{ fontSize: 12, color: darkMode ? '#94a3b8' : '#475569', lineHeight: 1.6, margin: '0 0 12px' }}>
             Real-time elasto-plastic can crushing with Mass-Spring FEM, Ludwik-Hollomon hardening,
             Von Mises stress, SEA/CFE crashworthiness, stress-strain curves, searchable material table with category badges,
-            result comparison, and STL/STEP/IGES CAD import.
+            result comparison, STL/STEP/IGES CAD import, touch gestures, session persistence, and batch export.
           </p>
           <div style={{ fontSize: 11, color: darkMode ? '#94a3b8' : '#64748b', lineHeight: 1.8 }}>
             <div><strong>Space</strong> Play/Pause · <strong>N</strong> Step · <strong>V</strong> Display · <strong>H</strong> HUD</div>
-            <div><strong>C</strong> Copy · <strong>E</strong> CSV · <strong>J</strong> JSON · <strong>I</strong> Materials</div>
-            <div><strong>[ ]</strong> Cycle · <strong>A</strong> About · <strong>S</strong> Screenshot · <strong>D</strong> Dark</div>
-            <div><strong>M</strong> Measure · <strong>?</strong> Help · <strong>Tab</strong> Panel</div>
+            <div><strong>C</strong> Copy · <strong>E</strong> CSV · <strong>J</strong> JSON · <strong>X</strong> Export All</div>
+            <div><strong>[ ]</strong> Cycle · <strong>I</strong> Materials · <strong>S</strong> Screenshot · <strong>D</strong> Dark</div>
+            <div><strong>M</strong> Measure · <strong>?</strong> Help · <strong>A</strong> About · <strong>Tab</strong> Panel</div>
+            <div style={{ fontSize: 10, color: darkMode ? '#475569' : '#94a3b8', marginTop: 2 }}>Double-click mesh to center · Touch: 1-finger orbit, 2-finger pan/zoom</div>
           </div>
           <button
             onClick={() => { setShowAbout(false); localStorage.setItem('cancrush_visited', '1') }}
