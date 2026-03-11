@@ -2085,6 +2085,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.05,
     wallThickness: 0.5,
   }),
+  steel_304l: createMaterial({
+    name: 'AISI 304L (Low Carbon)',
+    youngsModulus: 193000,
+    poissonRatio: 0.29,
+    yieldStress: 170,
+    uts: 485,
+    density: 7900,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
