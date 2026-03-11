@@ -1,16 +1,46 @@
 import * as THREE from 'three'
 
-// opencascade.js dynamic import (WASM)
+// opencascade.js CDN-based dynamic loading (avoids Vite WASM bundling issues)
 let ocInstance: any = null
+
+const OCCT_CDN = 'https://cdn.jsdelivr.net/npm/opencascade.js@2.0.0-beta.b5ff984/dist/opencascade.full.js'
+
+function loadScript(url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${url}"]`)) {
+      resolve()
+      return
+    }
+    const script = document.createElement('script')
+    script.src = url
+    script.onload = () => resolve()
+    script.onerror = () => reject(new Error(`Failed to load script: ${url}`))
+    document.head.appendChild(script)
+  })
+}
 
 export async function initOCCT(): Promise<any> {
   if (ocInstance) return ocInstance
   try {
-    const ocModule = await import('opencascade.js')
-    const oc = await (ocModule.default as any)()
-    ocInstance = oc
-    console.log('OpenCASCADE.js initialized successfully')
-    return oc
+    // Try npm import first (works in dev mode), fall back to CDN
+    // Use variable to prevent Vite from statically analyzing the import
+    try {
+      const modName = 'opencascade' + '.js'
+      const ocModule = await (Function('m', 'return import(m)')(modName))
+      const oc = await (ocModule.default as any)()
+      ocInstance = oc
+      console.log('OpenCASCADE.js initialized (npm)')
+      return oc
+    } catch {
+      // npm import failed (production build) — use CDN
+      await loadScript(OCCT_CDN)
+      const ocFactory = (window as any).opencascade
+      if (!ocFactory) throw new Error('opencascade.js CDN load failed')
+      const oc = await ocFactory()
+      ocInstance = oc
+      console.log('OpenCASCADE.js initialized (CDN)')
+      return oc
+    }
   } catch (e) {
     console.error('Failed to initialize OpenCASCADE.js:', e)
     throw e
