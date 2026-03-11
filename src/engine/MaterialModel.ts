@@ -1995,6 +1995,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.05,
     wallThickness: 0.3,
   }),
+  copper_chromium_c182: createMaterial({
+    name: 'Chromium Copper C18200',
+    youngsModulus: 130000,
+    poissonRatio: 0.34,
+    yieldStress: 380,
+    uts: 430,
+    density: 8890,
+    hardeningExponent: 0.06,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
