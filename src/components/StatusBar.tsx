@@ -15,6 +15,7 @@ interface StatusBarProps {
 export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTime = 0, displacement = 0, simSteps = 0, maxDisplacement = 0, wallElapsed = 0, displayInfo, darkMode = false }: StatusBarProps) {
   const stateLabel = simState === 'idle' ? 'Ready' : simState === 'running' ? 'Simulating' : 'Paused'
   const stateColor = simState === 'idle' ? '#64748b' : simState === 'running' ? '#10b981' : '#f59e0b'
+  const stateIcon = simState === 'idle' ? '○' : simState === 'running' ? '▶' : '⏸'
 
   return (
     <div
@@ -36,9 +37,9 @@ export default function StatusBar({ simState, fps, nodeCount, cursorWorld, simTi
       }}
     >
       {/* Sim State */}
-      <span>
-        <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: stateColor, marginRight: 6, verticalAlign: 'middle' }} />
-        {stateLabel}
+      <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <span style={{ color: stateColor, fontSize: 10 }}>{stateIcon}</span>
+        <span style={{ color: stateColor, fontWeight: 600 }}>{stateLabel}</span>
       </span>
 
       {/* Cursor Position */}
