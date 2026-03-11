@@ -1422,6 +1422,7 @@ export default function App() {
       let geometries: THREE.BufferGeometry[] = []
 
       if (ext === 'stl') {
+        showToast(`Loading STL: ${fileName}…`)
         geometries = [loadSTL(buffer)]
       } else if (ext === 'stp' || ext === 'step') {
         try {
@@ -1431,7 +1432,6 @@ export default function App() {
             showToast('STEP file loaded but contains no valid geometry')
             return
           }
-          showToast(`STEP loaded: ${geometries.length} geometr${geometries.length === 1 ? 'y' : 'ies'} from ${fileName}`)
         } catch (e) {
           console.error('STEP loading failed:', e)
           showToast(`STEP import failed: ${(e as Error).message}`)
@@ -1445,7 +1445,6 @@ export default function App() {
             showToast('IGES file loaded but contains no valid geometry')
             return
           }
-          showToast(`IGES loaded: ${geometries.length} geometr${geometries.length === 1 ? 'y' : 'ies'} from ${fileName}`)
         } catch (e) {
           console.error('IGES loading failed:', e)
           showToast(`IGES import failed: ${(e as Error).message}`)
@@ -1456,24 +1455,41 @@ export default function App() {
         return
       }
 
-      const material = new THREE.MeshStandardMaterial({
+      // Remove previously imported meshes before adding new ones
+      const toRemove = scene.children.filter(c => c.name.startsWith('imported_'))
+      toRemove.forEach(c => {
+        scene.remove(c)
+        if (c instanceof THREE.Mesh) {
+          c.geometry.dispose()
+          if (c.material instanceof THREE.Material) c.material.dispose()
+        }
+      })
+
+      const importMat = new THREE.MeshStandardMaterial({
         color: 0x88aacc,
         metalness: 0.4,
         roughness: 0.5,
         side: THREE.DoubleSide,
       })
 
+      let totalVerts = 0
+      let totalTris = 0
       for (const geom of geometries) {
-        const mesh = new THREE.Mesh(geom, material)
+        const mesh = new THREE.Mesh(geom, importMat)
         mesh.name = `imported_${fileName}`
+        mesh.castShadow = true
+        mesh.receiveShadow = true
         scene.add(mesh)
+        totalVerts += (geom.attributes.position?.count ?? 0)
+        totalTris += (geom.index ? geom.index.count / 3 : (geom.attributes.position?.count ?? 0) / 3)
       }
 
-      console.log(`Loaded ${fileName}: ${geometries.length} geometries`)
+      showToast(`${ext.toUpperCase()} loaded: ${fileName} — ${geometries.length} bod${geometries.length === 1 ? 'y' : 'ies'}, ${totalVerts.toLocaleString()} verts, ${Math.round(totalTris).toLocaleString()} tris`)
     } catch (e) {
       console.error(`Failed to load ${fileName}:`, e)
+      showToast(`Failed to load ${fileName}: ${(e as Error).message}`)
     }
-  }, [])
+  }, [showToast])
 
   const handleSavePreset = useCallback((name: string) => {
     const preset = {

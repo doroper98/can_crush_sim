@@ -117,6 +117,23 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 -->
 
+### [EXP-423] CAD 임포트 기능 개선
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 16:00:00 |
+| **Step** | S2.2 |
+| **관련 FR** | FR-01 |
+| **관련 NF** | NF-05 |
+| **변경 내용** | handleFileLoaded 전면 개선: (1) 새 파일 임포트 시 기존 imported_ 메시 자동 제거 + geometry/material dispose (메모리 누수 방지). (2) STL 로드 시에도 toast 피드백 추가. (3) 로드 완료 후 body수/vertex수/triangle수 상세 정보 toast. (4) 임포트 메시에 castShadow/receiveShadow 활성화. (5) 최외곽 catch에서도 showToast 에러 피드백. (6) showToast 의존성 추가. |
+| **테스트 항목** | tsc --noEmit, vite build |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: ok (891.85 kB, gzip 241.76 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | 기존에는 여러 파일을 연속 드롭하면 중복 추가되었음. 이제 이전 임포트를 자동 제거. 로드 정보(verts/tris)로 사용자에게 CAD 복잡도 파악 가능. |
+
+---
+
 ### [EXP-422] 물성 슬라이더 범위 확장
 
 | 항목 | 값 |
