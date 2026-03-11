@@ -2025,6 +2025,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.28,
     wallThickness: 0.3,
   }),
+  steel_o1: createMaterial({
+    name: 'AISI O1 Oil-Hardening Tool Steel',
+    youngsModulus: 207000,
+    poissonRatio: 0.29,
+    yieldStress: 450,
+    uts: 820,
+    density: 7850,
+    hardeningExponent: 0.14,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
