@@ -345,6 +345,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.40,
     wallThickness: 0.3,
   }),
+  tantalum_ta: createMaterial({
+    name: 'Tantalum (Ta)',
+    youngsModulus: 186000,
+    poissonRatio: 0.34,
+    yieldStress: 180,
+    uts: 285,
+    density: 16650,
+    hardeningExponent: 0.22,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
