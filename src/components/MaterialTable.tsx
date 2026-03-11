@@ -94,6 +94,9 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
         } else if (sortKey === 'specific_strength') {
           va = a[1].yieldStress / a[1].density * 1000
           vb = b[1].yieldStress / b[1].density * 1000
+        } else if (sortKey === 'specific_stiffness') {
+          va = a[1].youngsModulus / a[1].density
+          vb = b[1].youngsModulus / b[1].density
         } else if (sortKey === 'name') {
           return sortAsc
             ? a[1].name.localeCompare(b[1].name)
@@ -181,6 +184,7 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
               ))}
               <th onClick={() => handleSort('uts_ratio')} style={thStyle()}>UTS/σy{sortIndicator('uts_ratio')}</th>
               <th onClick={() => handleSort('specific_strength')} style={thStyle()}>σy/ρ{sortIndicator('specific_strength')}</th>
+              <th onClick={() => handleSort('specific_stiffness')} style={thStyle()}>E/ρ{sortIndicator('specific_stiffness')}</th>
             </tr>
           </thead>
           <tbody>
@@ -227,6 +231,14 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
                       </td>
                     )
                   })()}
+                  {(() => {
+                    const se = mat.youngsModulus / mat.density // (MPa)/(kg/m³) = kNm/kg
+                    return (
+                      <td style={{ padding: '4px 6px', textAlign: 'right', color: se >= 25 ? '#3b82f6' : textSec, borderBottom: `1px solid ${borderColor}`, fontFamily: 'monospace', fontWeight: se >= 25 ? 600 : 400 }}>
+                        {se.toFixed(1)}
+                      </td>
+                    )
+                  })()}
                 </tr>
               )
             })}
@@ -239,7 +251,7 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
           return (
             <div style={{ marginTop: 12, padding: '8px 12px', borderRadius: 10, background: darkMode ? 'rgba(59,130,246,0.08)' : 'rgba(59,130,246,0.05)', fontSize: 10, color: textSec, lineHeight: 1.7 }}>
               <span style={{ fontWeight: 600, color: text }}>{m.name}</span> <span style={{ fontSize: 8, color: cat.color, fontWeight: 700 }}>[{cat.label}]</span>
-              <span style={{ marginLeft: 8 }}>K={m.hardeningK().toFixed(0)} MPa · σy/ρ={ss.toFixed(0)} kNm/kg · UTS/σy={(m.uts / m.yieldStress).toFixed(2)}</span>
+              <span style={{ marginLeft: 8 }}>K={m.hardeningK().toFixed(0)} MPa · σy/ρ={ss.toFixed(0)} kNm/kg · E/ρ={(m.youngsModulus / m.density).toFixed(1)} · UTS/σy={(m.uts / m.yieldStress).toFixed(2)}</span>
             </div>
           )
         })()}
