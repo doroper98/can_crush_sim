@@ -646,9 +646,13 @@ export default function ControlPanel({
                   boxShadow: theme.selectShadow,
                 }}
               >
-                {filteredKeys.map(k => (
-                  <option key={k} value={k}>{MATERIALS[k].name}</option>
-                ))}
+                {filteredKeys.map(k => {
+                  const m = MATERIALS[k]
+                  const E = m.youngsModulus >= 1000 ? `${(m.youngsModulus / 1000).toFixed(0)}G` : `${m.youngsModulus}M`
+                  return <option key={k} value={k} title={`E=${E}Pa σy=${m.yieldStress}MPa UTS=${m.uts}MPa ρ=${m.density}kg/m³ n=${m.hardeningExponent}`}>
+                    {m.name} [{getCategory(k).label}]
+                  </option>
+                })}
               </select>
             </>
           )
