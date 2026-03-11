@@ -230,8 +230,25 @@ export default function MaterialTable({ visible, onClose, onSelect, darkMode = f
             </div>
           )
         })()}
-        <div style={{ marginTop: 8, textAlign: 'center', fontSize: 11, color: darkMode ? '#64748b' : '#94a3b8' }}>
-          Click header to sort · Click row to select · Press I or click outside to close
+        {(() => {
+          const cats: Record<string, { label: string; color: string; count: number }> = {}
+          for (const [key] of allEntries) {
+            const c = getCategory(key)
+            if (!cats[c.label]) cats[c.label] = { ...c, count: 0 }
+            cats[c.label].count++
+          }
+          return (
+            <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 4, justifyContent: 'center' }}>
+              {Object.values(cats).map(c => (
+                <span key={c.label} onClick={() => setFilter(c.label)} style={{ display: 'inline-flex', alignItems: 'center', gap: 2, padding: '1px 5px', borderRadius: 4, background: c.color + '18', fontSize: 9, color: c.color, fontWeight: 600, cursor: 'pointer' }}>
+                  {c.label} {c.count}
+                </span>
+              ))}
+            </div>
+          )
+        })()}
+        <div style={{ marginTop: 6, textAlign: 'center', fontSize: 11, color: darkMode ? '#64748b' : '#94a3b8' }}>
+          Click header to sort · Click row to select · Click badge to filter · Press I or click outside to close
         </div>
       </div>
     </div>
