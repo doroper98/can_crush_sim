@@ -1365,6 +1365,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.28,
     wallThickness: 0.3,
   }),
+  niobium_b66: createMaterial({
+    name: 'Nb B-66 (Nb-5Mo-5V-1Zr)',
+    youngsModulus: 103000,
+    poissonRatio: 0.38,
+    yieldStress: 490,
+    uts: 580,
+    density: 8680,
+    hardeningExponent: 0.12,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
