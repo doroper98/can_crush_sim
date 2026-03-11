@@ -28,7 +28,7 @@ export function getCategory(key: string): { label: string; color: string } {
   if (key === 'platinum_pt') return { label: 'Pt', color: '#d4d4d8' }
   if (key === 'tantalum_ta') return { label: 'Ta', color: '#6366f1' }
   if (key.startsWith('niobium_')) return { label: 'Nb', color: '#7c3aed' }
-  if (key === 'molybdenum_mo') return { label: 'Mo', color: '#a1a1aa' }
+  if (key.startsWith('molybdenum_')) return { label: 'Mo', color: '#a1a1aa' }
   if (key === 'vanadium_v') return { label: 'V', color: '#fb923c' }
   if (key === 'beryllium_be') return { label: 'Be', color: '#a3e635' }
   if (key === 'chromium_cr') return { label: 'Cr', color: '#dc2626' }
