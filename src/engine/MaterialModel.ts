@@ -1195,6 +1195,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.38,
     wallThickness: 0.3,
   }),
+  copper_sibronze_c655: createMaterial({
+    name: 'Silicon Bronze C65500',
+    youngsModulus: 103000,
+    poissonRatio: 0.34,
+    yieldStress: 145,
+    uts: 390,
+    density: 8530,
+    hardeningExponent: 0.40,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
