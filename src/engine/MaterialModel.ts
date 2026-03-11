@@ -1025,6 +1025,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.32,
     wallThickness: 0.3,
   }),
+  steel_300m: createMaterial({
+    name: '300M Steel (Ultra-High Strength)',
+    youngsModulus: 205000,
+    poissonRatio: 0.29,
+    yieldStress: 1690,
+    uts: 1930,
+    density: 7830,
+    hardeningExponent: 0.05,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
