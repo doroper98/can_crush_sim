@@ -1535,6 +1535,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.20,
     wallThickness: 0.5,
   }),
+  steel_8620: createMaterial({
+    name: 'AISI 8620 (Case Hardening)',
+    youngsModulus: 205000,
+    poissonRatio: 0.29,
+    yieldStress: 360,
+    uts: 530,
+    density: 7850,
+    hardeningExponent: 0.18,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
