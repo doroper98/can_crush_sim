@@ -365,6 +365,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.28,
     wallThickness: 0.3,
   }),
+  steel_hadfield: createMaterial({
+    name: 'Hadfield Mn Steel',
+    youngsModulus: 190000,
+    poissonRatio: 0.30,
+    yieldStress: 380,
+    uts: 880,
+    density: 7800,
+    hardeningExponent: 0.50,
+    wallThickness: 0.5,
+  }),
 }
 
 /** Get material keys for UI dropdown */
