@@ -588,8 +588,9 @@ export default function ControlPanel({
         {(() => {
           const mat = MATERIALS[materialKey] ?? MATERIALS['aluminum_6061']
           return (
-            <div style={{ fontSize: 10, color: theme.textSec, marginTop: 4 }}>
-              ν = {mat.poissonRatio} · ρ = {mat.density.toLocaleString()} kg/m³
+            <div style={{ fontSize: 10, color: theme.textSec, marginTop: 4, lineHeight: 1.6 }}>
+              <div>ν = {mat.poissonRatio} · ρ = {mat.density.toLocaleString()} kg/m³ · t = {mat.wallThickness} mm</div>
+              <div>K = {mat.hardeningK().toFixed(0)} MPa · σ_f: {mat.yieldStress.toFixed(0)}→{mat.flowStress(0.3).toFixed(0)} MPa</div>
             </div>
           )
         })()}
