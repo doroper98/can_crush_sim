@@ -1855,6 +1855,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.10,
     wallThickness: 0.5,
   }),
+  copper_nickel_c706: createMaterial({
+    name: 'Copper-Nickel C70600 (90Cu-10Ni)',
+    youngsModulus: 135000,
+    poissonRatio: 0.34,
+    yieldStress: 125,
+    uts: 320,
+    density: 8940,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
