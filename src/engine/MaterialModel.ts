@@ -315,6 +315,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.44,
     wallThickness: 0.3,
   }),
+  gold_au: createMaterial({
+    name: 'Gold (Au)',
+    youngsModulus: 79000,
+    poissonRatio: 0.44,
+    yieldStress: 25,
+    uts: 130,
+    density: 19320,
+    hardeningExponent: 0.45,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
