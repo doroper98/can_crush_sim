@@ -2343,6 +2343,22 @@ export default function App() {
           >
             Fit All (F)
           </div>
+          <div style={{ display: 'flex', gap: 2, padding: '2px 12px' }}>
+            {([
+              { label: 'Top', view: 'top' as const },
+              { label: 'Front', view: 'front' as const },
+              { label: 'Right', view: 'right' as const },
+              { label: 'Iso', view: 'iso' as const },
+            ] as const).map(v => (
+              <div
+                key={v.view}
+                onClick={() => { controlsRef.current?.setView(v.view); setContextMenu(null) }}
+                style={{ flex: 1, textAlign: 'center', padding: '3px 0', fontSize: 10, fontWeight: 600, borderRadius: 4, cursor: 'pointer', color: darkMode ? '#94a3b8' : '#64748b' }}
+                onMouseEnter={e => (e.currentTarget.style.background = ctxHoverBg)}
+                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+              >{v.label}</div>
+            ))}
+          </div>
           <div
             onClick={() => { setIsWireframe(prev => !prev); setContextMenu(null) }}
             style={ctxItemStyle}
