@@ -1984,6 +1984,21 @@ export default function App() {
             </div>
           )
         })()}
+        {/* Idle hint overlay */}
+        {simState === 'idle' && chartData.length === 0 && (
+          <div style={{
+            position: 'absolute', bottom: 60, left: '50%', transform: 'translateX(-50%)',
+            background: darkMode ? 'rgba(30,41,59,0.85)' : 'rgba(240,244,248,0.9)',
+            color: darkMode ? '#94a3b8' : '#64748b',
+            padding: '8px 16px', borderRadius: 12, fontSize: 12,
+            pointerEvents: 'none', zIndex: 10, textAlign: 'center',
+            boxShadow: darkMode
+              ? '4px 4px 8px rgba(0,0,0,0.3), -4px -4px 8px rgba(51,65,85,0.3)'
+              : '4px 4px 8px rgba(163,177,198,0.4), -4px -4px 8px rgba(255,255,255,0.6)',
+          }}>
+            Press <span style={{ fontWeight: 700, color: '#3b82f6' }}>Space</span> to start simulation · <span style={{ fontWeight: 700, color: '#3b82f6' }}>?</span> for shortcuts
+          </div>
+        )}
         {/* Simulation HUD overlay */}
         {showHUD && simState !== 'idle' && resultSummary && (
           <div style={{
