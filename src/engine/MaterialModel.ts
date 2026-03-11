@@ -1645,6 +1645,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.30,
     wallThickness: 0.3,
   }),
+  steel_4140: createMaterial({
+    name: 'AISI 4140 (Cr-Mo)',
+    youngsModulus: 205000,
+    poissonRatio: 0.29,
+    yieldStress: 655,
+    uts: 1020,
+    density: 7850,
+    hardeningExponent: 0.12,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
