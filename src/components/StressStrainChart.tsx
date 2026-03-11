@@ -109,6 +109,32 @@ export default function StressStrainChart({
     ctx.beginPath(); ctx.moveTo(pad.left, yieldY); ctx.lineTo(pad.left + plotW, yieldY); ctx.stroke()
     ctx.setLineDash([])
 
+    // UTS horizontal dashed line
+    if (material.uts <= maxStress) {
+      const utsY = pad.top + plotH - (material.uts / maxStress) * plotH
+      ctx.setLineDash([2, 2])
+      ctx.strokeStyle = darkMode ? 'rgba(96,165,250,0.4)' : 'rgba(59,130,246,0.3)'
+      ctx.lineWidth = 0.8
+      ctx.beginPath(); ctx.moveTo(pad.left, utsY); ctx.lineTo(pad.left + plotW, utsY); ctx.stroke()
+      ctx.setLineDash([])
+    }
+
+    // Legend (top-right)
+    const lgX = pad.left + plotW - 50, lgY = pad.top + 3
+    ctx.font = '7px sans-serif'
+    ctx.textAlign = 'left'
+    ctx.setLineDash([3, 2])
+    ctx.strokeStyle = darkMode ? 'rgba(248,113,113,0.6)' : 'rgba(239,68,68,0.5)'
+    ctx.beginPath(); ctx.moveTo(lgX, lgY + 3); ctx.lineTo(lgX + 8, lgY + 3); ctx.stroke()
+    ctx.setLineDash([])
+    ctx.fillStyle = labelColor
+    ctx.fillText(`σy ${material.yieldStress.toFixed(0)}`, lgX + 10, lgY + 5)
+    ctx.setLineDash([2, 2])
+    ctx.strokeStyle = darkMode ? 'rgba(96,165,250,0.6)' : 'rgba(59,130,246,0.5)'
+    ctx.beginPath(); ctx.moveTo(lgX, lgY + 12); ctx.lineTo(lgX + 8, lgY + 12); ctx.stroke()
+    ctx.setLineDash([])
+    ctx.fillText(`UTS ${material.uts.toFixed(0)}`, lgX + 10, lgY + 14)
+
     // Area fill
     ctx.fillStyle = darkMode ? 'rgba(168,85,247,0.12)' : 'rgba(168,85,247,0.08)'
     ctx.beginPath()
