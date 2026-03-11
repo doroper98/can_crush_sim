@@ -1925,6 +1925,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.05,
     wallThickness: 0.3,
   }),
+  niobium_1zr: createMaterial({
+    name: 'Nb-1Zr',
+    youngsModulus: 105000,
+    poissonRatio: 0.38,
+    yieldStress: 170,
+    uts: 285,
+    density: 8600,
+    hardeningExponent: 0.18,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
