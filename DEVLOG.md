@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-330 기준, 26/03/12 07:50)
+### 누적 통계 (EXP-340 기준, 26/03/12 08:40)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **330** |
-| 성공 커밋 | 330 |
+| 총 실험 수 | **340** |
+| 성공 커밋 | 340 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 294건, EXP-028~330) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 304건, EXP-028~340) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 874 kB (gzip 238 kB) |
-| 재료 라이브러리 | **155종** (Al×16, Fe×26, Cu×20, Ti×10, Ni×20, Poly×19, Co×5, Mg×5, Zn×3, Sn×3, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×3, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
+| 빌드 크기 | 875 kB (gzip 238 kB) |
+| 재료 라이브러리 | **165종** (Al×17, Fe×29, Cu×21, Ti×10, Ni×22, Poly×20, Co×6, Mg×5, Zn×4, Sn×3, W×2, Pb×2, Zr×3, Ag, Au, Pt, Ta, Nb×3, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
 | 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **155 재료**, 31카테고리, CFRP/GFRP 복합재, 주철(Gray+Ductile), Nitinol SMA, Incoloy, TiGr12, 150재료마일스톤 |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), CFRP(최고비강도σy/ρ=937), **165 재료**, 31카테고리, MP159(Co최강σy=1590), 4140CrMo, HasteloyC-22, 160재료마일스톤 |
 
 ---
 
@@ -2054,6 +2054,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 872.08 kB (gzip 237 kB) · tsc: pass · ui: 10/10 |
 | **판정** | ✅ COMMIT |
 | **비고** | 유리섬유 단방향 복합재. CFRP 대비 경제적. 풍력 블레이드·보트·건축 소재. 누적: 320실험, 145재료, 31카테고리, 872kB. CFRP+GFRP로 복합재 시리즈 확립. Poly 19종 달성 |
+
+---
+
+### [EXP-340] SS 347 (Nb-Stabilized) 재료 추가 + 누적통계 — 165번째, 29번째 Fe
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 08:40:00 |
+| **Step** | - (재료 라이브러리 확장 + 통계) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | SS 347 추가: E=193GPa, σy=240MPa, UTS=550MPa, n=0.30, ρ=7960, t=0.3mm. 누적통계 EXP-330→340 갱신 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 875.27 kB (gzip 238 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | Nb 안정화 오스테나이트 STS. 입간부식 방지. 고온배관용. Fe 29번째. 누적: 340실험, 165재료 |
 
 ---
 
