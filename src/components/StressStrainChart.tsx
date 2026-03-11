@@ -138,6 +138,8 @@ export default function StressStrainChart({
     ctx.fillText(`UTS ${material.uts.toFixed(0)}`, lgX + 10, lgY + 14)
     ctx.fillStyle = darkMode ? '#a855f7' : '#9333ea'
     ctx.fillText(`n=${material.hardeningExponent.toFixed(2)}`, lgX + 10, lgY + 23)
+    ctx.fillStyle = darkMode ? '#22d3ee' : '#0891b2'
+    ctx.fillText(`K=${material.hardeningK().toFixed(0)}`, lgX + 10, lgY + 32)
 
     // Area fill
     ctx.fillStyle = darkMode ? 'rgba(168,85,247,0.12)' : 'rgba(168,85,247,0.08)'
