@@ -485,6 +485,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.42,
     wallThickness: 0.3,
   }),
+  ruthenium_ru: createMaterial({
+    name: 'Ruthenium (Ru)',
+    youngsModulus: 447000,
+    poissonRatio: 0.25,
+    yieldStress: 80,
+    uts: 165,
+    density: 12370,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
