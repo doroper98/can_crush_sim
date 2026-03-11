@@ -67,28 +67,28 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 
 **상태 범례**: ⬜ 미착수 | 🔄 진행중 | ✅ 완료 | ❌ 실패/보류 | 🔁 재시도중
 
-### 누적 통계 (EXP-280 기준, 26/03/12 03:35)
+### 누적 통계 (EXP-290 기준, 26/03/12 04:30)
 
 | 항목 | 값 |
 |------|-----|
-| 총 실험 수 | **280** |
-| 성공 커밋 | 280 |
+| 총 실험 수 | **290** |
+| 성공 커밋 | 290 |
 | 리셋 | 0 |
 | 성공률 | 100% |
 | Phase 1 | ✅ 완료 (S1.1~S1.11, EXP-001~010) |
 | Phase 2 | ✅ 완료 (S2.1~S2.7, EXP-011~016) |
 | Phase 3 | ✅ 완료 (S3.1~S3.8, EXP-017~023) |
 | Phase 4 | ✅ 완료 (S4.1~S4.8, EXP-024~027) |
-| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 244건, EXP-028~280) |
+| Phase 5 | ✅ 완료 (S5.1~S5.5+추가개선 254건, EXP-028~290) |
 | 충족 FR | FR-01~FR-15 (15/15) |
 | 충족 NF | NF-01~NF-08 (8/8) |
 | 현재 UI Score | 10/10 |
-| 빌드 크기 | 866 kB (gzip 236 kB) |
-| 재료 라이브러리 | **105종** (Al×13, Fe×14, Cu×9, Ti×7, Ni×15, Poly×13, Zn, Mg×3, Sn, W, Pb, Zr×3, Ag, Au, Co×3, Pt, Ta, Nb×2, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
+| 빌드 크기 | 867 kB (gzip 236 kB) |
+| 재료 라이브러리 | **115종** (Al×14, Fe×17, Cu×11, Ti×8, Ni×15, Poly×14, Zn×2, Mg×3, Sn, W×2, Pb, Zr×3, Ag, Au, Co×3, Pt, Ta, Nb×2, Mo×2, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 차트 | 3종 (Load-Displacement, Energy-Displacement, Stress-Strain) |
 | 카테고리 | **31종** (Al, Fe, Cu, Ti, Ni, Poly, Zn, Mg, Sn, W, Pb, Zr, Ag, Au, Co, Pt, Ta, Nb, Mo, V, Be, Cr, Mn, Hf, Rh, Ir, Os, Pd, Ru, Re, U) |
 | 내충격성 지표 | SEA (J/kg), CFE (%), F_peak, F_mean, UTS 활용률 바, flow stress |
-| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, 300M(최고σy=1690), UHMWPE(최저ρ), **100+ 재료**, 31카테고리 |
+| 신규 기능 (v1.5+) | StressStrain K값, About 카테고리 동적화, Maraging350(최고σy=2390/UTS=2450), UHMWPE(최저ρ), **115 재료**, 31카테고리 |
 
 ---
 
@@ -1589,6 +1589,21 @@ BUG-{NNN}     버그 ID         (발견된 결함 추적)
 | **측정값** | build: 853.62 kB (gzip 232.92 kB) · fps: 60 · nodes: 693 · physics: ok · ui: 10/10 |
 | **판정** | ✅ COMMIT (아래) |
 | **비고** | 바나듐 합금강의 핵심 원소. 공구강·스프링강. UTS/σy=1.94. 내화금속 4종(W/Ta/Mo/Nb+V). 20카테고리 달성! |
+
+---
+
+### [EXP-290] Maraging Steel 350 재료 추가 + 누적 통계 갱신 — 115번째, 17번째 Fe
+
+| 항목 | 값 |
+|------|-----|
+| **시각** | 26/03/12 04:30:00 |
+| **Step** | - (재료 라이브러리 확장 + 누적 통계) |
+| **관련 FR** | FR-06 |
+| **변경 내용** | Maraging Steel 350 추가: E=190GPa, σy=2390MPa, UTS=2450MPa, n=0.03, ρ=8100. 누적 통계 EXP-280→290 갱신 |
+| **테스트 결과** | ✅ PASS |
+| **측정값** | build: 867.14 kB (gzip 236 kB) · tsc: pass · ui: 10/10 |
+| **판정** | ✅ COMMIT |
+| **비고** | σy=2390MPa — 라이브러리 최고 항복강도! UTS=2450MPa — 최고 인장강도! n=0.03 최저 가공경화. Maraging 300(σy=2000) 대비 20%↑. 115종 달성. 누적: 290실험, 115재료, 31카테고리, 867kB |
 
 ---
 

@@ -1175,6 +1175,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.18,
     wallThickness: 0.3,
   }),
+  steel_maraging350: createMaterial({
+    name: 'Maraging Steel 350',
+    youngsModulus: 190000,
+    poissonRatio: 0.30,
+    yieldStress: 2390,
+    uts: 2450,
+    density: 8100,
+    hardeningExponent: 0.03,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
