@@ -2225,6 +2225,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.10,
     wallThickness: 0.5,
   }),
+  inconel_725: createMaterial({
+    name: 'Inconel 725 (Ni-Cr-Mo-Nb)',
+    youngsModulus: 204000,
+    poissonRatio: 0.30,
+    yieldStress: 860,
+    uts: 1170,
+    density: 8310,
+    hardeningExponent: 0.12,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
