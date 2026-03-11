@@ -1165,6 +1165,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.06,
     wallThickness: 0.3,
   }),
+  tungsten_93w: createMaterial({
+    name: 'W-Ni-Fe 93% Heavy Alloy',
+    youngsModulus: 350000,
+    poissonRatio: 0.29,
+    yieldStress: 600,
+    uts: 920,
+    density: 17600,
+    hardeningExponent: 0.18,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
