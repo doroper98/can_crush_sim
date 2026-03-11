@@ -2365,6 +2365,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.04,
     wallThickness: 0.3,
   }),
+  nickel_mumetal: createMaterial({
+    name: 'Mu-Metal (Ni-Fe Magnetic Shield)',
+    youngsModulus: 150000,
+    poissonRatio: 0.30,
+    yieldStress: 200,
+    uts: 520,
+    density: 8580,
+    hardeningExponent: 0.30,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
