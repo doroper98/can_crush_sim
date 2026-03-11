@@ -1355,6 +1355,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.35,
     wallThickness: 0.3,
   }),
+  cobalt_haynes188: createMaterial({
+    name: 'Haynes 188 (Co-Ni-Cr-W)',
+    youngsModulus: 232000,
+    poissonRatio: 0.31,
+    yieldStress: 470,
+    uts: 960,
+    density: 8980,
+    hardeningExponent: 0.28,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
