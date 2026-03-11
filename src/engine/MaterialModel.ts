@@ -1345,6 +1345,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.18,
     wallThickness: 0.3,
   }),
+  copper_tinbronze_c903: createMaterial({
+    name: 'Tin Bronze C90300 (Gun Metal)',
+    youngsModulus: 97000,
+    poissonRatio: 0.34,
+    yieldStress: 125,
+    uts: 310,
+    density: 8800,
+    hardeningExponent: 0.35,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
