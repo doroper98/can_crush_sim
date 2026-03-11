@@ -2035,6 +2035,16 @@ export const MATERIALS: Record<string, MaterialModel> = {
     hardeningExponent: 0.14,
     wallThickness: 0.3,
   }),
+  copper_leaded_c932: createMaterial({
+    name: 'Leaded Bronze C93200 (SAE 660)',
+    youngsModulus: 76000,
+    poissonRatio: 0.34,
+    yieldStress: 125,
+    uts: 240,
+    density: 8930,
+    hardeningExponent: 0.20,
+    wallThickness: 0.3,
+  }),
 }
 
 /** Get material keys for UI dropdown */
